@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>News_js</name>
+    <code>news_js</code>
+    <version>1.0.1</version>
+    <author>GEN</author>
+  <file path="admin/controller/common/column_left.php">
+    <operation>
+      <search><![CDATA[if ($this->user->hasPermission('access', 'catalog/information')) {]]></search>
+      <add position="before"><![CDATA[
+			if ($this->user->hasPermission('access', 'catalog/news_js')) {		
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_newsJs'),
+					'href'     => $this->url->link('catalog/news_js', 'token=' . $this->session->data['token'], true),
+					'children' => array()		
+				);					
+			}
+      	]]></add>
+    </operation>
+  </file>
+  <file path="admin/language/ru-ru/common/column_left.php">
+    <operation>
+      <search><![CDATA[$_['text_manufacturer']]]></search>
+      <add position="before"><![CDATA[$_['text_newsJs'] = 'Модуль мастеров';]]></add>
+    </operation>
+  </file>
+  <file path="admin/language/en-gb/common/column_left.php">
+    <operation>
+      <search><![CDATA[$_['text_manufacturer']]]></search>
+      <add position="before"><![CDATA[$_['text_newsJs'] = 'Module masters';]]></add>
+    </operation>
+  </file>
+</modification>

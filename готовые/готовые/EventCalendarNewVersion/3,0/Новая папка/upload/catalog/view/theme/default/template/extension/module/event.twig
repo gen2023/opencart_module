@@ -1,0 +1,78 @@
+{{ header }} 
+<div class="container" id="introPanel">
+	<div class="row">{{ column_left }} 
+    	{% if (column_left and column_right) %} 
+    		{% set class = 'col-sm-6' %} 
+    	{% elseif (column_left or column_right) %} 
+    		{% set class = 'col-sm-9' %} 
+    	{% else %} 
+    		{% set class = 'col-sm-12' %} 
+    	{% endif %}
+    	<div id="content" class="{{ class }}">{{ content_top }} 
+    		<h2>{{ heading_title }}</h2>
+
+      		<div id="calendar"></div>
+
+      			<div class="row">
+        			<!--<div class="col-sm-6 text-left">{{ pagination }}</div>-->
+        			<!--<div class="col-sm-6 text-right">{{ results }}</div>-->
+      			</div>
+				
+      		 
+			{% if (not events) %} 
+      			<p>{{ text_empty }}</p>
+      		{% endif %}	
+      		{{ content_bottom }} 
+        </div>
+   	 	{{ column_right }} 
+    </div>
+</div>
+	<script type="text/javascript"><!--
+
+  $(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+		firstDay: 1,
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,basicWeek,basicDay'
+		},
+		monthNames: ['{{ January }}','{{ February }}','{{ March }}','{{ April }}','{{ May }}','{{ June }}','{{ July }}','{{ August }}','{{ September }}','{{ October }}','{{ November }}','{{ December }}'],
+        monthNamesShort: ['{{ Jan }}','{{ Feb }}','{{ Mar }}','{{ Apr }}','{{ May1 }}','{{ Jun }}','{{ Jul }}','{{ Aug }}','{{ Sept }}','{{ Oct }}','{{ Nov }}','{{ Dec }}'],
+        dayNames: ["{{ sun }}","{{ mon }}","{{ tue }}","{{ wed }}","{{ thu }}","{{ fri }}","{{ sat }}"],
+        dayNamesShort: ["{{ sun1 }}","{{ mon1 }}","{{ tue1 }}","{{ wed1 }}","{{ thu1 }}","{{ fri1 }}","{{ sat1 }}"],
+        buttonText: {
+            prevYear: "&nbsp;&lt;&lt;&nbsp;",
+			nextYear: "&nbsp;&gt;&gt;&nbsp;",
+			today: "{{ tooday }}",
+			month: "{{ month }}",
+			week: "{{ week }}",
+			day: "{{ day }}"
+		},
+		navLinks: true, // can click day/week names to navigate views
+		editable: true,
+		eventLimit: true, // allow "more" link when too many events
+		events: [
+		{% for event in events %} 
+				
+	
+			{% set new_from = event["explode_From"] %}
+			{% set new_to = event["explode_To"] %}
+							
+				
+				
+			{
+			title: '{{ event["mindescription"] }}',
+			url: 'index.php?route=extension/module/event_detail&event_id={{ event["event_id"] }}',
+			start: '{{ new_to[0] ~ "-" ~ new_to[1] ~ "-"~new_to[2] }}',
+			end: '{{ new_from[0] ~ "-" ~ new_from[1] ~"-" ~ new_from[2] }}T20:00:00'
+			},
+		{% endfor %}{}] 
+    });
+
+  });
+
+//--></script>
+
+{{ footer }}

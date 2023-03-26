@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart Events calendar</name>
+    <code>Events_calendar</code>
+    <version>2.1</version>
+    <author>GEN</author>
+  <file path="catalog/controller/startup/seo_pro.php">
+    <operation>
+      <search><![CDATA[$this->request->get['route'] = 'information/information';]]></search>
+      <add position="after"><![CDATA[     } elseif (isset($this->request->get['event_id'])) {
+        $this->request->get['route'] = 'extension/module/event_detail';]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[case 'information_id':]]></search>
+      <add position="after"><![CDATA[case 'event_id':]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/startup/seo_url.php">
+    <operation>
+      <search><![CDATA[$url = explode('=', $query->row['query']);]]></search>
+      <add position="after"><![CDATA[         if ($url[0] == 'event_id') {
+            $this->request->get['event_id'] = $url[1];
+          }]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$url[0] != 'information_id' &&]]></search>
+      <add position="replace"><![CDATA[$url[0] != 'information_id' && $url[0] != 'event_id' &&]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[} elseif (isset($this->request->get['information_id'])) {]]></search>
+      <add position="replace"><![CDATA[
+        } elseif (isset($this->request->get['event_id'])) {
+          $this->request->get['route'] = 'extension/module/event_detail';
+        } elseif (isset($this->request->get['information_id'])) {
+        ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[($data['route'] == 'information/information' && $key == 'information_id')]]></search>
+      <add position="replace"><![CDATA[($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'extension/module/event_detail' && $key == 'event_id')]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/default/template/common/header.twig">
+    <operation>
+      <search><![CDATA[<link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">]]></search>
+      <add position="before"><![CDATA[	
+		<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/fullcalendar.min.css">
+		<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/EventsGen.css">
+		<script src="catalog/view/javascript/lib/moment.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/lib/jquery.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/fullcalendar.min.js" type="text/javascript"></script>
+	  ]]></add>
+    </operation>
+  </file>
+	<file path="admin/view/template/common/header.tpl">
+    <operation>
+      <search><![CDATA[<link href="view/stylesheet/bootstrap.css" type="text/css" rel="stylesheet" />]]></search>
+      <add position="before"><![CDATA[	
+		<link href="view/stylesheet/genEvent.css" type="text/css" rel="stylesheet" />
+]]></add>
+    </operation>
+  </file>
+</modification>

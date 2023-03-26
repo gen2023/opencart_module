@@ -1,0 +1,9 @@
+.title_cat_home{
+	background: #f08e21;
+    display: block;
+    color: #fff;
+    line-height: 30px;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding-left: 5px;
+}

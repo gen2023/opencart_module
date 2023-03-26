@@ -1,0 +1,53 @@
+<modification>
+	<name>Количество просмотров в товаре</name>
+	<code>product-page-views</code>
+	<version>1.0</version>
+	<author>https://ocmod.net</author>
+	<link>https://ocmod.net</link>
+
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[$data['images'] = array();]]></search>
+			<add position="after"><![CDATA[		
+            $data['view'] = $product_info['viewed'];
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/language/en-gb/product/product.php">
+		<operation>
+			<search><![CDATA[$_['text_search']]]></search>
+			<add position="before"><![CDATA[		
+$_['text_view']              = 'View: ';
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/language/ru-ru/product/product.php">
+		<operation>
+			<search><![CDATA[$_['text_search']]]></search>
+			<add position="before"><![CDATA[		
+$_['text_view']              = 'Просмотров: ';
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/language/uk-ua/product/product.php">
+		<operation>
+			<search><![CDATA[$_['text_search']]]></search>
+			<add position="before"><![CDATA[		
+$_['text_view']              = 'Переглядів: ';
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+			<search index="2"><![CDATA[{% if review_status %}]]></search>
+			<add position="before"><![CDATA[			
+			<h4>{{ text_view }}{{ view }}</h4>
+			]]></add>
+		</operation>
+	</file>
+
+</modification>

@@ -1,0 +1,19 @@
+.list_services{
+	margin-bottom:30px;
+	display:flex;
+	justify-content: flex-start;
+    align-items: center;
+}
+
+.list_services img{float:left;}
+
+.description_service{
+	margin-left:50px;
+}
+
+.number_service{
+	color: white;
+    font-size: 14px;
+    position: absolute;
+    padding-left: 2px;
+}

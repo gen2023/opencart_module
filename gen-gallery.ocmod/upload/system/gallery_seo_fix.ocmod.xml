@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart gallery Seo Url fix OC 2.3</name>
+    <code>Gallery_calendar_seo_fix</code>
+    <version>1.0</version>
+    <author>GEN</author>
+  <file path="catalog/controller/startup/seo_pro.php">
+    <operation>
+      <search><![CDATA[$this->request->get['route'] = 'information/information';]]></search>
+      <add position="after"><![CDATA[     } elseif (isset($this->request->get['gallery_id'])) {
+        $this->request->get['route'] = 'extension/module/gallery_detail';]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[case 'information_id':]]></search>
+      <add position="after"><![CDATA[case 'gallery_id':]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/startup/seo_url.php">
+    <operation>
+      <search><![CDATA[$url = explode('=', $query->row['query']);]]></search>
+      <add position="after"><![CDATA[         if ($url[0] == 'gallery_id') {
+            $this->request->get['gallery_id'] = $url[1];
+          }]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$url[0] != 'information_id' &&]]></search>
+      <add position="replace"><![CDATA[$url[0] != 'information_id' && $url[0] != 'gallery_id' &&]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[} elseif (isset($this->request->get['information_id'])) {]]></search>
+      <add position="replace"><![CDATA[
+        } elseif (isset($this->request->get['gallery_id'])) {
+          $this->request->get['route'] = 'extension/module/gallery_detail';
+        } elseif (isset($this->request->get['information_id'])) {
+        ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[($data['route'] == 'information/information' && $key == 'information_id')]]></search>
+      <add position="replace"><![CDATA[($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'extension/module/gallery_detail' && $key == 'gallery_id')]]></add>
+    </operation>
+  </file>
+</modification>

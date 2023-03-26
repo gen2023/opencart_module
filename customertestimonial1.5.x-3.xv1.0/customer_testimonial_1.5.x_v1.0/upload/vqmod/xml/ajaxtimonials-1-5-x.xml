@@ -1,0 +1,25 @@
+<modification>
+	<id>Customer Testimonials - OpenCart 1.5.x</id>
+	<version>1.0</version>
+	<vqmver>1.0</vqmver>
+	<author>Azeroth</author>
+	<file name="admin/controller/common/header.php">
+		<operation>
+			<search position="after"><![CDATA[$this->data['text_information'] = $this->language->get('text_information');]]></search>
+			<add><![CDATA[		
+			$this->load->language('module/ajaxtestimonial');
+			$this->data['text_ajaxtestimonial'] = $this->language->get('heading_title');
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[$this->data['information'] = $this->url->link('catalog/information', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+			<add><![CDATA[			$this->data['ajaxtestimonial'] = $this->url->link('catalog/ajaxtestimonial', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/common/header.tpl">
+		<operation>
+			<search position="after"><![CDATA[<li><a href="<?php echo $information; ?>"><?php echo $text_information; ?></a></li>]]></search>
+			<add><![CDATA[        <li><a href="<?php echo $ajaxtestimonial; ?>"><?php echo $text_ajaxtestimonial; ?></a></li>]]></add>
+		</operation>
+	</file>
+</modification>

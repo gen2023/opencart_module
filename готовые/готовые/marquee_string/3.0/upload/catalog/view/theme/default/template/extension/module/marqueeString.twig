@@ -1,0 +1,19 @@
+<div class='marquee' style='overflow:hidden; font-size:{{ fontSize }}px; color: {{ textColor }}; background:{{ textBg }}; height:{{ height }}px;{{ css }}'>{{ string }}</div>
+
+
+<script type="text/javascript"><!--
+$(function() {
+    $('.marquee').marquee({
+      duration: {{ duration }},
+      direction: '{{ direction }}',
+      delayBeforeStart: {{ delayBeforeStart }},
+      gap: {{ gap }},
+      startVisible: {{ startVisible }},
+      pauseOnHover: {{ pauseOnHover }},
+      pauseOnCycle: {{ pauseOnCycle }},
+      speed: {{ speed }},
+      duplicated: {{ duplicated }},
+      amount: {{ amount }}
+    });
+  });
+--></script> 

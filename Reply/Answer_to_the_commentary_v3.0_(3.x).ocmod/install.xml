@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>User reply to comment</name>
+	<version>2.12</version>
+	<link>https://dev-opencart.com</link>
+	<author>Gen</author>
+	<code>User reply to comment</code>
+<file path="admin/controller/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[$this->model_catalog_review->editReview($this->request->get['review_id'], $this->request->post);]]></search>
+		<add position="replace"><![CDATA[$this->model_catalog_review->editReview($this->request->get['review_id'], $this->request->post, $this->request->get['replys_id']);]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA['author'     => $result['author'],]]></search>
+		<add position="after"><![CDATA['replyUser'  => $this->model_catalog_review->getRewiewReply($result['review_id']),
+		'count'  => $this->model_catalog_review->getRewiewReplyCount($result['review_id']),]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$review_info = $this->model_catalog_review->getReview($this->request->get['review_id']);]]></search>
+		<add position="after" offset="3"><![CDATA[
+		if ($review_Replys){
+		$id='';	
+		foreach ($review_Replys as $result) {
+			$id .= '/' .$result['reviewReply_id'];			
+		}
+			$url .= '&replys_id='.$id;
+		} else {$url .= '&replys_id=0';}
+		
+		if (!isset($this->request->get['review_id'])) {
+			$data['action'] = $this->url->link('catalog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		} else {			
+			$data['action'] = $this->url->link('catalog/review/edit', 'user_token=' . $this->session->data['user_token'] . '&review_id=' . $this->request->get['review_id'] . $url, true);
+		}
+
+		$data['review_Replys']=$review_Replys;
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$review_info = $this->model_catalog_review->getReview($this->request->get['review_id']);]]></search>
+		<add position="after"><![CDATA[$review_Replys=$this->model_catalog_review->getReviewReplys($this->request->get['review_id']);]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$this->load->model('catalog/product');]]></search>
+		<add position="before"><![CDATA[
+			$this->load->model('user/user');
+		
+			$user_info = $this->model_user_user->getUser($this->user->getId());
+
+			if ($user_info) {
+				$data['user_group'] = $user_info['user_group'] ;
+			} else {
+				$data['user_group'] = '';
+			}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['rating'])) {]]></search>
+		<add position="before"><![CDATA[
+			if (isset($this->request->post['admin_author'])) {
+				$data['admin_author'] = $this->request->post['admin_author'];
+			} elseif (!empty($review_info)) {
+				$data['admin_author'] = $review_info['admin_author'] ? $review_info['admin_author'] : $data['user_group'];
+			} else {
+				$data['admin_author'] = $data['user_group'];
+			}
+			
+			if (isset($this->request->post['answer'])) {
+				$data['answer'] = $this->request->post['answer'];
+			} elseif (!empty($review_info)) {
+				$data['answer'] = $review_info['answer'];
+			} else {
+				$data['answer'] = '';
+			}
+			
+			if (isset($this->request->post['email'])) {
+				$data['email'] = $this->request->post['email'];
+			} elseif (!empty($review_info)) {
+				$data['email'] = $review_info['email'];
+			} else {
+				$data['email'] = '';
+			}
+			
+			if (isset($this->request->post['telephone'])) {
+				$data['telephone'] = $this->request->post['telephone'];
+			} elseif (!empty($review_info)) {
+				$data['telephone'] = $review_info['telephone'];
+			} else {
+				$data['telephone'] = '';
+			}
+			
+			if (!empty($review_info['feedback'])) {
+				$data['feedback'] = $review_info['feedback'];
+			} else {
+				$data['feedback'] = '';
+			}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$this->response->setOutput($this->load->view('catalog/review_form', $data));]]></search>
+		<add position="replace"><![CDATA[$this->response->setOutput($this->load->view('catalog/reviewReply_form', $data));]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/review_list.twig">
+	<operation error="skip">
+		<search><![CDATA[<td class="text-left">{% if sort == 'r.author' %} <a href="{{ sort_author }}" class="{{ order|lower }}">{{ column_author }}</a> {% else %} <a href="{{ sort_author }}">{{ column_author }}</a> {% endif %}</td>]]></search>
+		<add position="after"><![CDATA[<td class="text-left">Последний ответ от ... </td>
+		<td class="text-left">Кол-во отзывов </td>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<td class="text-left">{{ review.author }}</td>]]></search>
+		<add position="after"><![CDATA[<td class="text-left">{{ review.replyUser }}</td>
+		<td class="text-left">{{ review.count }}</td>]]></add>
+	</operation>
+</file>
+<file path="admin/language/ru-ru/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[$_['entry_text']]]></search>
+		<add position="after"><![CDATA[$_['entry_author_answer']   	= 'Автор ответа';
+$_['entry_answer']   	= 'Ответ';
+$_['entry_telephone']   	= 'Телефон';
+$_['entry_email']   	= 'E-Mail';]]></add>
+	</operation>
+</file>
+<file path="admin/language/ua-uk/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[$_['entry_text']]]></search>
+		<add position="after"><![CDATA[
+			$_['entry_author_answer']   	= 'Автор відповіді';
+			$_['entry_answer']   	= 'Відповідь';
+			$_['entry_telephone']   	= 'Телефон';
+			$_['entry_email']   	= 'E-Mail';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/en-gb/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[$_['entry_text']]]></search>
+		<add position="after"><![CDATA[
+			$_['entry_author_answer']   	= 'Author answer';
+			$_['entry_answer']   	= 'Answer';
+			$_['entry_telephone']   	= 'Telephone';
+$_['entry_email']   	= 'E-Mail';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[public function getReviews($data = array()) {]]></search>
+		<add position="after"><![CDATA[
+			$result_hd_description = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "review LIKE 'admin_author';");
+			if ($result_hd_description->num_rows == 0) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "review ADD COLUMN `admin_author` VARCHAR( 64 ) NOT NULL AFTER `author`");                
+			}
+			
+			$result_hd_description = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "review LIKE 'answer';");
+			if ($result_hd_description->num_rows == 0) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "review ADD COLUMN `answer` TEXT NOT NULL AFTER `text`");                
+			}
+			
+			$result_hd_description = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "review LIKE 'email';");
+			if ($result_hd_description->num_rows == 0) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "review ADD COLUMN `email` VARCHAR( 64 ) NOT NULL AFTER `author`");                
+			}
+			
+			$result_hd_description = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "review LIKE 'telephone';");
+			if ($result_hd_description->num_rows == 0) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "review ADD COLUMN `telephone` VARCHAR( 64 ) NOT NULL AFTER `author`");                
+			}
+			
+			$result_hd_description = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "review LIKE 'feedback';");
+			if ($result_hd_description->num_rows == 0) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "review ADD COLUMN `feedback` VARCHAR( 64 ) NOT NULL AFTER `author`");                
+			}
+		
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[public function deleteReview($review_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getReviewReplys($review_id) {
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "reviewReply WHERE review_id = '" . (int)$review_id . "'");
+
+		return $query->rows;
+	}
+
+		public function getRewiewReplyCount($review_id) {
+			$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "reviewReply WHERE review_id = '" . (int)$review_id . "'");
+
+		return $query->row['total'];
+	}
+	
+		public function getRewiewReply($review_id){
+		
+			$query = $this->db->query("SELECT author FROM " . DB_PREFIX . "reviewReply WHERE review_id='" . (int)$review_id . "' ORDER BY reviewReply_id DESC LIMIT 1");
+		
+		if ($query->row){ return $query->row['author'];	} else return '';
+	}
+	
+		public function getRewiewReplyTotalCount() {
+			$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "reviewReply");
+
+		return $query->row['total'];
+	}
+		
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[
+			$this->db->query("INSERT INTO " . DB_PREFIX . "review SET author = '" . $this->db->escape($data['author']) . "', product_id = '" . (int)$data['product_id'] . "', text = '" . $this->db->escape(strip_tags($data['text'])) . "', rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "', date_added = '" . $this->db->escape($data['date_added']) . "'");			
+		]]></search>
+		<add position="replace"><![CDATA[
+			$this->db->query("INSERT INTO " . DB_PREFIX . "review SET author = '" . $this->db->escape($data['author']) . "', product_id = '" . (int)$data['product_id'] . "', text = '" . $this->db->escape(strip_tags($data['text'])) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', feedback = '" . $this->db->escape($data['feedback']) . "', admin_author = '" . $this->db->escape($data['admin_author']) . "', answer = '" . $this->db->escape(strip_tags($data['answer'])) . "', rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "', date_added = '" . $this->db->escape($data['date_added']) . "'");
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[
+			$this->db->query("UPDATE " . DB_PREFIX . "review SET author = '" . $this->db->escape($data['author']) . "', product_id = '" . (int)$data['product_id'] . "', text = '" . $this->db->escape(strip_tags($data['text'])) . "', rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "', date_added = '" . $this->db->escape($data['date_added']) . "', date_modified = NOW() WHERE review_id = '" . (int)$review_id . "'");
+		]]></search>
+		<add position="replace"><![CDATA[
+			$this->db->query("UPDATE " . DB_PREFIX . "review SET author = '" . $this->db->escape($data['author']) . "', product_id = '" . (int)$data['product_id'] . "', text = '" . $this->db->escape(strip_tags($data['text'])) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', feedback = '" . $this->db->escape($data['feedback']) . "', admin_author = '" . $this->db->escape($data['admin_author']) . "', answer = '" . $this->db->escape(strip_tags($data['answer'])) . "', rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "', date_added = '" . $this->db->escape($data['date_added']) . "', date_modified = NOW() WHERE review_id = '" . (int)$review_id . "'");
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[public function editReview($review_id, $data) {]]></search>
+		<add position="replace"><![CDATA[public function editReview($review_id, $data, $replys_id) {
+		if ($replys_id){
+		  $array_reply_id=explode('/', $replys_id);
+
+		  for ($i=1;$i<count($array_reply_id); $i++)
+		  {
+			  if ((int)$data['status_'.$array_reply_id[$i]]==2)
+			  {
+				  $this->db->query("DELETE FROM " . DB_PREFIX . "reviewReply WHERE reviewReply_id = '" . (int)$array_reply_id[$i] . "'");
+			  }
+			$this->db->query("UPDATE " . DB_PREFIX . "reviewReply SET author = '" . $this->db->escape($data['author_'.$array_reply_id[$i]]) . "', review_id = '" . (int)$review_id . "', text = '" . $this->db->escape(strip_tags($data['text_'.$array_reply_id[$i]])) . "', admin_author = '" . $this->db->escape($data['admin_author_'.$array_reply_id[$i]]) . "', answer = '" . $this->db->escape(strip_tags($data['answer_'.$array_reply_id[$i]])) . "', email = '" . $this->db->escape($data['email_'.$array_reply_id[$i]]) . "', telephone = '" . $this->db->escape($data['telephone_'.$array_reply_id[$i]]) . "', status = '" . (int)$data['status_'.$array_reply_id[$i]] . "', date_added = '" . $this->db->escape($data['date_added_'.$array_reply_id[$i]]) . "', date_modified = NOW() WHERE reviewReply_id = '" . $array_reply_id[$i] . "'");
+		  }
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "review WHERE review_id = '" . (int)$review_id . "'");]]></search>
+		<add position="after"><![CDATA[
+			$this->db->query("DELETE FROM " . DB_PREFIX . "reviewReply WHERE review_id = '" . (int)$review_id . "'");
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/model/catalog/review.php">
+	<operation error="skip">
+		<search><![CDATA[
+			$query = $this->db->query("SELECT r.review_id, r.author, r.rating, r.text, p.product_id, pd.name, p.price, p.image, r.date_added FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (r.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1' AND r.status = '1' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY r.date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
+		]]></search>
+		<add position="replace"><![CDATA[
+			$query = $this->db->query("SELECT r.review_id, r.author, r.admin_author, r.rating, r.text, r.answer, p.product_id, pd.name, p.price, p.image, r.date_added FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (r.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1' AND r.status = '1' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY r.date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/default/template/product/product.twig">
+	<operation error="skip">
+		<search><![CDATA[<div id="review"></div>]]></search>
+		<add position="replace"><![CDATA[<div id="reviewReply"></div>]]></add>
+	</operation>	
+	<operation error="skip">
+		<search><![CDATA[$('#review').delegate('.pagination a', 'click', function(e) {]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').delegate('.pagination a', 'click', function(e) {]]></add>
+	</operation>
+		<operation error="skip">
+		<search><![CDATA[$('#review').fadeOut('slow');]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').fadeOut('slow');]]></add>
+	</operation>
+		<operation error="skip">
+		<search><![CDATA[$('#review').load(this.href);]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').load(this.href);]]></add>
+	</operation>
+		<operation error="skip">
+		<search><![CDATA[$('#review').fadeIn('slow');]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').fadeIn('slow');]]></add>
+	</operation>	
+	<operation error="skip">
+		<search><![CDATA[$('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').load('index.php?route=product/reply_review/review&product_id={{ product_id }}');]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[$('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');]]></add>
+	</operation>
+		<operation error="skip">
+		<search><![CDATA[$('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');]]></search>
+		<add position="replace"><![CDATA[$('#reviewReply').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ captcha }}]]></search>
+		<add position="before"><![CDATA[
+						<div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Как с Вами  связаться...</label>
+                    <br />
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Telephone" />	
+						<span>Telephone</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Viber" />
+						<span>Viber</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Telegram" />
+						<span>Telegram</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="WhatsApp" />
+						<span>WhatsApp</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Email" />
+						<span>Email</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Comment" checked="checked" />
+						<span>Comment</span>
+					</label>
+                    </div>
+                </div>
+				<div id="Email" class="form-group" style='display:none'>
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-review">{{ entry_email }}</label>
+                    <input type="email" name="email" value="{{ email }}" id="input-email" class="form-control" />
+                  </div>
+                </div>
+                <div id="Telephone" class="form-group" style='display:none'>
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-review">{{ entry_telephone }}</label>
+                    <input type="tel" name="telephone" value="{{ telephone }}" id="input-telephone" class="form-control" />
+                  </div>
+                </div>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<script type="text/javascript"><!--]]></search>
+		<add position="before"><![CDATA[
+		<script type="text/javascript"><!--
+$(document).ready(function(){
+  $("input[type='radio']").click(function () {
+	switch($(this).val()) {
+		case 'Telephone':  
+		case 'Telegram':
+		case 'Viber':
+		case 'WhatsApp':
+			$('#Telephone').css('display','block');
+			$('#Email').css('display','none');   
+			break;
+		case 'Email':  
+			$('#Email').css('display','block');
+			$('#Telephone').css('display','none');    
+			break;
+		default: 
+			$('#Telephone').css('display','none');
+			$('#Email').css('display','none');
+			break;
+	}
+  });
+});
+-->
+</script>]]></add>
+	</operation>
+</file>
+
+<file path="admin/language/ru-ru/common/header.php">
+    <operation error="skip">
+      <search><![CDATA[$_['text_profile']]]></search>
+      <add position="before"><![CDATA[
+	$_['text_new_reviewReply']              = 'Сomment';
+      ]]></add>
+    </operation>
+  </file>
+  
+  <file path="admin/controller/common/header.php">
+    <operation error="skip">
+      <search><![CDATA[$data['profile'] = $this->url->link('common/profile', 'user_token=' . $this->session->data['user_token'], true);]]></search>
+      <add position="after"><![CDATA[
+       
+        // Reviews
+      $this->load->model('catalog/review');
+
+	  $reviewReply_total = $this->model_catalog_review->getRewiewReplyTotalCount();
+
+	  $data['reviewReply_total'] = $reviewReply_total;
+
+
+$data['review'] = $this->url->link('catalog/review', 'user_token=' . $this->session->data['user_token'] . '&filter_status=0', true);
+      ]]></add>
+    </operation>
+  </file>
+  <file path="admin/view/template/common/header.twig">
+    <operation error="skip">
+      <search><![CDATA[<ul class="nav navbar-nav navbar-right">]]></search>
+      <add position="after"><![CDATA[
+<style>
+sub {
+ font-size: 12px;
+ color: red;
+ font-weight: bold;
+ bottom:0;
+ }
+</style>      
+     
+      {% if reviewReply_total >= 1 %}
+      <li class="dropdown"><a href="{{ review }}"> <i class="fa fa fa-comments-o fa-lg" style="color:red"></i> {{ text_new_reviewReply }} <sub>({{ reviewReply_total }})</sub></a>{% endif %}
+      ]]></add>
+    </operation>
+  </file>
+</modification>

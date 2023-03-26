@@ -1,0 +1,7 @@
+category_home - вывод категории первой ступени на любой странице +
+contact_store - Контакты магазина на любой странице +
+EventCalendarNewVersion - календарь с событиями +
+guest-newsletter-subscription - подписка на рассылку +
+popular_product - популярный продукт по просмотрам +
+presentProduct - модуль товар в подарок при покупке на сумму 1000грн -
+voting - модуль опрос/голосование -

@@ -1,0 +1,218 @@
+{% if reviews %}
+{% for review in reviews %}
+<table class="table table-striped table-bordered">
+  <tr>
+    <td style="width: 50%;"><strong>{{ review.author }}</strong></td>
+	<td class="text-right">
+		{% for i in 1..5 %}
+			{% if review.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+		{% endfor %}
+	</td>
+    <td class="text-right">{{ review.date_added }}</td>
+  </tr>
+  <tr>
+    <td colspan="3"><p>{{ review.text }}</p>
+	
+		{% if (review.answer) %} 
+			<hr>
+			  <div class="answer_admin">
+				<p><strong>{{ review.admin_author }}</strong> - {{ entry_admin_author }}</p>
+				<p>{{ review.answer }}</p>
+			  </div>			  
+		{% endif %} 
+			
+		<div class="reviewReply">
+			{% if review.replyFromReview_id %}
+				{% for reply in review.replyFromReview_id %}
+					{% if reply.review_id == review.review_id %}
+				    <table class="table table-striped table-bordered" style="background:#FFFFEE">
+				    <tr>
+					  <td style="width: 50%;"><strong>{{ reply.author }}</strong></td>
+					  <td class="text-right">{{ reply.date_added }}</td>
+				    </tr>
+					<tr>
+					  <td colspan="2"><p>{{ reply.text }}</p>
+						{% if (reply.answer) %} 
+						  <hr>
+						  <div class="answer_admin">
+							<p><strong>{{ reply.admin_author }}</strong> - {{ entry_admin_author }}</p>
+							<p>{{ reply.answer }}</p>
+						  </div>
+						{% endif %}
+					  </td>
+					</tr>
+					</table>
+					{% endif %}
+				{% endfor %}
+			{% endif %} 
+		</div>
+		{% set key=review.review_id %}
+		{% if paginationReply[key] %}
+		  <table style="width:100%;"><tr><td>
+			<div class="col-sm-6 text-left">{{ paginationReply[key] }}</div>
+			<div class="col-sm-6 text-right">{{ resultsReply[key] }}</div>
+		  </td></tr></table>
+		{% endif %}
+		<a class="answer_user_{{ review.review_id }}" id="{{ review.review_id }}" href="#">Коментировать</a> 
+
+		<div class="form_answer_user{{ review.review_id }}" id="{{ review.review_id }}" style="display:none;">
+			<form class="form-horizontal" id="form-review{{ review.review_id }}">
+                <div id="error{{ review.review_id }}"></div>
+				{% if review_guest %}
+                <div class="form-group required">
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-name">{{ entry_name }}</label>
+                    <input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />
+                  </div>
+                </div>
+				<div class="form-group required">
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-review">{{ entry_review }}</label>
+                    <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
+                    <div class="help-block">{{ text_note }}</div>
+                  </div>
+                </div>
+				<div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Как с Вами  связаться...</label>
+                    <br />
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Telephone" nameForJs="Telephone{{ review.review_id }}" />	
+						<span>Telephone</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Viber" nameForJs="Viber{{ review.review_id }}" />
+						<span>Viber</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Telegram" nameForJs="Telegram{{ review.review_id }}" />
+						<span>Telegram</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="WhatsApp" nameForJs="WhatsApp{{ review.review_id }}" />
+						<span>WhatsApp</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Email" nameForJs="Email{{ review.review_id }}" />
+						<span>Email</span>
+					</label>
+                    &nbsp;
+					<label id="feedback_review">
+						<input class="input_feedback_review" type="radio" name="feedback" value="Comment" nameForJs="Comment{{ review.review_id }}" checked="checked" />
+						<span>Comment</span>
+					</label>
+                    </div>
+                </div>
+				<div id="Email{{ review.review_id }}" class="form-group" style='display:none'>
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-review">{{ entry_email }}</label>
+                    <input type="email" name="email" value="{{ email }}" id="input-email" class="form-control" />
+                  </div>
+                </div>
+                <div id="Telephone{{ review.review_id }}" class="form-group" style='display:none'>
+                  <div class="col-sm-12">
+                    <label class="control-label" for="input-review">{{ entry_telephone }}</label>
+                    <input type="tel" name="telephone" value="{{ telephone }}" id="input-telephone" class="form-control" />
+                  </div>
+                </div>
+                {{ captcha }}
+                <div class="buttons clearfix">
+                  <div class="pull-right">
+                    <button type="button" id="button-review{{ review.review_id }}" data-loading-text="{{ text_loading }}" class="btn btn-primary">{{ button_continue }}</button>
+                  </div>
+                </div>
+				{% else %}
+                {{ text_login }}
+                {% endif %}
+            </form>
+		</div>
+	</td>		
+  </tr>
+</table>
+{% endfor %}
+<div style="margin-bottom:50px;">
+	<div class="col-sm-6 text-left">{{ pagination }}</div>
+	<div class="col-sm-6 text-right">{{ results }}</div>
+</div>
+{% else %}
+<p>{{ text_no_reviews }}</p>
+{% endif %} 
+
+<script type="text/javascript"><!--
+const id={{ reviewsId }};
+$(document).ready(function(){
+	for (let i=1; i<=id; i++){
+		$('.answer_user_'+ i).click(function(){
+			$('.form_answer_user'+ i).slideToggle(300);      
+			return false;
+		});
+	};
+for (let i=1; i<=id; i++){
+	
+  $("input[type='radio']").click(function () {
+	switch($(this).attr('nameForJs')) {
+		case 'Telephone'+i:  
+		case 'Telegram'+i:
+		case 'Viber'+i:
+		case 'WhatsApp'+i:
+			$('#Telephone'+i).css('display','block');
+			$('#Email'+i).css('display','none');   
+			break;
+		case 'Email'+i:  
+			$('#Email'+i).css('display','block');
+			$('#Telephone'+i).css('display','none');    
+			break;
+		default: 
+			$('#Telephone'+i).css('display','none');
+			$('#Email'+i).css('display','none');
+			break;
+	}
+  });
+};
+});
+
+-->
+</script>
+
+<script type="text/javascript"><!--
+const id={{ reviewsId }};
+for (let i=1; i<=id; i++){
+$('#button-review'+ i).on('click', function() {
+	$.ajax({
+		url: 'index.php?route=product/reply_review/writeRewiew&review_id='+i,
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-review"+ i).serialize(),
+		beforeSend: function() {
+			$('#button-review'+ i).button('loading');
+		},
+		complete: function() {
+			$('#button-review'+ i).button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#error'+ i).after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+				location.href = 'index.php?route=product/product&product_id=43';
+				$('#error'+ i).after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('input[name=\'name\']').val('');
+				$('input[name=\'email\']').val('');
+				$('input[name=\'telephone\']').val('');
+				$('textarea[name=\'text\']').val('');
+				$('input[name=\'feedback\']:checked').prop('checked', false);
+			}
+		}
+	});
+});
+}
+-->
+</script>

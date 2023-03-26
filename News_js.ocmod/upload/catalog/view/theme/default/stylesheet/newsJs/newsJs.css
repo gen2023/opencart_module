@@ -1,0 +1,32 @@
+.newsJs_listName{
+	display: flex;
+}
+
+.none{
+	display:none;
+}
+
+.selected{
+	background:#ededed;
+}
+
+.newsJs_title{
+	display:flex;
+	align-items: center;
+    height: 50px;
+    padding-left: 10px;
+}
+
+.newsJs_title div{
+	width:300px; 
+	height: max-content;
+	}
+	
+.newsJs_title span{
+	margin-left: 350px;
+    background: #ededed;
+    position: absolute;
+	top:0;
+	left:0;
+	padding:20px;
+	}
