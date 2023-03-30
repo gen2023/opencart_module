@@ -1,9 +1,9 @@
+<div id="voting<?php echo $module_id?>" class="voting" style="<?php echo $displayNone;?>">
 <?php if ($heading_title) {?>
   <div class="block_title">
 	<?php echo $heading_title; ?>
   </div>	
 <?php } ?>
-
 <form action="" method="post">
 <?php foreach ($voting_attributes as $key=> $voting_attribute) { ?>
   <div>
@@ -15,19 +15,27 @@
     <label for="contactChoice1"><?php echo $voting_attribute[$lang_id]['text']; ?></label>
   </div>
   <?php } ?>
-  <div>
     <button onClick="return setValueVoting(event);" type="submit"><?php echo $text_btn; ?></button>
-  </div>
+	<div id="error<?php echo $module_id;?>" class="text-danger" style="display:none;"></div>
 </form>
-
+</div>
+<div id="resultVoting<?php echo $module_id;?>" style="display:none;">
+	<div id="contentResultVoting<?php echo $module_id;?>" style="display:none;">тут будет результат</div>
+</div>
 <script>
  function setValueVoting(event){
 	event.preventDefault();
 	let result=[];
-	if (<?php echo $type_module?>==0){
-	result[0]=$("input[type=radio][name=voting<?php echo $module_id?>]:checked").val();
+	let viewResult=<?php echo $viewResult; ?>;
+	const form=document.querySelector("#voting<?php echo $module_id;?>");
+	const resultVoting=document.querySelector("#resultVoting<?php echo $module_id;?>");
+	const error=document.querySelector("#error<?php echo $module_id;?>");
+	const contentResultVoting=document.querySelector("#contentResultVoting<?php echo $module_id;?>");
+	
+	if (<?php echo $type_module; ?>==0){
+	result[0]=$("input[type=radio][name=voting<?php echo $module_id; ?>]:checked").val();
 	}else{
-    $('[name="voting<?php echo $module_id?>"]:checked').each(function(){
+    $('[name="voting<?php echo $module_id; ?>"]:checked').each(function(){
       result.push($(this).val());
     }); 
     
@@ -39,14 +47,27 @@
 			type: 'post',
 			data: {
 				checked: result,
-				module_id: <?php echo $module_id?>
+				module_id: <?php echo $module_id; ?>
 			},
 			dataType: 'json',									
 			success: function(json) { 
-				console.log(json.message);
+				if (viewResult==0){
+					form.style.display='none';
+					resultVoting.style.display='block';
+					resultVoting.textContent=json.message;
+				}else{
+					form.style.display='none';
+					resultVoting.style.display='block';
+					contentResultVoting.style.display='block';
+				}
+				
 			},
 			error: function(xhr, textStatus, errorThrown) {
-				console.log(xhr.responseText);
+				error.style.display='block';
+				error.textContent="<?php echo $error_voting; ?>";
+				setTimeout(function() { 
+					error.style.display='none';
+				}, 10000);
 			}			
 		});	
  }

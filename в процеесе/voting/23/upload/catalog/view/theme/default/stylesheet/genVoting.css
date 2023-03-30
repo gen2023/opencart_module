@@ -2,6 +2,15 @@
     background-color: #eee;
 	font-size:17px;
 	font-weight: 500;
-	padding:10px;
+	padding: 10px 10px 10px 20px;
 	margin-bottom:20px;
+}
+.voting{
+	border: 1px solid #ddd;
+}
+.voting form{
+	padding: 0 20px 20px 20px;
+}
+.voting form button{
+	margin-top:10px;
 }

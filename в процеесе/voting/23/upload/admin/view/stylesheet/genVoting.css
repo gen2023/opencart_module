@@ -1,0 +1,7 @@
+#statistic tbody .input-group{margin-bottom:5px;}
+#statistic tbody .input-group:last-child{margin-bottom:0px;}
+#statistic tbody .input-group-addon:first-child {
+    border-right: 1px solid #ccc;
+    border-radius: 3px;
+}
+.form-horizontal #statistic .control-label{text-align:left;}

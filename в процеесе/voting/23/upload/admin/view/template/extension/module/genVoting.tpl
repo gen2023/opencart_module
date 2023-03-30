@@ -34,11 +34,12 @@
 		  <ul class="nav nav-tabs">
 			<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
 			<li><a href="#tab-data" data-toggle="tab"><?php echo $tab_data; ?></a></li>
+			<li style="<?php echo $viewStatistic;?>"><a href="#tab-statistic" data-toggle="tab"><?php echo $tab_statistic; ?></a></li>
 		  </ul>
 		  <div class="tab-content">
 			<div class="tab-pane active" id="tab-general">
 			  <input type="hidden" name="module_id" value="<?php echo $module_id; ?>" id="input-module_id" />
-			  <div class="form-group">
+			  <div class="form-group required">
 				<label class="col-sm-2 control-label" for="input-name"><?php echo $entry_name; ?></label>
 				<div class="col-sm-10">
 				  <input type="text" name="name" value="<?php echo $name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" />
@@ -47,7 +48,7 @@
 				  <?php } ?>
 				</div>
 			  </div>
-			  <div class="form-group required">
+			  <div class="form-group">
 				<label class="col-sm-2 control-label"><?php echo $entry_title_module; ?></label>
 				<div class="col-sm-10">
 				  <?php foreach ($languages as $language) { ?>
@@ -55,6 +56,20 @@
 					<input type="text" name="title_module[<?php echo $language['language_id']; ?>][name]" value="<?php echo isset($title_module[$language['language_id']]) ? $title_module[$language['language_id']]['name'] : ''; ?>" placeholder="<?php echo $entry_title_module; ?>" class="form-control" />
 				  </div>
 				  <?php } ?>
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-viewResult"><?php echo $entry_viewResult; ?></label>
+				<div class="col-sm-10">
+				  <select name="viewResult" id="input-viewResult" class="form-control">
+					<?php if ($viewResult) { ?>
+					<option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+					<option value="0"><?php echo $text_disabled; ?></option>
+					<?php } else { ?>
+					<option value="1"><?php echo $text_enabled; ?></option>
+					<option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+					<?php } ?>
+				  </select>
 				</div>
 			  </div>
 			  <div class="form-group">
@@ -119,6 +134,32 @@
                 </table>
               </div>
 			</div>  
+			<div class="tab-pane" id="tab-statistic">
+				<table id="statistic" class="table table-striped table-bordered table-hover">
+				  <thead>
+                    <tr>
+                      <td class="text-left"><?php echo $entry_attribute; ?></td>
+                      <td><?php echo $text_statistic; ?></td>
+                    </tr>
+                  </thead>
+				  <tbody>
+
+                    <?php foreach ($voting_attributes as $voting_attribute) { ?>
+                    <tr>
+                      <td class="text-left"><?php foreach ($languages as $language) { ?>
+                        <div class="input-group"><span class="input-group-addon"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /></span>
+                          <label class="col-sm-10 control-label" for="input-name"><?php echo isset($voting_attribute[$language['language_id']]) ? $voting_attribute[$language['language_id']]['text'] : ''; ?></label>
+                        </div>
+                        <?php } ?>
+					  </td>
+                      <td class="text-left">
+						<label class="col-sm-2 control-label" for="input-name"><?php echo isset($voting_attribute) ? $voting_attribute['value'] : '0'; ?></label>
+					  </td>
+                    </tr>
+                    <?php } ?>
+                  </tbody>
+				</table>			  
+			</div>
         </form>
       </div>
     </div>

@@ -5,6 +5,7 @@ class ControllerExtensionModuleGenVoting extends Controller {
 //добавить вопрос сохранять куки или нет
 	public function index() {
 		$this->load->language('extension/module/genVoting');
+		$this->document->addStyle('view/stylesheet/genVoting.css');
 
 		$this->load->model('extension/module');
 		$this->load->model('extension/module/genVoting');		
@@ -33,12 +34,14 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		$data['text_edit'] = $this->language->get('text_edit');
 		$data['text_enabled'] = $this->language->get('text_enabled');
 		$data['text_disabled'] = $this->language->get('text_disabled');		
+		$data['text_statistic'] = $this->language->get('text_statistic');		
 
 		$data['entry_status'] = $this->language->get('entry_status');
 		$data['entry_type'] = $this->language->get('entry_type');
 		$data['entry_name'] = $this->language->get('entry_name');
 		$data['entry_attribute'] = $this->language->get('entry_attribute');
 		$data['entry_title_module'] = $this->language->get('entry_title_module');
+		$data['entry_viewResult'] = $this->language->get('entry_viewResult');
 		
 		$data['button_apply'] = $this->language->get('button_apply');
 		$data['button_save'] = $this->language->get('button_save');
@@ -48,6 +51,7 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		
 		$data['tab_general'] = $this->language->get('tab_general');
 		$data['tab_data'] = $this->language->get('tab_data');
+		$data['tab_statistic'] = $this->language->get('tab_statistic');
 		
 		if (isset($this->session->data['success'])) {
 			$data['text_success'] = $this->session->data['success'];
@@ -61,12 +65,18 @@ class ControllerExtensionModuleGenVoting extends Controller {
 			$data['error_warning'] = '';
 		}
 		
+		if (isset($this->error['atribute'])) {
+			$data['error_warning'] = $this->error['atribute'];
+		} else {
+			$data['error_warning'] = '';
+		}
+
 		if (isset($this->error['name'])) {
 			$data['error_name'] = $this->error['name'];
 		} else {
 			$data['error_name'] = '';
 		}
-
+		
 		$data['breadcrumbs'] = array();
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -102,8 +112,10 @@ class ControllerExtensionModuleGenVoting extends Controller {
 			$data['module_id'] = $this->request->post['module_id'];
 		} elseif (!empty($module_info)) {
 			$data['module_id'] = $module_info['module_id'];
+			$data['viewStatistic']='display:block';
 		} else {
 			$data['module_id'] = array();
+			$data['viewStatistic']='display:none';
 		}
 		
 		if (isset($this->request->post['name'])) {
@@ -128,6 +140,14 @@ class ControllerExtensionModuleGenVoting extends Controller {
 			$data['title_module'] = $module_info['title_module'];
 		} else {
 			$data['title_module'] = array();
+		}
+		
+		if (isset($this->request->post['viewResult'])) {
+			$data['viewResult'] = $this->request->post['viewResult'];
+		} elseif (!empty($module_info)) {
+			$data['viewResult'] = $module_info['viewResult'];
+		} else {
+			$data['viewResult'] = '';
 		}
 		
 		if (isset($this->request->post['voting_attributes'])) {
@@ -161,6 +181,12 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 64)) {
 			$this->error['name'] = $this->language->get('error_name');
 		}
+		
+		
+		if (!isset($this->request->post['voting_attributes'])) {
+			$this->error['atribute'] = $this->language->get('error_atribute');
+		}
+		
 		return !$this->error;
 	}
 }

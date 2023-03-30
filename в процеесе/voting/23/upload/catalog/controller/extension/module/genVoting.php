@@ -27,6 +27,7 @@ array(6) {
 		
 		$data['text_btn'] = $this->language->get('text_btn');
 		$data['text_result'] = $this->language->get('text_edit');
+		$data['error_voting'] = $this->language->get('error_voting');
 		$data['lang_id']=$this->config->get('config_language_id');
 		
 		//var_dump($setting);
@@ -34,6 +35,8 @@ array(6) {
 		$data['module_id']=$setting['module_id'];
 		$data['voting_attributes']=$setting['voting_attributes'];
 		$data['type_module']=$setting['type_module'];
+		$data['viewResult']=$setting['viewResult'];
+		$data['displayNone']='display:block;';
 
 		return $this->load->view('extension/module/genVoting', $data);
 
@@ -41,11 +44,14 @@ array(6) {
 	
 	public function setValueVoting(){
 		$this->load->model('extension/module/genVoting');
+		$this->load->language('extension/module/genVoting'); 
+		
+		$data['text_success'] = $this->language->get('text_success');
 	
 		$json = array();
 		$result = $this->model_extension_module_genVoting->editValue($this->request->post);
 
-		$json['message']='good';//$result;
+		$json['message']=$data['text_success'];
 		
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
