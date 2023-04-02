@@ -56,4 +56,20 @@ array(6) {
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
+	
+	public function getResultVoting(){
+		
+		$this->load->model('extension/module/genVoting');
+		//$this->load->language('extension/module/genVoting'); 
+		
+		//$data['text_success'] = $this->language->get('text_success');
+	
+		$json = array();
+		$result = $this->model_extension_module_genVoting->getResult($this->request->post);
+
+		$json['result']=$result;
+		
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
 }
