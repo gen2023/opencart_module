@@ -42,21 +42,25 @@ class ControllerExtensionFeedSimpleYMLFacebook extends Controller {
 			$output .= '<id>'. $product['product_id'].'</id>';
 			$output .= '<title>'. $product['name'].'</title>';
 			$output .= '<description><![CDATA['.html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8').']]></description>';
-			$output .= '<link>'.$this->url->link('product/product', 'product_id='.$product['product_id'], true).'</link>';
-			$output .= '<condition>new</condition>';
 			$output .= '<availability>in stock</availability>';
+			$output .= '<condition>new</condition>';
 			if (isset($product['special'])) {
 				$output .= '<price>'.number_format($product['special'],2) . ' ' . $this->config->get('config_currency').'</price>';
 				$output .= '<oldprice>'.number_format($product['price'],2) . ' ' . $this->config->get('config_currency').'</oldprice>';
 			} else {
 				$output .= '<price>'.number_format($product['price'],2) . ' ' .$this->config->get('config_currency').'</price>';
-			}			
-			$output .= '<image>'.HTTPS_SERVER.'image/'.$product['image'].'</image>';
+			}	
+			$output .= '<link>'.$this->url->link('product/product', 'product_id='.$product['product_id'], true).'</link>';
+			$output .= '<image_link>'.HTTPS_SERVER.'image/'.$product['image'].'</image_link>';
+			$output .= '<brand>Ivory and Kate</brand>';		
+			$output .= '<size>'.$productsOptionSize[0].'</size>';
+			$output .= '<quantity_to_sell_on_facebook>100</quantity_to_sell_on_facebook>';
 			$productImages=$this->model_extension_feed_simple_yml->getProductImages($product['product_id']);
 			foreach ($productImages as $productImage) {
 				$output .= '<additional_image_link>'.HTTPS_SERVER.'image/'.$productImage['image'].'</additional_image_link>';
 			}
-			$output .= '<google_product_category>'.$product['category_id'].'</google_product_category>';
+			$output .= '<google_product_category>2271</google_product_category>';
+			$output .= '<fb_product_category>443</fb_product_category>';
 			$output .= '</item>';
 		}
 
