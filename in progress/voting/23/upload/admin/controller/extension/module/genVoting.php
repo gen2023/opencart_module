@@ -1,7 +1,6 @@
 <?php
 class ControllerExtensionModuleGenVoting extends Controller {
 	private $error = array();
-//добавить - пользоваели могут видеть результаты или нет
 //добавить вопрос сохранять куки или нет
 	public function index() {
 		$this->load->language('extension/module/genVoting');
@@ -37,6 +36,8 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		$data['text_statistic'] = $this->language->get('text_statistic');		
 
 		$data['entry_status'] = $this->language->get('entry_status');
+		$data['entry_validity'] = $this->language->get('entry_validity');
+		$data['entry_cookies'] = $this->language->get('entry_cookies');
 		$data['entry_type'] = $this->language->get('entry_type');
 		$data['entry_name'] = $this->language->get('entry_name');
 		$data['entry_attribute'] = $this->language->get('entry_attribute');
@@ -67,6 +68,12 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		
 		if (isset($this->error['atribute'])) {
 			$data['error_warning'] = $this->error['atribute'];
+		} else {
+			$data['error_warning'] = '';
+		}
+		
+		if (isset($this->error['validity'])) {
+			$data['error_warning'] = $this->error['validity'];
 		} else {
 			$data['error_warning'] = '';
 		}
@@ -157,6 +164,22 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		} else {
 			$data['voting_attributes'] = array();
 		}
+		
+		if (isset($this->request->post['cookies'])) {
+			$data['cookies'] = $this->request->post['cookies'];
+		} elseif (!empty($module_info)) {
+			$data['cookies'] = $module_info['cookies'];
+		} else {
+			$data['cookies'] = '';
+		}
+		
+		if (isset($this->request->post['validity'])) {
+			$data['validity'] = $this->request->post['validity'];
+		} elseif (!empty($module_info)) {
+			$data['validity'] = $module_info['validity'];
+		} else {
+			$data['validity'] = '365';
+		}
 
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];
@@ -180,11 +203,16 @@ class ControllerExtensionModuleGenVoting extends Controller {
 		
 		if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 64)) {
 			$this->error['name'] = $this->language->get('error_name');
-		}
-		
+		}		
 		
 		if (!isset($this->request->post['voting_attributes'])) {
 			$this->error['atribute'] = $this->language->get('error_atribute');
+		}
+		
+		if ($this->request->post['cookies']==1){
+			if (!isset($this->request->post['validity']) || ($this->request->post['validity']<1)){
+				$this->error['validity'] = $this->language->get('error_validity');
+			}
 		}
 		
 		return !$this->error;

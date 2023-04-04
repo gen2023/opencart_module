@@ -1,0 +1,55 @@
+{{ header }}
+<div class="container container-settings">
+    <div class="row">
+        <div class="col-md-2 col-xs-12 btn-group-vertical" role="group" aria-label="...">
+            {{ menu }}
+        </div>
+        <div class="col-md-9">
+          <div class="thumbnail-text header-h1"> <h1> {{ heading_title }}</h1></div>
+            {% if works %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <td width="8%"class="text-right">{{ column_work_id }}</td>
+                            <td width="60%"class="text-left">{{ column_title }}</td>
+                            <td width="15%"class="text-left">{{ column_date_added }}</td>
+                            <td width="15%"></td>
+                        </tr>
+                        </thead>
+                       </table>
+                       <table class="table table-bordered table-hover">
+                        <tbody>
+                        {% for work in works %}
+                            <tr>
+                                <td width="8%"class="text-right">{{ work.work_id }}</td>
+                                <td width="60%"class="text-left">{{ work.title }}</td>
+                                <td width="15%"class="text-left">{{ work.date_added }}</td>
+                                <td width="15%"class="text-right"><a href="{{ work.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ work.delete }}" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-remove"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+            {% else %}
+                <p>{{ text_empty }}</p>
+            {% endif %}
+            <div class="buttons clearfix">
+                <div class="text-center"><a href="{{ add_new }}" class="btn-block bucn_4_r thumbnail-text">{{ button_new }}</a></div>
+            </div>
+            <br>
+  <div class="buttons clearfix">
+          <div class="pull-right"><a href="{{ continue }}" class="btn bucn_4_s thumbnail-text">{{ button_continue }}</a></div>
+      
+  <div class="buttons clearfix">      
+          <div class="pull-left"><a href=https://budiak.kiev.ua/index.php?route=account/account class="btn bucn_4_s thumbnail-text">{{ button_back }}</a></div>
+   </div><br>
+{{ content_bottom }}</div>
+</div>
+</div>
+{{ footer }}

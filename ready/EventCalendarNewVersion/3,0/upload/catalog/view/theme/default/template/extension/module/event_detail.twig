@@ -1,0 +1,59 @@
+{{ header }} 
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %} 
+    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+    {% endfor %} 
+  </ul>
+  <div class="row">{{ column_left }} 
+    {% if (column_left and column_right) %} 
+    {% set class = 'col-sm-6' %} 
+    {% elseif (column_left or column_right) %} 
+    {% set class = 'col-sm-9' %} 
+    {% else %} 
+    {% set class = 'col-sm-12' %} 
+    {% endif %} 
+    <div id="content" class="{{ class }}">{{ content_top }} 
+      <div class="row">
+        {% if (column_left and column_right) %} 
+        {% set class = 'col-sm-6' %} 
+        {% elseif (column_left or column_right) %} 
+        {% set class = 'col-sm-9' %} 
+        {% else %} 
+        {% set class = 'col-sm-12' %} 
+        {% endif %} 
+        <div class="{{ class }}">
+		    <div class="eventTitle">
+                <h3>{{ heading_title }}</h3>
+            </div>
+			<div class="contentEvent">
+				<div class="imageEvent">
+					<img src="{{ image }}"/>
+				</div>
+				<div class="contentDescriptionEvent">
+					<div class="dateEvent">
+						<b><h3>{{event_date_to}}{{ date_To }}{{event_date_from}}{{ date_From }}&nbsp;({{time_to}}&nbsp;-&nbsp;{{time_from}})</h3></b>
+					</div>
+					{% if (product) %}
+						<div class="productEvent">
+							<div class="product-thumb">
+								{% for product in product %}
+									<div id="featured-product{{ product.product_id }}">	
+										<div class="image"><a href="{{ product.href }}"><img src="{{ product.image }}" alt="{{ product.name }}"/></a></div>
+										<h4 class="nameProductEvent">{{ product.name }}</h4>								
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+					<div class="descriptionEvent">
+						<p>{{ description }}</p>
+					</div>
+				</div>
+			</div>
+        </div>		
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }} 

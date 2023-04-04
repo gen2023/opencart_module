@@ -1,0 +1,14 @@
+$(function() {
+    $('.marquee').marquee({
+      allowCss3Support:true,
+      duration: 7000, //duration – задает время, за которое текст должен прокрутиться. продолжительность в миллисекундах marquee
+      direction: 'left', //'left' 'right' up down
+      delayBeforeStart: 1000, //время в миллисекундах до того, как marquee начнет анимировать 
+      gap: 500, //gap промежуток в пикселях между бегущими строками
+      startVisible: true, //startVisible – текст должен заполнять пространство при начале.
+      pauseOnHover:true,
+      pauseOnCycle:0,
+      speed:10,
+      duplicated: true //duplicated – задает непрерывность текста.
+    });
+  });

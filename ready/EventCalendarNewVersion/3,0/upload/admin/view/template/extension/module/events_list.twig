@@ -1,0 +1,100 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a href="{{ setting }}" data-toggle="tooltip" title="{{ button_setting }}" class="btn btn-primary"><i class="fa fa-cog"></i>&nbsp; {{ button_setting }}</a>
+				<a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-success"><i class="fa fa-plus"></i></a>
+				<button type="submit" form="form-events" formaction="{{ hideEvent }}" data-toggle="tooltip" title="{{ button_hideEvent }}" class="btn btn-default"><i class="fa fa-eye-slash"></i></button>
+				<button type="submit" form="form-events" formaction="{{ copy }}" data-toggle="tooltip" title="{{ button_copy }}" class="btn btn-default"><i class="fa fa-copy"></i></button>
+				<button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-events').submit() : false;"><i class="fa fa-trash-o"></i></button>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		{% if success %}
+		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-6 text-left">{{ pagination }}</div>
+					<div class="col-sm-6 text-right">{{ results }}</div>
+				</div>
+				<form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-events">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+									<td class="center">{{ column_image }}</td>
+									<td class="center">{% if (sort == 'nd.title') %}
+										<a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
+										{% else %}
+										<a href="{{ sort_title }}">{{ column_title }}</a>
+									{% endif %}</td>
+									<td class="center">{% if (sort == 'n.date_to') %}
+										<a href="{{ sort_date_to }}" class="{{ order|lower }}">{{ column_date_to }}</a>
+										{% else %}
+										<a href="{{ sort_date_to }}">{{ column_date_to }}</a>
+									{% endif %}</td>
+									<td class="center">{{ column_date_from }}</td>
+									<td class="left">{{ column_status }}</td>
+									<td class="right">{{ column_action }}</td>
+								</tr>
+							</thead>
+							<tbody>
+							{% if events %}
+								{% set class = 'odd' %} 
+								{% for events_story in events %} 
+								{% set class = class == 'even' ? 'odd' : 'even' %} 
+								<tr class="{{ class }}">
+									<td align="center">
+										{% if (events_story['selected']) %} 
+										<input type="checkbox" name="selected[]" value="{{ events_story['event_id'] }}" checked="checked" />
+										{% else %} 
+										<input type="checkbox" name="selected[]" value="{{ events_story['event_id'] }}" />
+										{% endif %} 
+									</td>
+									<td class="center"><img src="{{ events_story['image'] }}" alt="{{ events_story['title'] }}" style="padding: 1px; border: 1px solid #DDD;" /></td>
+									<td class="left">{{ events_story['title'] }}</td>
+									<td class="left">{{ events_story['date_to'] }}</td>
+									<td class="left">{{ events_story['date_from'] }}</td>
+									<td class="left">{{ events_story['status'] }}</td>
+				                	<td class="text-right"><a href="{{ events_story['edit'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>	
+								</tr>
+								{% endfor %}
+								{% else %}
+								<tr class="even">
+									<td class="center" colspan="7">{{ text_no_results }}</td>
+								</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="row">
+					<div class="col-sm-6 text-left">{{ pagination }}</div>
+					<div class="col-sm-6 text-right">{{ results }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}

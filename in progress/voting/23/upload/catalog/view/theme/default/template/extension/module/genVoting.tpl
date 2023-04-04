@@ -64,7 +64,8 @@
 				module_id: <?php echo $module_id; ?>
 			},
 			dataType: 'json',									
-			success: function(json) { 
+			success: function(json) {
+				if (<?php echo $cookies; ?>){setCookie(<?php echo $module_id; ?>);}				
 				if (viewResult==0){
 					form.style.display='none';
 					resultVoting.style.display='block';
@@ -114,4 +115,12 @@
 			}			
 		});	
  }
+ function setCookie(id){
+		let value=[id];
+		var date = new Date();
+		date.setTime(date.getTime()+<?php echo $validity; ?>*24*60*60*1000);
+		console.log(date);
+		var expires = "; expires="+date.toGMTString();
+		document.cookie = "genvoting_<?php echo $module_id; ?>="+value+expires;
+	}
 </script>

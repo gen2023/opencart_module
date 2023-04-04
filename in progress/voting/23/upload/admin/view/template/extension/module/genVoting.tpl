@@ -73,6 +73,26 @@
 				</div>
 			  </div>
 			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-cookies"><?php echo $entry_cookies; ?></label>
+				<div class="col-sm-10">
+				  <select name="cookies" id="input-cookies" class="form-control">
+					<?php if ($cookies) { ?>
+					<option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+					<option value="0"><?php echo $text_disabled; ?></option>
+					<?php } else { ?>
+					<option value="1"><?php echo $text_enabled; ?></option>
+					<option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+					<?php } ?>
+				  </select>
+				</div>
+			  </div>			 
+			  <div id="block_validity" class="form-group">
+				<label class="col-sm-2 control-label" for="input-validity"><?php echo $entry_validity; ?></label>
+				<div class="col-sm-10">
+				  <input type="number" name="validity" value="<?php echo $validity; ?>" placeholder="<?php echo $entry_validity; ?>" id="input-validity" class="form-control" />
+				</div>
+			  </div>			
+			  <div class="form-group">
 				<label class="col-sm-2 control-label" for="input-type_module"><?php echo $entry_type; ?></label>
 				<div class="col-sm-10">
 				  <select name="type_module" id="input-type_module" class="form-control">
@@ -166,10 +186,12 @@
   </div>
 </div>
 <script>
-	setTimeout(function() { 
-		$('#message_success').css("display", "none");
-		$('#message_success')[0].textContent='';
-	}, 10000);
+	if($('#message_success')[0]){
+		setTimeout(function() { 
+			$('#message_success').css("display", "none");	
+			$('#message_success')[0].textContent='';
+		}, 10000);
+	}	
 </script>
   <script type="text/javascript"><!--
 var attribute_row = <?php echo $attribute_row; ?>;
@@ -188,4 +210,17 @@ function addAttribute() {
 	attribute_row++;
 }
 //--></script>
+<script>
+	setCookie();
+	$('#input-cookies').on('change',function(){
+		setCookie();
+	});
+	function setCookie(){
+		if ($('#input-cookies').val()==1){
+			$('#block_validity').css("display","block");
+		} else{
+			$('#block_validity').css("display","none");
+		}
+	}
+</script>
 <?php echo $footer; ?>

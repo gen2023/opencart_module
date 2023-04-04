@@ -36,9 +36,18 @@ array(6) {
 		$data['voting_attributes']=$setting['voting_attributes'];
 		$data['type_module']=$setting['type_module'];
 		$data['viewResult']=$setting['viewResult'];
+		$data['cookies']=$setting['cookies'];
+		$data['validity']=$setting['validity'];
 		$data['displayNone']='display:block;';
 
-		return $this->load->view('extension/module/genVoting', $data);
+		
+		if(isset($_COOKIE["genvoting_".$data['module_id']]) && isset($data['cookies'])){
+			return 0;
+		}else{
+			return $this->load->view('extension/module/genVoting', $data);
+		}
+
+		
 
 	}
 	
