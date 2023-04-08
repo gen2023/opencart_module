@@ -1,0 +1,17 @@
+{% for testimonation in testimonations %}
+<div class="swiper-slide">
+    <div class="opgtm-testimonial-left">
+		{% if    testimonation.author_image   and  display_avatar %}
+			<div class="opgtm-avtar-image"><img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}"></div>
+		{% endif %}
+	</div>
+	<div class="opgtm-testimonial-content">
+		<h4>{{ testimonation.testimonial_title }}</h4>
+		<div class="opgtm-testimonials-text">
+			<p>
+				 {{ testimonation.description }} 
+			</p>
+		</div>
+	</div>
+</div>
+{% endfor %}

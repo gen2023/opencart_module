@@ -1,0 +1,38 @@
+<div class="opgtm-testimonial {{ css_class }}">
+	{% if title %}<h2>{{ title }}</h2>{% endif %}
+	<div class="testimonation swiper-viewport">
+	  <div id="testimonation{{ module }}" class="swiper-container">
+		<div class="swiper-wrapper">
+		  
+			{{ design }}
+
+		  </div>
+	  </div>
+	  {% if viewPagination %} 
+		<div class="swiper-pagination testimonation{{ module }}"></div> 
+	  {% endif %}
+	  {% if viewnavigation %} 
+		<div class="swiper-pager"><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
+	  {% endif %}
+	</div>
+</div>
+<script type="text/javascript"><!--
+$('#testimonation{{ module }}').swiper({
+	autoHeight: true,
+	centeredSlides: true,
+	simulateTouch: true,
+	paginationClickable: true,
+	direction: "{{ direction }}",
+	effect: "{{ effect }}",
+	enabled: {{ enabled }},
+	followFinger: {{ followFinger }},
+	longSwipesMs: {{ longSwipesMs }},
+	loop: {{ loop }},
+	preloadImages: {{ preloadImages }},
+	spaceBetween: {{ spaceBetween }},
+	//autoplay: {{ autoplay }},
+	pagination: ".testimonation{{ module }}",
+	nextButton: ".testimonation .swiper-button-next",
+    prevButton: ".testimonation .swiper-button-prev"
+});
+--></script> 

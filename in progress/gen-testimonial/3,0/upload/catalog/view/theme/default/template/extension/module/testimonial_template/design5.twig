@@ -1,0 +1,61 @@
+
+
+
+	<div class="opgtm-testimonial-inner {% if  testimonation.author_image is empty %} {{ 'opgtm-no-author-image' }} {% endif %}%}">
+	{% if testimonation.author_image   and  display_avatar %}
+			<div class="opgtm-testimonial_avatar">			
+					<div class="opgtm-avtar-image"><img src="{{ testimonation.author_image }}" alt="avatar"></div>			
+			</div>
+		{% endif %}
+		<div class="opgtm-testimonial-content">
+			<div class="opgtm-testimonials-text">
+				<p>
+				
+				{{ testimonation.description }}
+				
+				</p>
+			</div>
+		</div>
+		<div class="opgtm-testimonial-author">
+			{% if display_job  and  testimonation.job_title  or  display_company  and  testimonation.company %}
+				<div class="opgtm-testimonial-cdec">
+					 {% if display_company  and  testimonation.company %}
+							{{ '<a href="'~urlCompany~'" > '~testimonation.company~' </a>' }}
+						{% endif %}
+				</div>
+				<div class="opgtm-testimonial-client">
+					
+						{% if display_client  and  testimonation.author %}
+							 <span class="nameAutor">{{ testimonation.author }}</span>						{% endif %} 
+						{% if display_job  and  testimonation.job_title %}
+							 <span class="positionAutor"><em>{{ testimonation.job_title }}</em></span>						{% endif %}						
+					
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+
+
+{% for testimonation in testimonations %}
+<div class="swiper-slide">
+
+{% if testimonation.author_image   and  display_avatar %}
+			<div class="opgtm-testimonial_avatar">			
+				<div class="opgtm-avtar-image"><img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}"></div>			
+			</div>
+		{% endif %}
+		
+  <div class="opgtm-testimonial_header">
+    <div style="width: 50%;"><strong>{{ testimonation.author }}</strong></div>
+    <div class="text-right">{{ testimonation.date }}</div>
+  </div>
+  <div class="opgtm-testimonial_description">
+    {{ testimonation.description }}</p>
+      {% for i in 1..5 %}
+      {% if testimonation.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+      {% endfor %}
+  </div>
+
+</div>
+{% endfor %}

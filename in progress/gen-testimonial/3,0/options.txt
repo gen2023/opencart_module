@@ -1,0 +1,58 @@
+autoHeight:true
+centeredSlides:true
+simulateTouch:true	
+direction	'horizontal' | 'vertical'	'horizontal'	
+effect	'slide' | 'fade' | 'cube' | 'coverflow' | 'flip' | 'creative' | 'cards'	'slide'	
+enabled	false true	true	
+followFinger false true	true	
+longSwipesMs	number	300	
+loop false true	false	
+preloadImages	false true	true	
+spaceBetween	number	0	
+autoplay false или число
+
+autoHeight	boolean	false	
+Установите значение, trueи обертка ползунка адаптирует свою высоту к высоте текущего активного слайда.
+
+centeredSlides	boolean	false	
+Если true, то активный слайд будет центрирован, а не всегда слева.
+
+createElements	boolean	false	
+Когда включено, Swiper автоматически оборачивает слайды элементом swiper-wrapper и создает необходимые элементы для навигации, разбивки на страницы и полосы прокрутки, если они включены (с соответствующим объектом params или с логическим значением true))
+
+direction	'horizontal' | 'vertical'	'horizontal'	
+Может быть 'horizontal' или 'vertical'(для вертикального слайдера).
+
+effect	'slide' | 'fade' | 'cube' | 'coverflow' | 'flip' | 'creative' | 'cards'	'slide'	
+Эффект перехода. Может быть 'slide', 'fade', 'cube', 'coverflow'или'flip''creative'
+
+enabled	boolean	true	
+Был ли изначально включен Swiper. Когда Swiper отключен, он скроет все элементы навигации и не будет реагировать ни на какие события и взаимодействия.
+
+followFinger	boolean	true	
+Если отключено, то слайдер будет анимироваться только тогда, когда вы его отпустите, он не будет двигаться, пока вы держите на нем палец
+
+longSwipesMs	number	300	
+Минимальная продолжительность (в мс) для перехода к следующему/предыдущему слайду при длительном смахивании
+
+loop	boolean	false	
+Установите, trueчтобы включить режим непрерывного цикла
+Из-за того, как работает циклический режим, он будет добавлять дублированные слайды. Такие дублированные слайды будут иметь дополнительные классы:
+swiper-slide-duplicate- представляет дублированный слайд
+swiper-slide-duplicate-active- представляет слайд, продублированный в текущий активный слайд
+swiper-slide-duplicate-next- представляет слайд, продублированный на слайд рядом с активным
+swiper-slide-duplicate-prev- представляет слайд, дублированный на слайд, предшествующий активному
+Если вы используете его вместе с slidesPerView: 'auto', то вам нужно указать loopedSlidesпараметр с количеством слайдов для повторения (дублирования). Не следует использовать вместе с rewindрежимом
+
+preloadImages	boolean	true	
+При включении Swiper принудительно загружает все изображения
+
+simulateTouch	boolean	true	
+Если true, Swiper будет принимать события мыши, такие как события касания (щелкните и перетащите, чтобы сменить слайды).
+
+spaceBetween	number	0	
+Расстояние между слайдами в p0x.
+Если вы используете свойство css «margin» для элементов, которые входят в Swiper, в который вы передаете «spaceBetween», навигация может работать неправильно.
+
+speed	number	300	
+Длительность перехода между слайдами (в мс)

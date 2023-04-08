@@ -1,5 +1,5 @@
 <?php
-class ControllerExtensionFeedSimpleYMLInstagram extends Controller {
+class ControllerExtensionFeedSimpleYML extends Controller {
 	private $currency_code;
 	private $currency_rate;
 	

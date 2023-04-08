@@ -1,0 +1,46 @@
+{% for testimonation in testimonations %}
+<div class="swiper-slide">
+<div class="{{ css_class }}">
+	<div class="opgtm-testimonial-inner {% if testimonation.author_image is empty  {{ 'opgtm-no-author-image' }} {% endif %}%}">
+	{% if testimonation.author_image and display_avatar %}
+			<div class="opgtm-testimonial_avatar">			
+					<div class="opgtm-avtar-image"><img src="{{ testimonation.author_image }}" alt="avatar"></div>			
+			</div>
+		{% endif %}
+		<div class="opgtm-testimonial-author">
+			{% if display_client and testimonation.author %}
+				<div class="opgtm-testimonial-client">
+					{{ testimonation.author }}
+				</div>
+			{% endif %}
+
+			{% if display_job  and  testimonation.job_title  or  display_company  and  testimonation.company %}
+				<div class="opgtm-testimonial-cdec">
+				
+					{% if display_job  and  testimonation.job_title %}
+						{{ job_title }}
+					{% endif %}
+					{% if display_job  and  testimonation.job_title  and  display_company  and  testimonation.company %} 
+						{{ " / " }}
+					 {% endif %}
+					{% if display_company  and  testimonation.company %}
+						{{ '<a href="'~urlCompany~'" > '~testimonation.company~' </a>' }}
+					{% endif %}
+				
+				</div>
+			{% endif %}
+		</div>
+		<div class="opgtm-testimonial-content">
+			<h4>{{ testimonation.testimonial_title }}</h4>
+			<div class="opgtm-testimonials-text">
+				<p>
+				{% if display_quotes %} <em> {% endif %}
+					 {{ testimonation.description }} 
+				{% if display_quotes %} </em> {% endif %}
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endfor %}
