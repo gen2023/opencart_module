@@ -1,6 +1,3 @@
-добавить форму для отзывов с возможностью изменять количество стандартных полей
+﻿добавить форму для отзывов с возможностью изменять количество стандартных полей
 
 
-https://nicepage.com/ru/st/41406/otzyvy-nashikh-klientov-shablon-sayta
-https://nicepage.com/ru/st/1381590/mnenie-o-proekte-shablon-sayta
-https://nicepage.com/ru/st/96142/chto-govoryat-nashi-gosti-shablon-sayta

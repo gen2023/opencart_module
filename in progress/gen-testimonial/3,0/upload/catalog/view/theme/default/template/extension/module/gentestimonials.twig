@@ -18,6 +18,26 @@
 </div>
 <script type="text/javascript"><!--
 $('#testimonation{{ module }}').swiper({
+	slidesPerView: {{ slidesPerView }},
+	spaceBetween: {{ spaceBetween }},
+	breakpoints: {
+		320: {
+		  slidesPerView: {{ slidesPerView320 }},
+		  spaceBetween: {{ spaceBetween320 }}
+		},
+		425: {
+		  slidesPerView: {{ slidesPerView425 }},
+		  spaceBetween: {{ spaceBetween425 }}
+		},
+		768: {
+		  slidesPerView: {{ slidesPerView768 }},
+		  spaceBetween: {{ spaceBetween768 }}
+		},
+		1024: {
+		  slidesPerView: {{ slidesPerView1024 }},
+		  spaceBetween: {{ spaceBetween1024 }}
+		}
+	},
 	autoHeight: true,
 	centeredSlides: true,
 	simulateTouch: true,
@@ -29,7 +49,6 @@ $('#testimonation{{ module }}').swiper({
 	longSwipesMs: {{ longSwipesMs }},
 	loop: {{ loop }},
 	preloadImages: {{ preloadImages }},
-	spaceBetween: {{ spaceBetween }},
 	//autoplay: {{ autoplay }},
 	pagination: ".testimonation{{ module }}",
 	nextButton: ".testimonation .swiper-button-next",

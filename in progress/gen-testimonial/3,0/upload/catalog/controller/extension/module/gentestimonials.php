@@ -15,22 +15,19 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 
 		$data['testimonations'] = array();
 
-		//$results = $this->model_design_banner->getBanner($setting['banner_id']);
-
 		foreach ($result_sql as $result) {
-				$data['testimonations'][] = array(
-					'userLink' => $result['userLink'],
-					'rating' => $result['rating'],
-					'author' => $result['user'], /*переименовать в author*/
-					'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
-					'color' => $result['color'],
-					'date' => $result['date'],
-					'testimonial_title' => 'test title', /*Добавить в написание отзывов */
-					'job_title' => 'test JOB', /*Добавить в написание отзывов */
-					'company' => 'test company', /*Добавить в написание отзывов */
-					'urlCompany' => 'http://www.google.com', /*Добавить в написание отзывов */
-					'author_image' => $this->model_tool_image->resize($result['image'], 100, 100)
-				);
+			$data['testimonations'][] = array(
+				'userLink' => $result['userLink'],
+				'rating' => $result['rating'],
+				'author' => $result['user'], /*переименовать в author*/
+				'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
+				'testimonial_title' => $result['testimonial_title'],
+				'job_title' => $result['job_title'], 
+				'company' => $result['company'], 
+				'urlCompany' => $result['urlCompany'], 
+				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100)
+			);
 		}
 //var_dump($data['testimonations']);
 
@@ -54,10 +51,55 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		$data['display_client'] = $setting['display_client'];
 		$data['display_job'] = $setting['display_job'];
 		$data['display_company'] = $setting['display_company'];
+		$data['display_rating'] = $setting['display_rating'];
+		$data['display_date'] = $setting['display_date'];
 		
 		$data['template'] = $setting['template'];
 		$data['css_class'] = 'design' . $setting['template'];
-		$data['class_image'] = 'circle'; /* добавить в настройки вид изображения square circle*/
+		$data['class_image'] = $setting['template'];
+		$data['slidesPerView'] = $setting['slidesPerView'];
+		
+		if ($setting['slidesPerView320']==''){
+			$data['slidesPerView320']=$setting['slidesPerView'];
+		} else {
+			$data['slidesPerView320'] 	= $setting['slidesPerView320'];
+		}
+		if ($setting['slidesPerView1024']==''){
+			$data['slidesPerView1024']=$setting['slidesPerView'];
+		} else {
+			$data['slidesPerView1024'] 	= $setting['slidesPerView1024'];
+		}
+		if ($setting['slidesPerView425']==''){
+			$data['slidesPerView425']=$setting['slidesPerView'];
+		} else {
+			$data['slidesPerView425'] 	= $setting['slidesPerView425'];
+		}
+		if ($setting['slidesPerView768']==''){
+			$data['slidesPerView768']=$setting['slidesPerView'];
+		} else {
+			$data['slidesPerView768'] 	= $setting['slidesPerView768'];
+		}
+		
+		if ($setting['spaceBetween320']==''){
+			$data['spaceBetween320']=$setting['spaceBetween'];
+		} else {
+			$data['spaceBetween320'] 	= $setting['spaceBetween320'];
+		}
+		if ($setting['spaceBetween1024']==''){
+			$data['spaceBetween1024']=$setting['spaceBetween'];
+		} else {
+			$data['spaceBetween1024'] 	= $setting['spaceBetween1024'];
+		}
+		if ($setting['spaceBetween768']==''){
+			$data['spaceBetween768']=$setting['spaceBetween'];
+		} else {
+			$data['spaceBetween768'] 	= $setting['spaceBetween768'];
+		}
+		if ($setting['spaceBetween425']==''){
+			$data['spaceBetween425']=$setting['spaceBetween'];
+		} else {
+			$data['spaceBetween425'] 	= $setting['spaceBetween425'];
+		}
 		
 		if ($setting['viewTitle']=='1')
 			$data['title'] = $setting['name'];

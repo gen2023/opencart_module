@@ -28,6 +28,7 @@
 		  <ul class="nav nav-tabs">
 			<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
 			<li><a href="#tab-data" data-toggle="tab">{{ tab_setting_swiper }}</a></li>
+			<li><a href="#tab-settingView" data-toggle="tab">{{ tab_setting_viev_slider }}</a></li>
 		  </ul>
 		  <div class="tab-content">
 			<div class="tab-pane active" id="tab-general">
@@ -57,38 +58,14 @@
 			  <div class="form-group">
 				<label class="col-sm-2 control-label" for="input-template">{{ entry_template }}</label>
 				<div class="col-sm-10">
-				  <select name="template" id="input-testimonial" class="form-control">
-					{% if template=='1' %}
-						<option value="1" selected="selected">{{ text_template1 }}</option>
-						<option value="2">{{ text_template2 }}</option>
-						<option value="3">{{ text_template3 }}</option>
-						<option value="4">{{ text_template4 }}</option>
-						<option value="5">{{ text_template5 }}</option>
-					{% elseif template==2 %}
-						<option value="1">{{ text_template1 }}</option>
-						<option value="2" selected="selected">{{ text_template2 }}</option>
-						<option value="3">{{ text_template3 }}</option>
-						<option value="4">{{ text_template4 }}</option>
-						<option value="5">{{ text_template5 }}</option>						
-					{% elseif template==3 %}
-						<option value="1">{{ text_template1 }}</option>
-						<option value="2">{{ text_template2 }}</option>
-						<option value="3" selected="selected">{{ text_template3 }}</option>
-						<option value="4">{{ text_template4 }}</option>
-						<option value="5">{{ text_template5 }}</option>						
-					{% elseif template==4 %}
-						<option value="1">{{ text_template1 }}</option>
-						<option value="2">{{ text_template2 }}</option>
-						<option value="3">{{ text_template3 }}</option>
-						<option value="4" selected="selected">{{ text_template4 }}</option>
-						<option value="5">{{ text_template5 }}</option>						
-					{% elseif template==5 %}
-						<option value="1">{{ text_template1 }}</option>
-						<option value="2">{{ text_template2 }}</option>
-						<option value="3">{{ text_template3 }}</option>
-						<option value="4">{{ text_template4 }}</option>
-						<option value="5" selected="selected">{{ text_template5 }}</option>						
-					{% endif %}
+				  <select name="template" id="input-template" class="form-control">
+					{% for i in 1..7 %}
+						{% if (template==i) %}
+							<option value="{{ i }}" selected="selected">{{ text_template}}{{ i }}</option>
+						{% else %}
+							<option value="{{ i }}" >{{ text_template}}{{ i }}</option>
+						{% endif %}
+					{% endfor %}
 				  </select>
 				</div>
 			  </div>
@@ -163,6 +140,34 @@
 				</div>
 			  </div>
 			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-display_rating">{{ entry_display_rating }}</label>
+				<div class="col-sm-10">
+				  <select name="display_rating" id="input-display_rating" class="form-control">
+					{% if display_rating %}
+					<option value="1" selected="selected">{{ text_enabled }}</option>
+					<option value="0">{{ text_disabled }}</option>
+					{% else %}
+					<option value="1">{{ text_enabled }}</option>
+					<option value="0" selected="selected">{{ text_disabled }}</option>
+					{% endif %}
+				  </select>
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-display_date">{{ entry_display_date }}</label>
+				<div class="col-sm-10">
+				  <select name="display_date" id="input-display_date" class="form-control">
+					{% if display_date %}
+					<option value="1" selected="selected">{{ text_enabled }}</option>
+					<option value="0">{{ text_disabled }}</option>
+					{% else %}
+					<option value="1">{{ text_enabled }}</option>
+					<option value="0" selected="selected">{{ text_disabled }}</option>
+					{% endif %}
+				  </select>
+				</div>
+			  </div>
+			  <div class="form-group">
 				<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
 				<div class="col-sm-10">
 				  <select name="status" id="input-status" class="form-control">
@@ -182,10 +187,10 @@
 				<label class="col-sm-2 control-label" for="input-direction">{{ entry_direction }}</label>
 				<div class="col-sm-10">
 				  <select name="direction" id="input-direction" class="form-control">
-					{% if direction %}
+					{% if direction=='horizontal' %}
 					<option value="horizontal" selected="selected">{{ text_horizontal }}</option>
 					<option value="vertical">{{ text_vertical }}</option>
-					{% else %}
+					{% elseif direction=='vertical'%}
 					<option value="horizontal">{{ text_horizontal }}</option>
 					<option value="vertical" selected="selected">{{ text_vertical }}</option>
 					{% endif %}
@@ -319,12 +324,6 @@
 				</div>
 			  </div>
 			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween" title="{{ help_spaceBetween }}">{{ entry_spaceBetween }}</label>
-				<div class="col-sm-10">
-				  <input type="text" name="spaceBetween" value="{{ spaceBetween }}" placeholder="{{ entry_spaceBetween }}" id="input-spaceBetween" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
 				<label class="col-sm-2 control-label" for="input-autoplay">{{ entry_autoplay }}</label>
 				<div class="col-sm-10">
 				  <input type="text" name="autoplay" value="{{ autoplay }}" placeholder="{{ entry_autoplay }}" id="input-autoplay" class="form-control" />
@@ -358,6 +357,82 @@
 				  </select>
 				</div>
 			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-class_image">{{ entry_class_image }}</label>
+				<div class="col-sm-10">
+				  <select name="class_image" id="input-class_image" class="form-control">
+					{% if class_image %}
+					<option value="circle" selected="selected">{{ text_circle }}</option>
+					<option value="square">{{ text_square }}</option>
+					{% else %}
+					<option value="circle">{{ text_circle }}</option>
+					<option value="square" selected="selected">{{ text_square }}</option>
+					{% endif %}
+				  </select>
+				</div>
+			  </div>
+			</div>
+			<div class="tab-pane" id="tab-settingView">	
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-slidesPerView">{{ entry_slidesPerView }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="slidesPerView" value="{{ slidesPerView }}" placeholder="{{ entry_slidesPerView }}" id="input-slidesPerView" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-slidesPerView320">{{ entry_slidesPerView320 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="slidesPerView320" value="{{ slidesPerView320 }}" placeholder="{{ entry_slidesPerView320 }}" id="input-slidesPerView" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-slidesPerView425">{{ entry_slidesPerView425 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="slidesPerView425" value="{{ slidesPerView425 }}" placeholder="{{ entry_slidesPerView425 }}" id="input-slidesPerView425" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-slidesPerView768">{{ entry_slidesPerView768 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="slidesPerView768" value="{{ slidesPerView768 }}" placeholder="{{ entry_slidesPerView768 }}" id="input-slidesPerView768" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-slidesPerView1024">{{ entry_slidesPerView1024 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="slidesPerView1024" value="{{ slidesPerView1024 }}" placeholder="{{ entry_slidesPerView1024 }}" id="input-slidesPerView1024" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-spaceBetween" title="{{ help_spaceBetween }}">{{ entry_spaceBetween }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="spaceBetween" value="{{ spaceBetween }}" placeholder="{{ entry_spaceBetween }}" id="input-spaceBetween" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-spaceBetween320">{{ entry_spaceBetween320 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="spaceBetween320" value="{{ spaceBetween320 }}" placeholder="{{ entry_spaceBetween320 }}" id="input-spaceBetween320" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-spaceBetween425">{{ entry_spaceBetween425 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="spaceBetween425" value="{{ spaceBetween425 }}" placeholder="{{ entry_spaceBetween425 }}" id="input-spaceBetween425" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-spaceBetween768">{{ entry_spaceBetween768 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="spaceBetween768" value="{{ spaceBetween768 }}" placeholder="{{ entry_spaceBetween768 }}" id="input-spaceBetween768" class="form-control" />
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-spaceBetween1024">{{ entry_spaceBetween1024 }}</label>
+				<div class="col-sm-10">
+				  <input type="number" name="spaceBetween1024" value="{{ spaceBetween1024 }}" placeholder="{{ entry_spaceBetween1024 }}" id="input-spaceBetween1024" class="form-control" />
+				</div>
+			  </div>			  
 			</div>
 		  </div>
 		</form>

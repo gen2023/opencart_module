@@ -296,19 +296,20 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 		$data['text_form'] = !isset($this->request->get['testimonial_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 		
 		$data['entry_userLink'] = $this->language->get('entry_userLink');
+		$data['entry_job_title'] = $this->language->get('entry_job_title');
+		$data['entry_company'] = $this->language->get('entry_company');
 		$data['entry_rating'] = $this->language->get('entry_rating');
-		$data['entry_mindescription'] = $this->language->get('entry_mindescription');
+		$data['entry_testimonial_title'] = $this->language->get('entry_testimonial_title');
 		$data['entry_description'] = $this->language->get('entry_description');
 		$data['entry_user'] = $this->language->get('entry_user');
 		$data['entry_date'] = $this->language->get('entry_date');
 		$data['entry_license'] = $this->language->get('entry_license');
-		$data['entry_testimonials_color'] = $this->language->get('entry_testimonials_color');
+		$data['entry_urlCompany'] = $this->language->get('entry_urlCompany');
 		$data['text_license'] = $this->language->get('text_license');
 		$data['tab_data'] = $this->language->get('tab_data');
 		$data['tab_license'] = $this->language->get('tab_license');
 		$data['entry_keyword'] = $this->language->get('entry_keyword');
 		$data['help_keyword'] = $this->language->get('help_keyword');	
-		$data['help_testimonials_color'] = $this->language->get('help_testimonials_color');		
 		
 		$testimonial_value = $this->model_extension_module_gentestimonials->getValue();
 		$data['value2']=$testimonial_value['value2'];
@@ -337,12 +338,6 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 			$data['error_description'] = array();
 		}
 		
-		if (isset($this->error['mindescription'])) {
-			$data['error_mindescription'] = $this->error['mindescription'];
-		} else {
-			$data['error_mindescription'] = array();
-		}
-
 		if (isset($this->error['meta_title'])) {
 			$data['error_meta_title'] = $this->error['meta_title'];
 		} else {
@@ -392,6 +387,13 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 		} else {
 			$data['testimonial_description'] = array();
 		}
+		if (isset($this->request->post['testimonial_title'])) {
+			$data['testimonial_title'] = $this->request->post['testimonial_title'];
+		} elseif (isset($this->request->get['testimonial_id'])) {
+			$data['testimonial_title'] = $this->model_extension_module_gentestimonials->getTestimonialDescriptions($this->request->get['testimonial_id']);
+		} else {
+			$data['testimonial_title'] = array();
+		}
 		
 		if (isset($this->request->post['meta_keyword'])) {
 			$data['meta_keyword'] = $this->request->post['meta_keyword'];
@@ -417,12 +419,12 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 			$data['date'] = date('Y-m-d');
 		}
 		
-		if (isset($this->request->post['color_text'])) {
-			$data['color_text'] = $this->request->post['color_text'];
+		if (isset($this->request->post['urlCompany'])) {
+			$data['urlCompany'] = $this->request->post['urlCompany'];
 		} elseif (!empty($testimonial_info)) {
-			$data['color_text'] = $testimonial_info['color'];
+			$data['urlCompany'] = $testimonial_info['urlCompany'];
 		} else {
-			$data['color_text'] = '';
+			$data['urlCompany'] = '';
 		}
 		
 		if (isset($this->request->post['sort_order'])) {
@@ -435,8 +437,8 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 		
 		if (isset($this->request->post['rating'])) {
 			$data['rating'] = $this->request->post['rating'];
-		} elseif (!empty($review_info)) {
-			$data['rating'] = $review_info['rating'];
+		} elseif (!empty($testimonial_info)) {
+			$data['rating'] = $testimonial_info['rating'];
 		} else {
 			$data['rating'] = '';
 		}
@@ -497,11 +499,7 @@ class ControllerExtensionModuleGentestimonialsList extends Controller {
 		
 			if (strlen($value['description']) < 3) {
 				$this->error['description'][$language_id] = $this->language->get('error_description');
-			}
-			
-			if (strlen($value['mindescription']) < 3) {
-				$this->error['mindescription'][$language_id] = $this->language->get('error_mindescription');
-			}
+			}			
 		}
 		
 		$testimonial_value = $this->model_extension_module_gentestimonials->getValue();

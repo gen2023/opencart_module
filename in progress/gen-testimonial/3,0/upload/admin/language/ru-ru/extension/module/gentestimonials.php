@@ -1,15 +1,19 @@
 <?php
 // Heading
 $_['heading_title']				= 'Отзывы';
+$_['heading_title_list']				= 'Отзывы список';
 $_['heading_title_setting']		= 'Настройки модуля';
 
 // Text
 $_['text_success_setting']		= 'Успех: вы изменили настройки!';
+$_['text_template']				= 'Шаблон';
 $_['text_template1']			= 'Шаблон1';
 $_['text_template2']			= 'Шаблон2';
 $_['text_template3']			= 'Шаблон3';
 $_['text_template4']			= 'Шаблон4';
 $_['text_template5']			= 'Шаблон5';
+$_['text_template6']			= 'Шаблон6';
+$_['text_template7']			= 'Шаблон7';
 $_['text_license']				= 'Для получения ключа, отправьте сообщение на e-meil: <b>gen2023@yandex.ru</b>';
 $_['text_list']					= 'Список отзывов';
 $_['text_add']					= 'Добавить отзыв';
@@ -24,14 +28,17 @@ $_['text_coverflow']			= 'покрытие';
 $_['text_flip']					= 'флип';
 $_['text_creative']				= 'творческий';
 $_['text_cards']				= 'карты';
+$_['text_square']				= 'квадрат';
+$_['text_circle']				= 'круг';
 
 // Вводимые значения
 $_['entry_template']			= 'Выберите макет';
-$_['entry_avtor']				= 'Введите автора';
+$_['entry_user']				= 'Введите автора';
 $_['entry_userLink']			= 'Введите сылку на пользователя';
 $_['entry_description']			= 'Отзыв';
-$_['entry_mindescription']		= 'Короткий отзыв';
+$_['entry_testimonial_title']	= 'Название отзыв';
 $_['entry_license']				= 'Введите ключ';
+$_['entry_date']				= 'Дата';
 $_['entry_date']				= 'Дата';
 $_['entry_testimonials_color']	= 'Цвет отзыва';
 $_['entry_sort_order']			= 'Сортировка отзыва';
@@ -41,7 +48,13 @@ $_['entry_status']				= 'Статус';
 $_['entry_viewTitle']			= 'Показывать заголовок?';
 $_['entry_name']				= 'Введите заголовок';
 $_['entry_rating']				= 'Рейтинг';
+$_['entry_class_image']			= 'Формат изображения';
+$_['entry_job_title']			= 'Должность';
+$_['entry_company']				= 'Компания';
+$_['entry_urlCompany']			= 'Сайт компании';
 
+$_['entry_display_date']				= 'Показывать дату?';
+$_['entry_display_rating']				= 'Показывать рейтинг?';
 $_['entry_display_avatar']				= 'Показывать аватар?';
 $_['entry_display_quotes']				= 'Показывать кавычки?';
 $_['entry_display_client']				= 'Показывать пользователя?';
@@ -52,12 +65,22 @@ $_['entry_effect']						= 'Введите эфект';
 $_['entry_enabled']						= 'Включен или отключен swiper';
 $_['entry_followFinger']				= 'Свойство';
 $_['entry_loop']						= 'Зацикливание';
-$_['entry_preloadImages']						= 'Загрузка изображений';
-$_['entry_longSwipesMs']						= 'Продолжительность';
-$_['entry_spaceBetween']						= 'Растояние между блоками';
-$_['entry_autoplay']						= 'Скорость прокрутки';
-$_['entry_viewnavigation']						= 'Показывать навигацию?';
-$_['entry_viewPagination']						= 'Показывать пагинацию?';
+$_['entry_preloadImages']				= 'Загрузка изображений';
+$_['entry_longSwipesMs']				= 'Продолжительность';
+$_['entry_autoplay']					= 'Скорость прокрутки';
+$_['entry_viewnavigation']				= 'Показывать навигацию?';
+$_['entry_viewPagination']				= 'Показывать пагинацию?';
+
+$_['entry_spaceBetween']		= 'Растояние между блоками по умолчанию';
+$_['entry_spaceBetween1024']	= 'Растояние для экрана>1024px';
+$_['entry_spaceBetween425']		= 'Растояние для экрана>425px';
+$_['entry_spaceBetween320']		= 'Растояние для экрана>320px';
+$_['entry_spaceBetween768']		= 'Растояние для экрана>768px';
+$_['entry_slidesPerView']		= 'Кол-во слайдов по умолчанию';
+$_['entry_slidesPerView1024']	= 'Кол-во для экрана>1024px';
+$_['entry_slidesPerView425']	= 'Кол-во для экрана>425px';
+$_['entry_slidesPerView320']	= 'Кол-во для экрана>320px';
+$_['entry_slidesPerView768']	= 'Кол-во для экрана>768px';
 
 // Колонки
 $_['column_image']				= 'Изображение';
@@ -70,6 +93,7 @@ $_['column_action']				= 'Действие';
 $_['tab_license']				= 'Лицензия';
 $_['tab_data']					= 'Данные';
 $_['tab_setting_swiper']		= 'Настройки слайдера';
+$_['tab_setting_viev_slider']	= 'Настройки на разных экранах';
 
 // Ошибка
 $_['error_warning']				= 'Предупреждение: пожалуйста, внимательно проверьте форму на наличие ошибок!';

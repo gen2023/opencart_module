@@ -50,12 +50,9 @@
 											</div>
 										</div>
 										<div class="form-group required">
-											<label class="col-sm-2 control-label" for="input-mindescription{{ language['language_id'] }}">{{ entry_mindescription }}</label>
+											<label class="col-sm-2 control-label" for="input-testimonial_title{{ language['language_id'] }}">{{ entry_testimonial_title }}</label>
 											<div class="col-sm-10">
-												<input type="text" name="testimonial_description[{{ language['language_id'] }}][mindescription]" value="{{ testimonial_description[language['language_id']] is defined ? testimonial_description[language['language_id']]['mindescription'] : '' }}" placeholder="{{ entry_mindescription }}" id="input-mindescription{{ language['language_id'] }}" class="form-control" />
-												{% if (error_mindescription[language['language_id']] is defined) %} 
-												<div class="text-danger">{{ error_user[language['language_id']] }}</div>
-												{% endif %} 
+												<input type="text" name="testimonial_description[{{ language['language_id'] }}][testimonial_title]" value="{{ testimonial_description[language['language_id']] is defined ? testimonial_description[language['language_id']]['testimonial_title'] : '' }}" placeholder="{{ entry_testimonial_title }}" id="input-testimonial_title{{ language['language_id'] }}" class="form-control" />
 											</div>
 										</div>
 										<div class="form-group required">
@@ -65,6 +62,18 @@
 												{% if (error_description[language['language_id']] is defined) %} 
 												<div class="text-danger">{{ error_description[language['language_id']] }}</div>
 												{% endif %} 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-job_title{{ language['language_id'] }}">{{ entry_job_title }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="testimonial_description[{{ language['language_id'] }}][job_title]" value="{{ testimonial_description[language['language_id']] is defined ? testimonial_description[language['language_id']]['job_title'] : '' }}" placeholder="{{ entry_job_title }}" id="input-job_title{{ language['language_id'] }}" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-company{{ language['language_id'] }}">{{ entry_company }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="testimonial_description[{{ language['language_id'] }}][company]" value="{{ testimonial_description[language['language_id']] is defined ? testimonial_description[language['language_id']]['company'] : '' }}" placeholder="{{ entry_company }}" id="input-company{{ language['language_id'] }}" class="form-control" />
 											</div>
 										</div>
 										
@@ -127,9 +136,9 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input-color_text"><span data-toggle="tooltip" title="{{ help_testimonials_color }}">{{ entry_testimonials_color }}</span></label>
+									<label class="col-sm-2 control-label" for="input-urlCompany">{{ entry_urlCompany }}</label>
 									<div class="col-sm-10">
-										<input type="text" name="color_text" value="{{ color_text }}" placeholder="{{ entry_testimonials_color }}" id="input-color_text" class="form-control" />
+										<input type="text" name="urlCompany" value="{{ urlCompany }}" placeholder="{{ entry_urlCompany }}" id="input-urlCompany" class="form-control" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -196,7 +205,7 @@
 										<input type="radio" name="rating" value="5" checked="checked" />
 										5
 										{% else %}
-										<input type="radio" name="rating" value="5" checked="checked" />
+										<input type="radio" name="rating" value="5" />
 										5
 										{% endif %} </label>
 									  {% if error_rating %}

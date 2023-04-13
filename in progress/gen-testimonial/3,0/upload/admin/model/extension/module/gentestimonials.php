@@ -2,9 +2,9 @@
 class ModelExtensionModuleGentestimonials extends Model {
 	
 	public function install() {
-		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial` (`testimonial_id` int(11) NOT NULL auto_increment, `rating` int(1) NOT NULL default '5',`status` int(1) NOT NULL default '0', `userLink` VARCHAR(255) COLLATE utf8_general_ci default NULL, `image` VARCHAR(255) COLLATE utf8_general_ci default NULL, `color` VARCHAR(255) COLLATE utf8_general_ci default NULL, `date` date default NULL, `sort_order` int(3) default NULL,  PRIMARY KEY (`testimonial_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");			
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial` (`testimonial_id` int(11) NOT NULL auto_increment, `rating` int(1) NOT NULL default '5',`status` int(1) NOT NULL default '0', `userLink` VARCHAR(255) COLLATE utf8_general_ci default NULL, `image` VARCHAR(255) COLLATE utf8_general_ci default NULL, `urlCompany` VARCHAR(255) COLLATE utf8_general_ci default NULL, `date` date default NULL, `sort_order` int(3) default NULL,  PRIMARY KEY (`testimonial_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");			
 		
-		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_description` (`testimonial_id` int(11) NOT NULL default '0', `language_id` int(11) NOT NULL default '0', `user` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `mindescription` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,  `meta_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,  `meta_h1` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `meta_description` VARCHAR(255) COLLATE utf8_general_ci NOT NULL, `meta_keyword` varchar(255) COLLATE utf8_general_ci NOT NULL, PRIMARY KEY (`testimonial_id`,`language_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");	
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_description` (`testimonial_id` int(11) NOT NULL default '0', `language_id` int(11) NOT NULL default '0', `user` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `testimonial_title` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,`company` VARCHAR(255) COLLATE utf8_general_ci default NULL, `job_title` VARCHAR(255) COLLATE utf8_general_ci default NULL,  `meta_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,  `meta_h1` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `meta_description` VARCHAR(255) COLLATE utf8_general_ci NOT NULL, `meta_keyword` varchar(255) COLLATE utf8_general_ci NOT NULL, PRIMARY KEY (`testimonial_id`,`language_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");	
 		
 		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_setting` (`testimonial_value_id` int(11) NOT NULL auto_increment,`value1` VARCHAR(255) COLLATE utf8_general_ci default NULL, `value2` VARCHAR(255) COLLATE utf8_general_ci default NULL, `template` VARCHAR(255) COLLATE utf8_general_ci default NULL, PRIMARY KEY (`testimonial_value_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
 		
@@ -20,7 +20,7 @@ class ModelExtensionModuleGentestimonials extends Model {
 	//var_dump($data);
 		$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial_setting SET value2 = '" . $this->db->escape($data['license']) . "' WHERE testimonial_value_id = '1'");
 		 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial SET rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "',userLink = '" . $this->db->escape($data['userLink']). "',  date = now(), sort_order = '" . (int)$data['sort_order'] . "', color = '" . $this->db->escape($data['color_text']) . "'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial SET rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "',userLink = '" . $this->db->escape($data['userLink']). "',  date = now(), sort_order = '" . (int)$data['sort_order'] . "', urlCompany = '" . $this->db->escape($data['urlCompany']) . "'");
 	
 		$testimonial_id = $this->db->getLastId();
 	
@@ -33,7 +33,7 @@ class ModelExtensionModuleGentestimonials extends Model {
 		}		
 		
 		foreach ($data['testimonial_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial_description SET testimonial_id = '" . (int)$testimonial_id . "', language_id = '" . (int)$language_id . "', user = '" . $this->db->escape($value['user']) . "',  mindescription = '" . $this->db->escape($value['mindescription']) . "',  description = '" . $this->db->escape($value['description']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "',  meta_h1 = '" . $this->db->escape($value['meta_h1']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial_description SET testimonial_id = '" . (int)$testimonial_id . "', language_id = '" . (int)$language_id . "', user = '" . $this->db->escape($value['user']) . "',  testimonial_title = '" . $this->db->escape($value['testimonial_title']) . "',  job_title = '" . $this->db->escape($value['job_title']) . "',  company = '" . $this->db->escape($value['company']) . "',  description = '" . $this->db->escape($value['description']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "',  meta_h1 = '" . $this->db->escape($value['meta_h1']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
 		}
 	
 		if ($data['keyword']) {
@@ -45,12 +45,12 @@ class ModelExtensionModuleGentestimonials extends Model {
 
 	public function editTestimonial($testimonial_id, $data) {
 //var_dump($data);
-		$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial SET rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "',userLink = '" . $this->db->escape($data['userLink']). "', sort_order = '" . (int)$data['sort_order'] . "', image = '" . $this->db->escape($data['image']) . "', color = '" . $this->db->escape($data['color_text']) . "', date = '" . $this->db->escape($data['date_to']) . "' WHERE testimonial_id = '" . (int)$testimonial_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial SET rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "',userLink = '" . $this->db->escape($data['userLink']). "', sort_order = '" . (int)$data['sort_order'] . "', image = '" . $this->db->escape($data['image']) . "', urlCompany = '" . $this->db->escape($data['urlCompany']) . "', date = '" . $this->db->escape($data['date_to']) . "' WHERE testimonial_id = '" . (int)$testimonial_id . "'");
 			
 		$this->db->query("DELETE FROM " . DB_PREFIX . "gentestimonial_description WHERE testimonial_id = '" . (int)$testimonial_id . "'");
 	
 		foreach ($data['testimonial_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial_description SET testimonial_id = '" . (int)$testimonial_id . "', language_id = '" . (int)$language_id . "', user = '" . $this->db->escape($value['user']) . "', mindescription = '" . $this->db->escape($value['mindescription']) . "', description = '" . $this->db->escape($value['description']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "',  meta_h1 = '" . $this->db->escape($value['meta_h1']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial_description SET testimonial_id = '" . (int)$testimonial_id . "', language_id = '" . (int)$language_id . "', user = '" . $this->db->escape($value['user']) . "', testimonial_title = '" . $this->db->escape($value['testimonial_title']) . "', job_title = '" . $this->db->escape($value['job_title']) . "', company = '" . $this->db->escape($value['company']) . "', description = '" . $this->db->escape($value['description']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "',  meta_h1 = '" . $this->db->escape($value['meta_h1']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
 		}
 	
 		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'testimonial_id=" . (int)$testimonial_id . "'");
@@ -135,8 +135,10 @@ class ModelExtensionModuleGentestimonials extends Model {
 		foreach ($query->rows as $result) {
 			$testimonial_description_data[$result['language_id']] = array(
 				'user'            	=> $result['user'],
-				'mindescription'    => $result['mindescription'],
+				'testimonial_title'    => $result['testimonial_title'],
 				'description'      	=> $result['description'],
+				'company'    => $result['company'],
+				'job_title'    => $result['job_title'],
 				'meta_title'        => $result['meta_title'],
 				'meta_h1'           => $result['meta_h1'],
 				'meta_description' 	=> $result['meta_description'],
@@ -161,9 +163,9 @@ class ModelExtensionModuleGentestimonials extends Model {
 
 	public function getTotalTestimonial() { 
 
-     /*	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "events");
+     	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "gentestimonial");
 	
-		return $query->row['total'];*/
+		return $query->row['total'];
 	}
 
 	public function setTestimonialsSetting($data) {
@@ -204,7 +206,7 @@ class ModelExtensionModuleGentestimonials extends Model {
 			$data['keyword'] = '';
 			$data['status'] = '0';
 			
-			$data['color_text'] = $query->row["color"];
+			//$data['color_text'] = $query->row["color"];
 
 			$data['testimonial_description'] = $this->getTestimonialDescriptions($testimonial_id);
 			$data['license'] = $this->getValue2();

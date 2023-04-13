@@ -2,7 +2,7 @@
 <modification>
     <name>Opencart Testimonial Shop</name>
     <code>Testimonial Shop</code>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <author>GEN</author>
     <file path="admin/controller/common/column_left.php">
     <operation>
@@ -11,7 +11,7 @@
 			if ($this->user->hasPermission('access', 'extension/module/gentestimonials_list')) {		
 				$catalog[] = array(
 					'name'	   => $this->language->get('text_gentestimonials'),
-					'href'     => $this->url->link('extension/module/gentestimonials_list', 'token=' . $this->session->data['token'], true),
+					'href'     => $this->url->link('extension/module/gentestimonials_list', 'user_token=' . $this->session->data['user_token'], true),
 					'children' => array()		
 				);					
 			}
