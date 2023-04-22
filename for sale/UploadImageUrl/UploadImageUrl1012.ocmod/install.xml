@@ -1,0 +1,194 @@
+<modification>
+    <name>Upload Image Url</name>
+    <code>UploadImageUrl</code>
+    <version>1.0.12</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    <file path="admin/view/template/catalog/product_form.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}"/> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ thumb }}" alt="" width=100 height=100 title="" data-placeholder="{{ placeholder }}"/> ]]></add>
+		</operation>
+    </file>
+	<file path="admin/view/template/catalog/product_list.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail" /> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ product.image }}" alt="{{ product.name }}" width=40 height=40 class="img-thumbnail" /> ]]></add>
+		</operation>
+    </file>
+	<file path="admin/controller/catalog/product.php">
+		<operation error="skip"> 
+			<search><![CDATA[ if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) { ]]></search>
+			<add offset="7" position="replace"><![CDATA[
+			/*if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
+				$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+			} elseif (!empty($product_info) && is_file(DIR_IMAGE . $product_info['image'])) {
+				$data['thumb'] = $this->model_tool_image->resize($product_info['image'], 100, 100);
+			} else {
+				$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			}*/
+			]]></add>
+		</operation>
+		<operation error="skip"> 
+			<search><![CDATA[ $data['image'] = $product_info['image']; ]]></search>
+			<add offset="0" position="replace"><![CDATA[ if(isset($product_info['ean'])){$product_info['url_imageHome']=$product_info['ean'];}
+			$data['thumb'] = $product_info['url_imageHome']; ]]></add>
+		</operation>
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = array( ]]></search>
+			<add position="before"><![CDATA[ if(isset($result['ean'])){$result['url_imageHome']=$result['ean'];}
+			$image = $result['url_imageHome']; ]]></add>
+		</operation>
+    </file>
+	
+    <file path="catalog/model/catalog/product.php">
+		<operation error="skip"> 
+			<search><![CDATA[ 'image'            => $query->row['image'], ]]></search>
+			<add position="before"><![CDATA[ 
+				'url_imageHome'            => isset($query->row['url_imageHome']) ? $query->row['url_imageHome'] : '',
+				'url_images'            => isset($query->row['url_images']) ? $query->row['url_images'] : '',		]]>
+			</add>
+		</operation>
+    </file>	
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['column_left'] = $this->load->controller('common/column_left'); ]]></search>
+			<add position="before"><![CDATA[ 
+				$url_images=explode(',',$product_info['jan']);
+				foreach ($url_images as $url_image) {
+					$data['images'][] = array(
+						'popup' => $url_image,
+						'popup_fancy' => $url_image,
+						'images_width' => $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'),
+						'images_height' => $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'),
+						'thumb' => $url_image
+					);
+				}
+				$data['thumb']=$product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/octemplates/main/oct_functions.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $this->response->setOutput($this->load->view('octemplates/module/oct_product_gallery', $data)); ]]></search>
+			<add position="before"><![CDATA[ $url_images=explode(',',$product_info['jan']);
+					$data['images'][0]['popup']=$product_info['ean'];
+					$data['images'][0]['thumb']=$product_info['ean'];
+				foreach ($url_images as $url_image) {
+					$data['images'][] = array(
+						'popup' => $url_image,
+						'thumb' => $url_image
+					);
+				} ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/octemplates/module/oct_product_gallery.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ image.thumb }}" alt="{{ heading_title }}" class="no-display" style="display:none;"> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ image.thumb }}" alt="{{ heading_title }}" width="82" height="82" class="no-display" style="display:none;"> ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/extension/module/oct_product_modules.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = [ ]]></search>
+			<add position="before"><![CDATA[ $image = $product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/extension/module/oct_product_views.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = [ ]]></search>
+			<add position="before"><![CDATA[ $image = $product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/octemplates/module/oct_popup_purchase.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $results = $this->model_catalog_product->getProductImages((int)$product_id); ]]></search>
+			<add position="before"><![CDATA[ $data['thumb']=$product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/octemplates/module/oct_popup_cart.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = [ ]]></search>
+			<add position="before"><![CDATA[ $image=$product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/octemplates/module/oct_popup_cart.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" /> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" width=100 height=100 /> ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/product/compare.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][$product_id] = array( ]]></search>
+			<add position="before"><![CDATA[ $image=$product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/product/compare.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}"/> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" width=100 height=100 /> ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/product/manufacturer.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = array( ]]></search>
+			<add position="before"><![CDATA[ $image=$result['ean']; ]]></add>
+		</operation>
+    </file>	
+	<file path="catalog/controller/octemplates/module/oct_popup_view.php">
+		<operation error="skip"> 
+			<search><![CDATA[ foreach ($results as $result) { ]]></search>
+			<add position="before"><![CDATA[ $url_images=explode(',',$product_info['jan']);
+							$data['thumb'] =$product_info['ean'];
+							$data['images'][0]=[
+								'popup' => $product_info['ean'],
+								'thumb' => $product_info['ean']
+							];
+							$data['images'][0]['thumb']=$product_info['ean'];
+							foreach ($url_images as $url_image) {
+								$data['images'][] = array(
+									'popup' => $url_image,
+									'thumb' => $url_image
+								);
+							}
+							]]></add>
+		</operation>
+		<operation error="skip"> 
+			<search><![CDATA[ foreach ($results as $result) { ]]></search>
+			<add offset="5" position="replace"><![CDATA[ /*foreach ($results as $result) {
+								$data['images'][] = [
+									'popup' => $this->model_tool_image->resize($result['image'], $image_width, $image_height),
+									'thumb' => $this->model_tool_image->resize($result['image'], $image_additional_width, $image_additional_height)
+								];
+							}*/ ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/octemplates/module/oct_popup_view.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ image.thumb }}" alt="{{ product_name }}" title="{{ product_name }}"> ]]></search>
+			<add offset="0" position="replace"><![CDATA[ <img src="{{ image.thumb }}" alt="{{ product_name }}" title="{{ product_name }}" width=100 height=100 > ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/product/category.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = array( ]]></search>
+			<add position="before"><![CDATA[ $image = $result['ean']; ]]></add>
+		</operation>
+    </file>
+	
+	<file path="catalog/controller/checkout/cart.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = array( ]]></search>
+			<add position="before"><![CDATA[ $this->load->model('catalog/product');
+					$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+					$image = $product_info['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/checkout/cart.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /> ]]></search>
+			<add position="before"><![CDATA[ <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" width=102 height=102 /> ]]></add>
+		</operation>
+    </file>
+	
+</modification>

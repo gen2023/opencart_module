@@ -2,7 +2,7 @@
 <modification>
     <name>Opencart Price chart</name>
     <code>Price_chart</code>
-    <version>1.1.2</version>
+    <version>0.0.3</version>
     <author>GEN</author>
   <file path="admin/controller/catalog/product.php">
     <operation>
@@ -16,6 +16,24 @@
       <search><![CDATA[$product_id = $this->db->getLastId();]]></search>
       <add position="after"><![CDATA[  
 			$this->db->query("INSERT INTO " . DB_PREFIX . "genProductPrice SET product_id = '" . (int)$product_id . "',price = '" . (float)$data['price'] . "', date_modified = NOW()");
+			]]></add>
+    </operation>
+  </file>
+    <file path="catalog/view/theme/default/template/product/product.twig">
+    <operation>
+      <search><![CDATA[<li><a href="#tab-review" data-toggle="tab">{{ tab_review }}</a></li>]]></search>
+      <add position="before" offset="1"><![CDATA[  
+			{% if product_chart_status %}
+            <li><a href="#tab-product_chart" data-toggle="tab">{{ product_chart }}</a></li>
+            {% endif %}
+			]]></add>
+    </operation>
+	<operation>
+      <search><![CDATA[ <div class="tab-pane" id="tab-review">]]></search>
+      <add position="before" offset="1"><![CDATA[  
+			{% if product_chart_status %}
+            <div class="tab-pane" id="tab-product_chart">тут будет график</div>
+			{% endif %}
 			]]></add>
     </operation>
   </file>
