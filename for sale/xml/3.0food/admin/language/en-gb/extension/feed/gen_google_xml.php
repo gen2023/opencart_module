@@ -24,6 +24,12 @@ $_['button_apply'] = 'Apply';
 
 // Entry
 $_['entry_status'] = 'Status';
+$_['entry_google_category']        = 'Google Category';
+$_['entry_category'] = 'Category';
+
+//column
+$_['column_google_category']        = 'Google Category';
+$_['column_category'] = 'Category';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permissions to modify the module Simple YML!';

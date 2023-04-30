@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionFeedSimpleYML extends Model {
+class ModelExtensionFeedGenGoogleXml extends Model {
 
 	public function getProducts() {
 		$cat_query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product_to_category LIKE 'main_category'");
@@ -12,10 +12,12 @@ class ModelExtensionFeedSimpleYML extends Model {
 		return $query->rows;
 	}
 
-	public function getCategories($parent_id = 0) {
-		$query = $this->db->query("SELECT c.category_id, c.parent_id, cd.name FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'");
-
-		return $query->rows;
+	public function getCategorie($product_id) {
+		$query = $this->db->query("SELECT `category_id` FROM `" . DB_PREFIX . "product_to_category` WHERE `product_id`='".$product_id."'");
+		$category_id=$query->row['category_id'];
+		$query = $this->db->query("SELECT `google_category_id` FROM `" . DB_PREFIX . "gen_google_xml_category` WHERE `category_id`='".$category_id."'");
+		
+		return $query->row['google_category_id'];
 	}
 	
 	public function getProductImages($product_id) {
