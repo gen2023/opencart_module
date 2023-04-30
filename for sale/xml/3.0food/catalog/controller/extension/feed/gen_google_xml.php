@@ -1,17 +1,18 @@
 <?php
-class ControllerExtensionFeedSimpleYMLGoogle extends Controller {
+class ControllerExtensionFeedGenGoogleXml extends Controller {
 	private $currency_code;
 	private $currency_rate;
 	
 	public function index() {
-		if ($this->config->get('feed_simple_yml_status')) {
+		
+		if ($this->config->get('feed_gen_google_xml_status')) {
 
 			set_time_limit(0);
 			ignore_user_abort(true);
 			while(ob_get_level()) ob_end_clean();
 			ob_implicit_flush(true);
 
-			$this->load->model('extension/feed/simple_yml');
+			$this->load->model('extension/feed/gen_google_xml');
 			$this->load->model('localisation/currency');
 
 			$output = '<?xml version="1.0"?>
@@ -36,8 +37,11 @@ class ControllerExtensionFeedSimpleYMLGoogle extends Controller {
 
 	protected function getProducts() {
 		$output = '';
-		$products = $this->model_extension_feed_simple_yml->getProducts();
+		$products = $this->model_extension_feed_gen_google_xml->getProducts();
+		
+		//$googleCategory='1755';
 		foreach ($products as $product) {
+			$googleCategory = $this->model_extension_feed_gen_google_xml->getCategorie($product['product_id']);
 			$output .= '<item>';
 			$output .= '<g:id>'. $product['product_id'].'</g:id>';
 			$output .= '<g:title>'. $product['name'].'</g:title>';
@@ -52,11 +56,11 @@ class ControllerExtensionFeedSimpleYMLGoogle extends Controller {
 				$output .= '<g:price>'.number_format($product['price'],2) . ' ' .$this->config->get('config_currency').'</g:price>';
 			}			
 			$output .= '<g:image_link>'.HTTPS_SERVER.'image/'.$product['image'].'</g:image_link>';
-			$productImages=$this->model_extension_feed_simple_yml->getProductImages($product['product_id']);
+			$productImages=$this->model_extension_feed_gen_google_xml->getProductImages($product['product_id']);
 			foreach ($productImages as $productImage) {
 				$output .= '<g:additional_image_link>'.HTTPS_SERVER.'image/'.$productImage['image'].'</g:additional_image_link>';
 			}
-			$output .= '<g:google_product_category>1755</g:google_product_category>';
+			$output .= '<g:google_product_category>'. $googleCategory .'</g:google_product_category>';
 			$output .= '</item>';
 		}
 

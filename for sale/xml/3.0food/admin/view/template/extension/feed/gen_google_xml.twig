@@ -1,0 +1,134 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" name="apply" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-check"></i></button>
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %} 
+				<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+				{% endfor %} 
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if (error_warning) %} 
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %} 
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab-main" data-toggle="tab">{{ tab_main }}</a></li>
+					<!--li><a href="#tab-license" data-toggle="tab">{{ tab_license }}</a></li-->
+				</ul>
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="tab-content">
+						<div class="tab-pane active form-horizontal" id="tab-main">
+						<div id="category">
+							<table class="table table-bordered">
+							  <thead>
+								<tr>
+								  <td class="text-left">{{ column_google_category }}</td>
+								  <td class="text-left">{{ column_category }}</td>
+								  <td class="text-right">{{ column_action }}</td>
+								</tr>
+							  </thead>
+							  <tbody>
+								{% if categorys %}
+								{% for category in categorys %}
+								<tr>
+								  <td class="text-left"><input type="text" name="google_category_{{ category.category_id }}" value="{{ category.google_category }}" placeholder="{{ entry_category }}" id="google_category_{{ category.category_id }}" class="form-control" /><div id="message_{{ category.category_id }}" style="display:none;"></div></td>
+								  <td class="text-left">{{ category.category_name }}</td>
+								  <td class="text-right"><button type="button" value="{{ category.category_id }}" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_save }}" class="updateGoogleCategory btn btn-primary"><i class="fa fa-save"></i></button></td>
+								</tr>
+								{% endfor %}
+								{% else %}
+								<tr>
+								  <td class="text-center" colspan="3">{{ text_no_results }}</td>
+								</tr>
+								{% endif %}
+							  </tbody>
+							</table>
+						</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="feed_gen_google_xml_status" id="input-status" class="form-control">
+										<option value="0" {{ "0" == feed_gen_google_xml_status ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == feed_gen_google_xml_status ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+									<br>
+									<div id="sitemap-staticGoogle">
+										{{ text_feedGoogle }}: <code><a href="{{ feed_linkGoogle }}" target="_blank">{{ feed_linkGoogle }}</a></code>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-license" style="display:none;">
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-10">
+									{{ text_copyright }}
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('.updateGoogleCategory').on('click',function(event){
+	event.preventDefault();
+	
+	const category_id=event.currentTarget.value;
+	const categoryGoogle=$('#google_category_'+category_id).val();
+	const message=document.querySelector("#message_"+category_id);
+	//console.log(categoryGoogle);
+	if (categoryGoogle!=''){		
+		$.ajax({
+			url: 'index.php?route=extension/feed/gen_google_xml/updateGoogleCategory&user_token={{ user_token }}',
+			type: 'post',
+			data: {
+				category_id: category_id,
+				categoryGoogle: categoryGoogle
+			},
+			dataType: 'json',									
+			success: function(json) {
+				sms('green',json.success);
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				console.log(xhr.responseText);
+				console.log(textStatus);
+				console.log(errorThrown);
+				
+				sms('red');
+			}			
+		});	
+	}else{
+		sms('red');
+	}
+	
+	function sms(color,text='error'){
+		message.style.display='block';
+		message.style.color=color;
+		message.textContent=text;
+		setTimeout(function() { 
+			message.style.display='none';
+		}, 10000);
+	}
+})
+</script>
+{{ footer }}

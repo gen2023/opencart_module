@@ -21,6 +21,12 @@ $_['button_apply'] = 'Застосувати';
 
 // Entry
 $_['entry_status']     = 'Статус';
+$_['entry_google_category']        = 'Google Категорія';
+$_['entry_category'] = 'Категорія';
+
+//column
+$_['column_google_category']        = 'Google Категорія';
+$_['column_category'] = 'Категорія';
 
 // Error
 $_['error_permission'] = 'Попередження: У вас недостатньо прав для редагування модуля Простий YML!';
