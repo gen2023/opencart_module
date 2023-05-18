@@ -1,0 +1,120 @@
+<modification>
+    <name>Image For Article</name>
+    <code>ImageForArticle</code>
+    <version>1.0.4</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    <file path="admin/view/template/catalog/information_form.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <div class="tab-pane" id="tab-data"> ]]></search>
+			<add position="after"><![CDATA[ 
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{{ entry_image }}</label>
+									<div class="col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+										<input type="hidden" name="image" value="{{ image }}" id="input-image" />
+									</div>
+								</div>
+
+			]]></add>
+		</operation>
+    </file>
+	<file path="admin/language/*/catalog/information.php">
+		<operation error="skip"> 
+			<search><![CDATA[ // Heading ]]></search>
+			<add position="after"><![CDATA[ $_['entry_image']          = 'Выберите изображение';
+
+			]]></add>
+		</operation>
+    </file>
+	<file path="admin/controller/catalog/information.php">
+		<operation error="skip"> 
+			<search><![CDATA[ if (isset($this->request->post['bottom'])) { ]]></search>
+			<add position="before"><![CDATA[ 
+			
+			$this->load->model('tool/image');
+
+		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+		} elseif (!empty($information_info) && (isset($information_info['image'])) && is_file(DIR_IMAGE . $information_info['image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($information_info['image'], 100, 100);
+		} else {
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		}
+		
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+
+			]]></add>
+		</operation>
+    </file>	
+	<file path="admin/model/catalog/information.php">
+		<operation error="skip"> 
+			<search><![CDATA[ public function addInformation($data) { ]]></search>
+			<add position="after"><![CDATA[ 
+			
+		$field_query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "information`");
+		foreach ($field_query->rows as $field) {
+			$field_data[] = $field['Field'];
+		}
+		if (!in_array("image", $field_data)) {
+			$this->db->query("ALTER TABLE " . DB_PREFIX . "information ADD image VARCHAR(255)");
+		}
+
+			]]></add>
+		</operation>
+		<operation error="skip"> 
+			<search><![CDATA[ $information_id = $this->db->getLastId(); ]]></search>
+			<add position="after"><![CDATA[ 
+			
+		if (isset($data['image'])) {
+			$this->db->query("UPDATE " . DB_PREFIX . "information SET image = '" . $this->db->escape($data['image']) . "' WHERE information_id = '" . (int)$information_id . "'");
+		}
+
+			]]></add>
+		</operation>
+		<operation error="skip"> 
+			<search><![CDATA[ public function editInformation($information_id, $data) { ]]></search>
+			<add position="after"><![CDATA[ 
+			
+		$field_query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "information`");
+		foreach ($field_query->rows as $field) {
+			$field_data[] = $field['Field'];
+		}
+		if (!in_array("image", $field_data)) {
+			$this->db->query("ALTER TABLE " . DB_PREFIX . "information ADD image VARCHAR(255)");
+		}
+		if (isset($data['image'])) {
+			$this->db->query("UPDATE " . DB_PREFIX . "information SET image = '" . $this->db->escape($data['image']) . "' WHERE information_id = '" . (int)$information_id . "'");
+		}
+
+			]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/*/template/information/information.twig">
+		<operation error="skip"> 
+			<search><![CDATA[ <h1>{{ heading_title }}</h1> ]]></search>
+			<add position="after"><![CDATA[ 
+			{% if thrumb %}
+				<div style="float:left;margin: 0 20px 10px 0;max-width: 30%;">
+					<img src="{{ thrumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="news-page__img">
+				</div>
+			{% endif %}
+			]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/information/information.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['heading_title'] = $information_info['title']; ]]></search>
+			<add position="after"><![CDATA[ 
+			//$this->load->model('tool/image');
+			
+			if($information_info['image']){
+				//$image = $this->model_tool_image->resize($information_info['image'], 300,300);
+				$image = '/image/' . $information_info['image'];
+			}else{
+				$image = false;
+			}
+			$data['thrumb'] = $image;
+			]]></add>
+		</operation>
+    </file>
+</modification>
