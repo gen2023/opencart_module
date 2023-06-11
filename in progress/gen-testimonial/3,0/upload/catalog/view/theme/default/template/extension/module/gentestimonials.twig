@@ -1,5 +1,6 @@
 <div class="opgtm-testimonial {{ css_class }}">
 	{% if title %}<h2>{{ title }}</h2>{% endif %}
+	{% if add_testimonial %}<a id="add_testimonial" href="#" class="btn btn-primary">{{ text_dd_testimonial }}</a>{% endif %}
 	<div class="testimonation swiper-viewport">
 	  <div id="testimonation{{ module }}" class="swiper-container">
 		<div class="swiper-wrapper">
@@ -15,7 +16,28 @@
 		<div class="swiper-pager"><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
 	  {% endif %}
 	</div>
+	{% if all_testimonial %}<a href="#" class="btn btn-primary">{{ text_all_testimonial }}</a>{% endif %}
 </div>
+<div id="modalFormTestimonial" class="modalTestimonial">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Название</h3>
+        <a href="#close" title="Close" class="close">?</a>
+      </div>
+      <div class="modal-body">    
+        <p>Содержимое модального окна...</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+	$('#add_testimonial').on('click',function(e){
+		e.preventDefault();
+		console.log('click');
+		$('#modalFormTestimonial').toggle('active');
+	})
+</script>
 <script type="text/javascript"><!--
 $('#testimonation{{ module }}').swiper({
 	slidesPerView: {{ slidesPerView }},

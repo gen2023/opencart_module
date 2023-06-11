@@ -7,13 +7,8 @@ $_['heading_title_setting']		= 'Настройки модуля';
 // Text
 $_['text_success_setting']		= 'Успех: вы изменили настройки!';
 $_['text_template']				= 'Шаблон';
-$_['text_template1']			= 'Шаблон1';
-$_['text_template2']			= 'Шаблон2';
-$_['text_template3']			= 'Шаблон3';
-$_['text_template4']			= 'Шаблон4';
-$_['text_template5']			= 'Шаблон5';
-$_['text_template6']			= 'Шаблон6';
-$_['text_template7']			= 'Шаблон7';
+$_['text_template_build']		= 'Шаблон - собери сам';
+$_['text_template_custom']		= 'Шаблон стандарт';
 $_['text_license']				= 'Для получения ключа, отправьте сообщение на e-meil: <b>gen2023@yandex.ru</b>';
 $_['text_list']					= 'Список отзывов';
 $_['text_add']					= 'Добавить отзыв';
@@ -52,6 +47,8 @@ $_['entry_class_image']			= 'Формат изображения';
 $_['entry_job_title']			= 'Должность';
 $_['entry_company']				= 'Компания';
 $_['entry_urlCompany']			= 'Сайт компании';
+$_['add_testimonial']			= 'Кнопка оставить отзыв';
+$_['all_testimonial']			= 'Кнопка все отзывы';
 
 $_['entry_display_date']				= 'Показывать дату?';
 $_['entry_display_rating']				= 'Показывать рейтинг?';
