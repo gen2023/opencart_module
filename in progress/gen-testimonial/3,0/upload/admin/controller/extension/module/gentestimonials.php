@@ -67,14 +67,8 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		$data['entry_spaceBetween768'] 		= $this->language->get('entry_spaceBetween768');
 		$data['entry_spaceBetween1024'] 	= $this->language->get('entry_spaceBetween1024');
 
-		$data['text_template'] = $this->language->get('text_template');		
-		$data['text_template2'] = $this->language->get('text_template2');
-		$data['text_template1'] = $this->language->get('text_template1');
-		$data['text_template3'] = $this->language->get('text_template3');
-		$data['text_template4'] = $this->language->get('text_template4');
-		$data['text_template5'] = $this->language->get('text_template5');
-		$data['text_template6'] = $this->language->get('text_template6');
-		$data['text_template7'] = $this->language->get('text_template7');
+		$data['text_template_custom'] = $this->language->get('text_template_custom');	
+		$data['text_template_build'] = $this->language->get('text_template_build');		
 		
 		$data['text_extension'] = $this->language->get('text_extension');
 		$data['text_vertical'] = $this->language->get('text_vertical');
@@ -254,6 +248,20 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		} else {
 			$data['status'] = '';
 		}
+		if (isset($this->request->post['add_testimonial'])) {
+			$data['add_testimonial'] = $this->request->post['add_testimonial'];
+		} elseif (!empty($module_info)) {
+			$data['add_testimonial'] = $module_info['add_testimonial'];
+		} else {
+			$data['add_testimonial'] = '';
+		}
+		if (isset($this->request->post['all_testimonial'])) {
+			$data['all_testimonial'] = $this->request->post['all_testimonial'];
+		} elseif (!empty($module_info)) {
+			$data['all_testimonial'] = $module_info['all_testimonial'];
+		} else {
+			$data['all_testimonial'] = '';
+		}
 		
 		if (isset($this->request->post['direction'])) {
 			$data['direction'] = $this->request->post['direction'];
@@ -346,6 +354,10 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		} else {
 			$data['autoplay'] = 'false';
 		}
+		$data['templates']=array(
+			'0' 		=> $data['text_template_build'],
+			'1' 		=> $data['text_template_custom']
+		);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

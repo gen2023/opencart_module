@@ -1,7 +1,7 @@
 <modification>
     <name>Upload Image Url</name>
     <code>UploadImageUrl</code>
-    <version>1.0.20</version>
+    <version>1.0.23</version>
 	<link>mailto:genodessa@gmail.com</link>
     <author>GEN2023</author>
     <file path="admin/view/template/catalog/product_form.twig">
@@ -139,7 +139,7 @@
 	<file path="catalog/view/theme/*/template/checkout/simplecheckout_cart.twig">
 		<operation error="skip"> 
 			<search><![CDATA[ <img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" /> ]]></search>
-			<add position="repleace"><![CDATA[ <img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" width=102 height=102 /> ]]></add>
+			<add position="repleace"><![CDATA[ <img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" width=100 height=150 /> ]]></add>
 		</operation>
     </file>
 	<file path="catalog/controller/extension/module/cyber_latest_grid.php">
@@ -183,6 +183,30 @@
 		</operation>
     </file>
 	<file path="catalog/controller/extension/module/cyber_product_categorytabs.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $data['products'][] = array( ]]></search>
+			<add position="before"><![CDATA[ $image=$result['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/extension/module/cyber_autosearch.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $json[] = array( ]]></search>
+			<add position="before"><![CDATA[ $image=$result['ean']; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/model/extension/module/cyber_autosearch.php">
+		<operation error="skip"> 
+			<search><![CDATA[ $sql = "SELECT ]]></search>
+			<add position="after"><![CDATA[ $sql .= "p.ean,"; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/view/theme/cyberstore/js/def_common.js">
+		<operation error="skip"> 
+			<search><![CDATA[ html += '<img title="'+json[i].name+'" src="'+json[i].image+'"/>'; ]]></search>
+			<add position="repleace"><![CDATA[ html += '<img title="'+json[i].name+'" src="'+json[i].image+'" width="70" height="130"/>'; ]]></add>
+		</operation>
+    </file>
+	<file path="catalog/controller/product/cyber_latestpage.php">
 		<operation error="skip"> 
 			<search><![CDATA[ $data['products'][] = array( ]]></search>
 			<add position="before"><![CDATA[ $image=$result['ean']; ]]></add>

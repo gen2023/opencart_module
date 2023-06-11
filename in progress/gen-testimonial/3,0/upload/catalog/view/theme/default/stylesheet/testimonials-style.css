@@ -58,70 +58,28 @@ img.opgtm-square{border-radius:0%;box-shadow:0 1px 4px rgb(0 0 0 / 20%); padding
 /************************************************************
 					 design2 (post)
 ************************************************************/
-.design2{margin-bottom:30px;}
-.design2 .opgtm-testimonial-client, .design2 .opgtm-testimonial-job{text-align: center;}
-.design2 .opgtm-testimonial-author{padding-top: 0px;}
-.design2 .opgtm-avtar-image {margin-bottom:10px;}
-.design2{padding:0!important;}
-.design2 .opgtm-testimonial-content{padding-left:29px;max-width:275px;margin:0 auto;}
-.design2 .opgtm-testimonials-text p{text-align:center;}
-.design2 .slick-dots{display:none;}
+
 
 /************************************************************
 					 design3 
 ************************************************************/
 
-.design3 .opgtm-testimonial-box{ margin-bottom:60px;}
-.design3 .opgtm-testimonial-author{padding-top:40px; }
-
-.design3 .opgtm-testimonial-inner{border:1px solid #ddd; position:relative; margin-top:60px;  padding:35px 15px 15px 15px; height:90%; text-align:center;}
-.design3 .opgtm-testimonial-inner:after,
-.design3 .opgtm-testimonial-inner:before {top: 100%;left: 80%;border: solid transparent;content: " ";height: 0;width: 0;position: absolute;	pointer-events: none;}
-
-.design3 .opgtm-testimonial-inner:after {border-color: rgba(136, 183, 213, 0);border-top-color: #fff;border-width: 30px;margin-left: -30px;}
-.design3 .opgtm-testimonial-inner:before{border-color: rgba(194, 225, 245, 0);border-top-color: #ddd;border-width: 30px;margin-left: -36px;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar{position:absolute; top:-60px; left:0; right:0; width:100%; height:120px;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar .opgtm-avtar-image{width:120px; margin:0 auto;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar .opgtm-avtar-image{width:120px; margin:0 auto;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar{position:absolute; top:-60px; left:0; right:0;  height:120px;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar .opgtm-avtar-image{width:110px; margin:0 auto;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar img{width:100%; max-width:100%; height:auto;  border:1px solid #ddd; padding:5px; background:#fff;}
-.design3 .opgtm-testimonial-inner .opgtm-testimonial_avatar img.opgtm-circle{border-radius:50%; }
-.design3 .opgtm-testimonials-text .quotes{justify-content:center;}
 /************************************************************
 					 design4 
 ************************************************************/
-.design4 .opgtm-testimonial-box{ margin-bottom:60px;}
-.design4 .opgtm-testimonial-inner{border:1px solid #ddd; position:relative; margin-left:50px;  padding:15px 15px 15px 70px; height:90%;}
-.design4 .opgtm-testimonial-inner .opgtm-testimonial_avatar{position:absolute; top:50%; left:-50px; width:100px;transform: translate(0px, -50%);}
-.design4 .opgtm-testimonial-inner .opgtm-testimonial_avatar img{width:100%; max-width:100%; height:auto; padding:5px; border:1px solid #ddd; background:#fff;}
-.design4 .opgtm-testimonial-inner .opgtm-testimonial_avatar img.opgtm-circle{border-radius:50%; }
-.design4 .opgtm-testimonial-content{text-align:left;}
-.design4 .opgtm-testimonials-text p {font-size: 15px; text-align:left;}
+
 /************************************************************
 					 design5
 ************************************************************/
-.design5 .opgtm-testimonial-content{padding:10px 10px 60px 10px;border: 1px solid #eee;margin-bottom:70px;min-height:152px;position:relative;}
-.design5 .opgtm-avtar-image{position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.design5 .opgtm-testimonials-text .quotes{justify-content:center;}
-.design5 .opgtm-testimonial-client,.design5 .opgtm-testimonial-job{text-align:center;}
+
 /************************************************************
 					 design6
 ************************************************************/
-.design6 .opgtm-testimonial-content{display:flex;align-items:center;}
-.design6 .opgtm-testimonial-right{margin-left:10px;}
-.design6 .opgtm-testimonial-job{margin-bottom:10px;}
-.design6 .opgtm-testimonials-text{margin-top: 10px;}
+
 /************************************************************
 					 design7 
 ************************************************************/
-.design7 .opgtm-testimonial-content{display:flex;}
-.design7 .opgtm-testimonial-right{margin-left:10px;}
-.design7 .opgtm-testimonials-title_rating{justify-content: start;}
+
 /************************************************************
 					 Grid
 ************************************************************/
@@ -130,6 +88,12 @@ img { max-width: 100%;  height: auto; }
 img {  -ms-interpolation-mode: bicubic; }
 .wpcolumn,
 .wpcolumns { padding-left: 0.9375em; padding-right: 0.9375em;  float: left; width:100%;   position: relative;  }
+
+
+
+/**/
+.modalTestimonial{display:none;}
+.modalTestimonial.active{display:blok}
 @media only screen {
   .wpcolumn,
   .wpcolumns { position: relative;  padding-left: 0.9375em; padding-right: 0.9375em; float: left; }
