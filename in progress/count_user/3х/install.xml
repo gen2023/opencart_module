@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart Count user</name>
+    <code>Count user</code>
+    <version>0.0.1</version>
+    <author>GEN</author>
+    <file path="catalog/controller/common/footer.php">
+    <operation>
+      <search><![CDATA[public function index() {]]></search>
+      <add position="after"><![CDATA[
+			$this->load->controller('extension/module/count_user');
+      	]]></add>
+    </operation>
+  </file>
+</modification>

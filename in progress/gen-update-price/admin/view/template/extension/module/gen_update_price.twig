@@ -1,0 +1,157 @@
+<style>
+ #action{display:flex;}
+ #action .items{padding: 10px;color:#fff;border-radius:5px;margin-right:10px;cursor:pointer;}
+ #action .items.active{background:#fff;color:#000;text-decoration: underline;border: 1px solid;}
+ #action .items:last-child{margin-right:0;}
+ #action .itemAction{padding: 10px;border-radius:5px;cursor:pointer;margin-right:10px;}
+ #action #input-number{margin-right:10px;}
+ #action .itemAction.active{background:grey;!important;color:#fff}
+ #action #button_apply{display:flex;align-items:center;}
+ #action #button_reset{display:flex;align-items:center;}
+</style>
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+
+    <div id="message" style="display:none" class="alert alert-dismissible"><i class="fa fa-exclamation-circle"></i>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+		<input type="hidden" name="module_gen_update_price_status" value="1" id="input-status">
+		  <div class="form-group">
+			<label class="col-sm-12" for="input-status">{{ entry_formula }}</label>
+			<div id="action" class="col-sm-12">
+				<div class="items btn-success active" data-action="+">{{ text_plus }}</div>
+				<div class="items btn-danger" data-action="-">{{ text_minuse }}</div>
+				<div class="items btn-warning" data-action="*">{{ text_multiply }}</div>
+				<div class="items btn-primary" data-action="/">{{ text_divide }}</div>
+				<input type="hidden" name="action" value="+" id="input-action">
+				<input type="number" step="0.01" name="number" id="input-number">
+				<div class="itemAction active" data-action="percent">%</div>
+				<div class="itemAction" data-action="number">{{ text_number }}</div>
+				<input type="hidden" name="action2" value="%" id="input-action2">
+				<a id="button_apply" form="form-module" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-save"></i></a>
+				
+			</div>
+		  </div>
+		  <div class="form-group">
+            <label class="col-sm-12" for="input-status">{{ entry_reset }}</label>
+            <div class="col-sm-10">
+              <a id="button_reset" form="form-module" data-toggle="tooltip" title="{{ button_reset }}" class="btn btn-warning"><i class="fa fa-trash-o"></i></a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('#action .itemAction').on('click',function(e){
+
+	let value= $(e.target).data('action');
+	$('#action .itemAction').removeClass('active');
+	$(e.target).addClass('active');
+	$('#input-action2').val(value);
+});
+$('#action .items').on('click',function(e){
+	let value= $(e.target).data('action');
+	$('#action .items').removeClass('active');
+	$(e.target).addClass('active');
+	$('#input-action').val(value);
+});
+$('#button_apply').on('click',function(e){
+	e.preventDefault();
+	const message=document.querySelector("#message");
+	//console.log(message);
+	let action=$('#input-action').val();
+	let number=$('#input-number').val();
+	let action2=$('#input-action2').val();
+	
+		$.ajax({
+			url: 'index.php?route=extension/module/gen_update_price/apply&user_token={{ user_token }}',
+			type: 'post',
+			data: {
+				action,
+				number,
+				action2
+			},
+			dataType: 'json',									
+			success: function(json) { 
+
+				message.style.display='block';	
+				message.classList.remove('alert-danger');
+				message.classList.add('alert-success');
+				message.textContent="{{ text_success }}";
+				setTimeout(function() { 
+					message.style.display='none';
+				}, 10000);	
+
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				//console.log(xhr.responseText);
+				//console.log(textStatus);
+				message.style.display='block';
+				message.classList.remove('alert-success');
+				message.classList.add('alert-danger');
+				message.textContent="{{ error_block }}";
+				setTimeout(function() { 
+					message.style.display='none';
+				}, 10000);
+		}			
+		});
+	
+});
+$('#button_reset').on('click',function(e){
+	e.preventDefault();
+	const message=document.querySelector("#message");
+		$.ajax({
+		url: 'index.php?route=extension/module/gen_update_price/resetPrice&user_token={{ user_token }}',
+		type: 'post',
+		data: {
+			checked: ''
+		},
+		dataType: 'json',									
+		success: function(json) {
+			message.style.display='block';	
+			message.classList.remove('alert-danger');
+			message.classList.add('alert-success');
+			message.textContent="{{ text_success }}";
+			setTimeout(function() { 
+				message.style.display='none';
+			}, 10000);			
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			console.log(xhr.responseText);
+			console.log(textStatus);
+			message.style.display='block';
+			message.classList.remove('alert-success');
+			message.classList.add('alert-danger');
+			message.textContent="{{ error_block }}";
+			setTimeout(function() { 
+				message.style.display='none';
+			}, 10000);
+		}			
+	});
+});
+
+</script>
+{{ footer }}
