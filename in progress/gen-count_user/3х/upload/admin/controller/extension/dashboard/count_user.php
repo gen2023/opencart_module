@@ -89,12 +89,12 @@ class ControllerExtensionDashboardCountUser extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		// Total Orders
-		$this->load->model('extension/dashboard/count_user');
+		$this->load->model('extension/module/count_user');
 
 		// Customers count_user
-		$data['total'] = $this->model_extension_dashboard_count_user->getTotal();
+		$data['total'] = $this->model_extension_module_count_user->getTotal();
 
-		//$data['online'] = $this->url->link('report/online', 'user_token=' . $this->session->data['user_token'], true);
+		$data['online'] = $this->url->link('extension/module/count_user', 'user_token=' . $this->session->data['user_token'], true);
 
 		return $this->load->view('extension/dashboard/count_user_info', $data);
 	}

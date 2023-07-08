@@ -89,25 +89,25 @@ class ControllerExtensionDashboardCountUserDay extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		// Total Orders
-		$this->load->model('extension/dashboard/count_user');
+		$this->load->model('extension/module/count_user');
 		
 		$nowTime=time();
 		$current_day=date('d.m.Y', $nowTime);
 
 		// Customers count_user
-		$results = $this->model_extension_dashboard_count_user->getTotalOnline($current_day);
+		$results = $this->model_extension_module_count_user->getTotalOnline();
 		
 		$data['user']=array();
 		$count=0;
 		
 		foreach ($results as $user) {
-			if(date('d.m.Y', $user['time'])==date('d.m.Y', $nowTime)){
+			if(date('d.m.Y', $user['time'])==$current_day){
 			$count +=1;
 		}
 		}
 		$data['total']=$count;
 
-		//$data['online'] = $this->url->link('report/online', 'user_token=' . $this->session->data['user_token'], true);
+		$data['online'] = $this->url->link('extension/module/count_user', 'user_token=' . $this->session->data['user_token'], true);
 
 		return $this->load->view('extension/dashboard/count_user_day_info', $data);
 	}

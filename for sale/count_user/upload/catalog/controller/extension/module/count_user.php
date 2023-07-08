@@ -1,7 +1,7 @@
 <?php  
 class ControllerExtensionModuleCountUser extends Controller {
 	public function index() {
-		if ($this->config->get('module_count_user_status') && !(isset($this->request->get['information_id']) || isset($this->request->get['manufacturer_id']))){
+		if ($this->config->get('module_count_user_status') && !(isset($this->request->get['information_id']) || isset($this->request->get['manufacturer_id']) || isset($this->request->get['product_id']))){
 			
 			//$this->load->language('extension/module/count_user');
 
@@ -51,7 +51,7 @@ class ControllerExtensionModuleCountUser extends Controller {
 				$this->model_extension_module_count_user->addUserAllPage($current_user,$nowTime);
 			}
 		
-		}		
+		}	
 
 	}
 }

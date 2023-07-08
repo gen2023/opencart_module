@@ -42,6 +42,42 @@
               </select>
             </div>
           </div>
+		  
+		  <div class="form-group">
+			<div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-list"></i>{{ table_statistic_title }}</h3>
+          </div>
+          <div class="panel-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-center">{{ text_current }}</td>
+                      <td class="text-center"> {{ text_yesterday }}</td>
+                      <td class="text-center"> {{ text_week }}</td>
+                      <td class="text-center"> {{ text_month }} </td>
+                      <td class="text-center"> {{ text_year }} </td>
+					  <td class="text-center">{{ text_all }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+					<tr>
+					  <td>{{ totalDay }}</td>
+					  <td>{{ totalУesterday }}</td>
+					  <td>{{ totalWeek }}</td>
+					  <td>{{ totalMonth }}</td>
+					  <td>{{ totalYear }}</td>
+					  <td>{{ totalAll }}</td>
+					</tr>
+                  </tbody>                  
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>		  
+		  </div>
+		  
         </form>
       </div>
     </div>

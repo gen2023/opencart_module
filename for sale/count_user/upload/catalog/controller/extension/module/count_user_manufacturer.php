@@ -1,9 +1,10 @@
 <?php  
 class ControllerExtensionModuleCountUserManufacturer extends Controller {
 	public function index() {
+		
 		if ($this->config->get('module_count_user_status')){
 			
-			//$this->load->language('extension/module/count_user');
+			$this->load->language('extension/module/count_user');
 
 			$this->load->model('extension/module/count_user');
 
@@ -12,45 +13,45 @@ class ControllerExtensionModuleCountUserManufacturer extends Controller {
 			} else {
 				$current_user=getenv('REMOTE_ADDR');
 			}
-			
+
 			$nowTime=time();
+			$current_day=date('d.m.Y', $nowTime);
+			
 			$flag=0;
-			$manufacturer_id = $this->request->get['manufacturer_id'];
-			$results=$this->model_extension_module_count_user->getUserManufacturer($manufacturer_id);
-			
+			$item_id = $this->request->get['manufacturer_id'];
+			$results=$this->model_extension_module_count_user->getUserManufacturer($item_id);
+
 			$users = array();
-			
+			$countDay=0;
+
 			foreach ($results as $result) {
 				$users[] = array(
 						'user_id'  	=> $result['user_id'],
 						'ip_user'   => $result['ip_user'],
-						'count'		=> $result['count'],
-						'countNow'	=> $result['countNow'],
 						'time'     	=> $result['time']
 					);
 			}
+
 			foreach ($users as $user) {
-				
+
 				if ($user['ip_user']==$current_user){
-					$user['count']=(int)$user['count']+1;
 					
-					if(date('d.m.Y', $user['time'])==date('d.m.Y', $nowTime)){
-						$countNow=(int)$user['countNow']+1;
-					}else{
-						$countNow='1';
+					if(date('d.m.Y', $user['time'])==$current_day){
+						$countDay +=1;						
 					}
-					
-					$this->model_extension_module_count_user->updateUser($user['user_id'],$user['count'],$nowTime,$countNow);
-					$flag=1;
-					return ;
+						$this->model_extension_module_count_user->updateUser($user['user_id'],$nowTime);
+						$flag=1;					
 				}
 				
 			}
-			
+
 			if ($flag!=1){
-				$this->model_extension_module_count_user->addUserManufacturer($current_user,$nowTime,$manufacturer_id);
+				$this->model_extension_module_count_user->addUserManufacturer($current_user,$nowTime,$item_id);
 			}
-		
+			$data['view2']=count($results);
+			$data['view1']=$countDay;
+
+			return $this->load->view('extension/module/count_user', $data);
 		}		
 
 	}
