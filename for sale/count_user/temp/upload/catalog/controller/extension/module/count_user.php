@@ -15,7 +15,6 @@ class ControllerExtensionModuleCountUser extends Controller {
 			
 			$nowTime=time();
 			$flag=0;
-			$countNow=0;
 			
 			$results=$this->model_extension_module_count_user->getUserAllPage();
 			
@@ -25,22 +24,23 @@ class ControllerExtensionModuleCountUser extends Controller {
 				$users[] = array(
 						'user_id'  	=> $result['user_id'],
 						'ip_user'   => $result['ip_user'],
-						'count'		=> '1',
-						//'countNow'	=> $result['countNow'],
+						'count'		=> $result['count'],
+						'countNow'	=> $result['countNow'],
 						'time'     	=> $result['time']
 					);
 			}
 			foreach ($users as $user) {
 				
 				if ($user['ip_user']==$current_user){
-					//$user['count']=(int)$user['count']+1;
+					$user['count']=(int)$user['count']+1;
 					
 					if(date('d.m.Y', $user['time'])==date('d.m.Y', $nowTime)){
-						$countNow+=1;
+						$countNow=(int)$user['countNow']+1;
+					}else{
+						$countNow='1';
 					}
 					
-					//$this->model_extension_module_count_user->updateUser($user['user_id'],$user['count'],$nowTime,$countNow);
-					$this->model_extension_module_count_user->updateUser($user['user_id'],$nowTime);
+					$this->model_extension_module_count_user->updateUser($user['user_id'],$user['count'],$nowTime,$countNow);
 					$flag=1;
 					return ;
 				}

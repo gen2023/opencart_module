@@ -28,6 +28,17 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
 		}
 
+		if (isset($this->request->get['page'])) {
+			$page = $this->request->get['page'];
+		} else {
+			$page = 1;
+		}
+
+		$url = '';
+		if (isset($this->request->get['page'])) {
+			$url .= '&page=' . $this->request->get['page'];
+		}
+
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
 		} else {
@@ -56,12 +67,57 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
-//var_dump($this->config->get);
-	/*	if (isset($this->request->post['module_gen_update_price_status'])) {
-			$data['module_gen_update_price_status'] = $this->request->post['module_gen_update_price_status'];
-		} else {
-			$data['module_gen_update_price_status'] = $this->config->get('module_gen_update_price_status');
-		}*/
+
+	/* list product */
+		$this->load->model('catalog/product');
+		$data['products'] = array();
+
+		$filter_data = array(
+			'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
+			'limit'           => $this->config->get('config_limit_admin')
+		);
+		$product_total = $this->model_catalog_product->getTotalProducts($filter_data);
+
+		$results = $this->model_catalog_product->getProducts($filter_data);
+		foreach ($results as $result) {
+			$special = false;
+			$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+
+			foreach ($product_specials  as $product_special) {
+				if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
+					$special = $this->currency->format($product_special['price'], $this->config->get('config_currency'));
+
+					break;
+				}
+			}
+			$data['products'][] = array(
+				'product_id' => $result['product_id'],
+				'name'       => $result['name'],
+				'model'      => $result['model'],
+				'price'      => $this->currency->format($result['price'], $this->config->get('config_currency')),
+				'special'    => $special,
+				'status'     => $result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
+			);
+		}
+
+		$url = '';
+
+		$pagination = new Pagination();
+		$pagination->total = $product_total;
+		$pagination->page = $page;
+		$pagination->limit = $this->config->get('config_limit_admin');
+		$pagination->url = $this->url->link('extension/module/gen_update_price', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}', true);
+
+		$data['pagination'] = $pagination->render();
+		$data['results'] = sprintf(
+			$this->language->get('text_pagination'), 
+			($product_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, 
+			((($page - 1) * $this->config->get('config_limit_admin')) > ($product_total - $this->config->get('config_limit_admin'))) ? $product_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), 
+			$product_total, 
+			ceil($product_total / $this->config->get('config_limit_admin')));
+		
+
+	/* list product end*/
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -76,7 +132,11 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 	
 		$json = array();
 
-		$result = $this->model_extension_module_gen_update_price->apply($this->request->post);
+		if ($this->request->post['typePrice']=='price'){
+			$result = $this->model_extension_module_gen_update_price->applyPrice($this->request->post);
+		} else {
+			$result = $this->model_extension_module_gen_update_price->applySpecialPrice($this->request->post);
+		}		
 
 		$json['result']=$result;
 		
@@ -90,6 +150,18 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 	
 		$json = array();
 		$result = $this->model_extension_module_gen_update_price->resetPrice();
+
+		$json['result']=$result;
+		
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+	public function updateNewPrice(){
+		
+		$this->load->model('extension/module/gen_update_price');
+	
+		$json = array();
+		$result = $this->model_extension_module_gen_update_price->updatePrice();
 
 		$json['result']=$result;
 		
