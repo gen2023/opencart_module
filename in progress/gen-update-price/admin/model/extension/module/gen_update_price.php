@@ -4,12 +4,14 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 	public function install() {
 		$this->db->query("ALTER TABLE " . DB_PREFIX . "product ADD currentPrice decimal(15,4)");
 		$this->db->query("ALTER TABLE " . DB_PREFIX . "product_special ADD currentSpecialPrice decimal(15,4)");
-		
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gen_history_price` (`id` int(11) NOT NULL auto_increment, `info` LONGTEXT COLLATE utf8_general_ci default NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+
 		$this->updatePrice();
 	}
 	public function uninstall() {
 		$data=$this->resetPrice();
-			
+		
+		$this->db->query("DROP TABLE " . DB_PREFIX . "gen_history_price");
 		$this->db->query("ALTER TABLE " . DB_PREFIX . "product DROP COLUMN currentPrice");
 		$this->db->query("ALTER TABLE " . DB_PREFIX . "product_special DROP COLUMN currentSpecialPrice");
 	}
@@ -39,6 +41,9 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 
 	public function applyPrice($data) {
 		$count=0;
+		$oldPriceArr=array();
+		$newPriceArr=array();
+
 		foreach ($data['checkedProducts'] as $product_id){
 				$resultPrice = $this->getProductsPriceById($product_id);
 				
@@ -74,14 +79,22 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 							break;
 					}
 				}
+				$oldPriceArr[$count]=(float)$price;
+				$newPriceArr[$count]=(float)$newPrice;
 			$this->db->query("UPDATE " . DB_PREFIX . "product SET price = '" . (float)$newPrice . "' WHERE product_id = '" . (int)$product_id . "'");
+			
 			$count++;
 		}
+		$data['oldPrice']=$oldPriceArr;
+		$data['newPrice']=$newPriceArr;		
+		$this->addHistory($data);
 		return $count;
 	}
 
 	public function applySpecialPrice($data) {
 		$count=0;
+		$oldPriceArr=array();
+		$newPriceArr=array();
 		foreach ($data['checkedProducts'] as $product_id){
 				$resultPrice = $this->getProductsSpecialPriceById($product_id);
 				
@@ -117,9 +130,14 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 							break;
 					}
 				}
+				$oldPriceArr[$count]=(float)$price;
+				$newPriceArr[$count]=(float)$newPrice;
 			$this->db->query("UPDATE " . DB_PREFIX . "product_special SET price = '" . (float)$newPrice . "' WHERE product_id = '" . (int)$product_id . "'");
 			$count++;
 		}
+		$data['oldPrice']=$oldPriceArr;
+		$data['newPrice']=$newPriceArr;
+		$this->addHistory($data);
 	return $count;
 	}
 
@@ -134,6 +152,7 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 		foreach ($specialPrice as $result) {
 			$this->db->query("UPDATE " . DB_PREFIX . "product_special SET price = '" . (float)$result['currentSpecialPrice'] . "' WHERE product_special_id = '" . (int)$result['product_special_id'] . "'");
 		}
+		$this->deleteHistory();
 	}
 	public function updatePrice() {
 	
@@ -145,6 +164,22 @@ class ModelExtensionModuleGenUpdatePrice extends Model {
 		foreach ($specialPrice as $result) {
 			$this->db->query("UPDATE " . DB_PREFIX . "product_special SET currentSpecialPrice = '" . (float)$result['price'] . "' WHERE	product_special_id = '" . (int)$result['product_special_id'] . "'");
 		}	
+	}
+	public function getHistory() {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "gen_history_price`");
+		return $query->rows;
+	}
+	public function addHistory($data) {
+		$date=date("Y-m-d H:i:s");
+		$typePrice=$data['typePrice'];
+		$product_id=implode(",", $data['checkedProducts']);
+		$price_old=implode(",",$data['oldPrice']);
+		$price_new=implode(",",$data['newPrice']);
+		$info=$date . ';' . $typePrice . ';' . $product_id . ';' . $price_old . ';' . $price_new;
+		$this->db->query("INSERT INTO " . DB_PREFIX . "gen_history_price SET info='" . $this->db->escape($info) . "'");
+	}
+	public function deleteHistory() {
+		$this->db->query("TRUNCATE TABLE " . DB_PREFIX . "gen_history_price");
 	}
 	
 

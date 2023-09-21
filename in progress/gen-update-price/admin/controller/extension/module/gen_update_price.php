@@ -16,7 +16,7 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/module/gen_update_price');	
+		$this->load->model('extension/module/gen_update_price');
 		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -68,7 +68,7 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
-	/* list product */
+		/* list product */
 		$this->load->model('catalog/product');
 		$data['products'] = array();
 
@@ -117,7 +117,38 @@ class ControllerExtensionModuleGenUpdatePrice extends Controller {
 			ceil($product_total / $this->config->get('config_limit_admin')));
 		
 
-	/* list product end*/
+		/* list product end*/
+		/* list history start */
+		$data['history']=array();
+			$resultsHistory=$this->model_extension_module_gen_update_price->getHistory();
+			
+			foreach ($resultsHistory as $item){
+				$arrInfo=explode(";", $item['info']);
+				$priceNewArr=explode(",", $arrInfo[4]);
+				$priceOldArr=explode(",", $arrInfo[3]);
+				$productArr=explode(",", $arrInfo[2]);
+				
+				$data['history'][] = array(
+					'id' 		=> $item['id'],
+					'data'	=> $arrInfo[0],
+					'type'	=> $arrInfo[1],
+					'priceNew'	=> $priceNewArr,
+					'priceOld'	=> $priceOldArr,
+					'product_id'	=> $productArr
+				);
+			}
+			
+			// echo '<pre>';var_dump($data['history'][0]);die;
+			/* 
+				["id"]=> string(1) "3" 
+				["name"]=> array(5) { 
+					[0]=> string(19) "2023-09-21 06:01:35" 
+					[1]=> string(5) "price" 
+					[2]=> string(5) "51,61" 
+					[3]=> string(17) "214.9900,229.0000" 
+					[4]=> string(10) "224.99,239"*/
+			
+		/* list history end */
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
