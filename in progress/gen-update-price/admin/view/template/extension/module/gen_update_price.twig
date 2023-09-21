@@ -36,96 +36,157 @@
         <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
       </div>
       <div class="panel-body">
-        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
-					<input type="hidden" name="module_gen_update_price_status" value="1" id="input-status">
-		  		<div class="form-group">
-						<label class="col-sm-12" for="input-status">{{ entry_formula }}</label>
-						<div id="action" class="col-sm-12">
-							<div class="items btn-success active" data-action="+">{{ text_plus }}</div>
-							<div class="items btn-danger" data-action="-">{{ text_minuse }}</div>
-							<div class="items btn-warning" data-action="*">{{ text_multiply }}</div>
-							<div class="items btn-primary" data-action="/">{{ text_divide }}</div>
-							<input type="hidden" name="action" value="+" id="input-action">
-							<input type="number" step="0.01" name="number" id="input-number">
-							<div class="itemAction active" data-action="number">{{ text_number }}</div>
-							<div class="itemAction" data-action="percent">%</div>							
-							<input type="hidden" name="action2" value="%" id="input-action2">
-							<select id="typePrice" name="typePrice">
-								<option value="price">Price</option>
-								<option value="special-price">Special price</option>
-							</select>
-							<a id="button_apply" form="form-module" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-save"></i> {{ button_apply }}</a>
-						</div>
-		  		</div>
-					<div class="form-group">
-						<div class="col-6">
-							<label class="col-sm-12" for="input-status">{{ entry_reset }}</label>
-							<div class="col-sm-10">
-								<a id="button_reset" form="form-module" data-toggle="tooltip" title="{{ button_reset }}" class="btn btn-warning"><i class="fa fa-trash-o"></i></a>
+				<ul class="nav nav-tabs">
+          <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+					<li><a href="#tab-history" data-toggle="tab">{{ tab_history }}</a></li>
+        </ul>
+				<div class="tab-content">
+          <div class="tab-pane active" id="tab-general">
+						<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+							<input type="hidden" name="module_gen_update_price_status" value="1" id="input-status">
+							<div class="form-group">
+								<label class="col-sm-12" for="input-status">{{ entry_formula }}</label>
+								<div id="action" class="col-sm-12">
+									<div class="items btn-success active" data-action="+">{{ text_plus }}</div>
+									<div class="items btn-danger" data-action="-">{{ text_minuse }}</div>
+									<div class="items btn-warning" data-action="*">{{ text_multiply }}</div>
+									<div class="items btn-primary" data-action="/">{{ text_divide }}</div>
+									<input type="hidden" name="action" value="+" id="input-action">
+									<input type="number" step="0.01" name="number" id="input-number">
+									<div class="itemAction active" data-action="number">{{ text_number }}</div>
+									<div class="itemAction" data-action="percent">%</div>							
+									<input type="hidden" name="action2" value="%" id="input-action2">
+									<select id="typePrice" name="typePrice">
+										<option value="price">Price</option>
+										<option value="special-price">Special price</option>
+									</select>
+									<a id="button_apply" form="form-module" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-save"></i> {{ button_apply }}</a>
+								</div>
 							</div>
-						</div>
-						<div class="col-6">
-							<label class="col-sm-12" for="input-status">{{ entry_update }}</label>
-							<div class="col-sm-10">
-								<a id="button_updateNewPrice" form="form-module" data-toggle="tooltip" title="{{ button_update }}" class="btn btn-success"><i class="fa fa-refresh"></i></a>
+							<div class="form-group">
+								<div class="col-6">
+									<label class="col-sm-12" for="input-status">{{ entry_reset }}</label>
+									<div class="col-sm-10">
+										<a id="button_reset" form="form-module" data-toggle="tooltip" title="{{ button_reset }}" class="btn btn-warning"><i class="fa fa-trash-o"></i></a>
+									</div>
+								</div>
+								<div class="col-6">
+									<label class="col-sm-12" for="input-status">{{ entry_update }}</label>
+									<div class="col-sm-10">
+										<a id="button_updateNewPrice" form="form-module" data-toggle="tooltip" title="{{ button_update }}" class="btn btn-success"><i class="fa fa-refresh"></i></a>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+										<td class="text-center">ID</td>
+										<td class="text-left">{{ column_name }}</td>
+										<td class="text-left">{{ column_model }}</td>
+										<td class="text-right">{{ column_price }}</td>
+										<td class="text-left">{{ column_status }}</td>
+									</tr>
+								</thead>
+								<tbody>
+									{% if products %}
+										{% for product in products %}
+											<tr>
+												<td class="text-center">
+													{% if product.product_id in selected %}
+														<input type="checkbox" name="selected" value="{{ product.product_id }}" checked="checked" />
+													{% else %}
+														<input type="checkbox" name="selected" value="{{ product.product_id }}" />
+													{% endif %}
+												</td>
+												<td class="text-center">{{ product.product_id }}</td>
+												<td class="text-left">{{ product.name }}</td>
+												<td class="text-left">{{ product.model }}</td>
+												<td class="text-right">
+													{% if product.special %} 
+														<span style="text-decoration: line-through;">{{ product.price }}</span><br/>
+														<div class="text-danger">{{ product.special }}</div>
+													{% else %}
+														{{ product.price }}
+													{% endif %}
+												</td>
+												<td class="text-left">{{ product.status }}</td>
+											</tr>
+										{% endfor %}
+									{% else %}
+										<tr>
+											<td class="text-center" colspan="8">{{ text_no_results }}</td>
+										</tr>
+									{% endif %}
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-sm-6 text-left">{{ pagination }}</div>
+								<div class="col-sm-6 text-right">{{ results }}</div>
 							</div>
 						</div>
 					</div>
-        </form>
-        <div class="table-responsive">
-        	<table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-              	<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-                <td class="text-center">ID</td>
-                <td class="text-left">{{ column_name }}</td>
-                <td class="text-left">{{ column_model }}</td>
-                <td class="text-right">{{ column_price }}</td>
-                <td class="text-left">{{ column_status }}</td>
-              </tr>
-            </thead>
-            <tbody>
-              {% if products %}
-                {% for product in products %}
-                  <tr>
-                    <td class="text-center">
-											{% if product.product_id in selected %}
-                      	<input type="checkbox" name="selected" value="{{ product.product_id }}" checked="checked" />
-                      {% else %}
-                      	<input type="checkbox" name="selected" value="{{ product.product_id }}" />
-                      {% endif %}
-										</td>
-				            <td class="text-center">{{ product.product_id }}</td>
-                    <td class="text-left">{{ product.name }}</td>
-                    <td class="text-left">{{ product.model }}</td>
-                    <td class="text-right">
-											{% if product.special %} 
-												<span style="text-decoration: line-through;">{{ product.price }}</span><br/>
-                      	<div class="text-danger">{{ product.special }}</div>
-                      {% else %}
-                      	{{ product.price }}
-                      {% endif %}
-										</td>
-                    <td class="text-left">{{ product.status }}</td>
-                  </tr>
-                {% endfor %}
-              {% else %}
-								<tr>
-									<td class="text-center" colspan="8">{{ text_no_results }}</td>
-								</tr>
-            	{% endif %}
-            </tbody>
-          </table>
-					<div class="row">
-						<div class="col-sm-6 text-left">{{ pagination }}</div>
-						<div class="col-sm-6 text-right">{{ results }}</div>
+					<div class="tab-pane" id="tab-history">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<td>Id</td>
+										<td>Data</td>
+										<td>Type</td>
+									</tr>
+								</thead>
+								<tbody>
+									{% if history %}
+										{% for item in history %}
+											<tr class="parrent" data-parrent="{{ item.id }}">
+												<td>{{ item.id }}</td>
+												<td>{{ item.data }}</td>
+												<td>{{ item.type }}</td>
+											</tr>
+											<tr class="clildren hide" data-child="{{ item.id }}"><td colspan="3">
+												<table class="table table-bordered">
+													<thead>
+													<tr>
+													<td>Product_id</td>
+													<td>Old_price</td>
+													<td>New_price</td>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+													{% for i in 0..item.product_id|length-1 %}
+													<tr>
+													<td>{{ item.product_id[i] }}</td>
+													<td>{{ item.priceOld[i] }}</td>
+													<td>{{ item.priceNew[i] }}</td>
+													</tr>
+													{% endfor %}
+													</tr>
+													</tbody>
+												</table>
+											</td>
+											</tr>
+										{% endfor %}
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
 					</div>
-        </div>
+				</div>
       </div>
     </div>
   </div>
 </div>
 <script>
+$('#tab-history .parrent').on('click',function(e){
+	let parrent=$(this).attr('data-parrent');
+	
+	$('.clildren[data-child]').addClass('hide');
+	$('.clildren[data-child="'+parrent+'"]').removeClass('hide');
+})
 $('#action .itemAction').on('click',function(e){
 
 	let value= $(e.target).data('action');
