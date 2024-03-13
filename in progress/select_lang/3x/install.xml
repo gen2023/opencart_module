@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart Select lang</name>
+    <code>Select lang</code>
+    <version>0.0.3</version>
+	  <link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    
+    <file path="catalog/controller/common/header.php">
+        <operation>
+            <search><![CDATA[return $this->load->view('common/header', $data);]]></search>
+            <add position="before"><![CDATA[
+                $data['select_lang_modal']=$this->load->controller('extension/module/select_lang');
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/*/template/common/header.twig">
+        <operation>
+            <search><![CDATA[ <body ]]></search>
+            <add position="after"><![CDATA[
+                {{ select_lang_modal }}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ {% for style in styles %} ]]></search>
+            <add position="before"><![CDATA[
+                <link href="catalog/view/theme/default/stylesheet/select_lang.css" rel="stylesheet">
+            ]]></add>
+        </operation>        
+    </file>    
+</modification>
