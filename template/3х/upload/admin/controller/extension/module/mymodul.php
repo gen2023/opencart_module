@@ -14,7 +14,7 @@ class ControllerExtensionModuleMymodul extends Controller {
 	public function index() {
 		$this->load->language('extension/module/mymodul'); //подключаем наш языковой файл
 
-		$this->load->model('setting/setting');   //подключаем модель setting, он позволяет сохранять настройки модуля в БД
+		$this->load->model('setting/module');   //подключаем модель setting, он позволяет сохранять настройки модуля в БД
 		
 		/* для типа модулей (одиночные)
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -77,6 +77,14 @@ class ControllerExtensionModuleMymodul extends Controller {
 			$data['mymodul_status'] = $this->request->post['mymodul_status'];
 		} else {
 			$data['mymodul_status'] = $this->config->get('mymodul_status');
+		}
+		
+		if (isset($this->request->post['name'])) {
+			$data['name'] = $this->request->post['name'];
+		} elseif (!empty($module_info)) {
+			$data['name'] = $module_info['name'];
+		} else {
+			$data['name'] = '';
 		}
 
         //ссылки на контроллеры header,column_left,footer, иначе мы не сможем вывести заголовок, подвал и левое меню в файле представления

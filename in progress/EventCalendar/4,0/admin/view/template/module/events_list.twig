@@ -1,0 +1,97 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+	  	<a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ button_setting }}" class="btn btn-primary"><i class="fa-solid fa-cog"></i>&nbsp; {{ button_setting }}</a>
+		<a href="{{ add }}" data-bs-toggle="tooltip" title="{{ button_add }}" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+		<button type="submit" form="form-events" formaction="{{ hideEvent }}" data-bs-toggle="tooltip" title="{{ button_hideEvent }}" class="btn btn-default"><i class="fa fa-eye-slash"></i></button>
+		<button type="submit" form="form-events" formaction="{{ copy }}" data-bs-toggle="tooltip" title="{{ button_copy }}" class="btn btn-light"><i class="fa-regular fa-copy"></i></button>
+		<button type="submit" form="form-events" formaction="{{ delete }}" data-bs-toggle="tooltip" title="{{ button_delete }}" onclick="return confirm('{{ text_confirm }}');" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+
+	<div class="container-fluid">
+		{% if error_licence %}
+			<div class="alert alert-warning"><i class="fa-solid fa-circle-exclamation"></i> {{ error_licence }}</div>
+		{% endif %}
+			<div class="card">
+				<div class="card-header"><i class="fa-solid fa-list"></i> {{ text_list }}</div>
+				<div id="events" class="card-body">
+				
+
+					<div class="row">
+						<div class="col-sm-6 text-start">{{ pagination }}</div>
+						<div class="col-sm-6 text-end">{{ results }}</div>
+					</div>
+					<form id="form-events" method="post" data-oc-toggle="ajax" data-oc-load="{{ action }}" data-oc-target="#events">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+										<td class="center">{{ column_image }}</td>
+										<td class="center">{% if (sort == 'nd.title') %}
+											<a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
+											{% else %}
+											<a href="{{ sort_title }}">{{ column_title }}</a>
+										{% endif %}</td>
+										<td class="center">{% if (sort == 'n.date_to') %}
+											<a href="{{ sort_date_to }}" class="{{ order|lower }}">{{ column_date_to }}</a>
+											{% else %}
+											<a href="{{ sort_date_to }}">{{ column_date_to }}</a>
+										{% endif %}</td>
+										<td class="center">{{ column_date_from }}</td>
+										<td class="left">{{ column_status }}</td>
+										<td class="right">{{ column_action }}</td>
+									</tr>
+								</thead>
+								<tbody>
+								{% if events %}
+									{% set class = 'odd' %} 
+									{% for events_story in events %} 
+									{% set class = class == 'even' ? 'odd' : 'even' %} 
+									<tr class="{{ class }}">
+										<td align="center">
+											{% if (events_story['selected']) %} 
+											<input type="checkbox" name="selected[]" value="{{ events_story['event_id'] }}" checked="checked" />
+											{% else %} 
+											<input type="checkbox" name="selected[]" value="{{ events_story['event_id'] }}" />
+											{% endif %} 
+										</td>
+										<td class="center"><img src="{{ events_story['image'] }}" alt="{{ events_story['title'] }}" style="padding: 1px; border: 1px solid #DDD;" /></td>
+										<td class="left">{{ events_story['title'] }}</td>
+										<td class="left">{{ events_story['date_to'] }}</td>
+										<td class="left">{{ events_story['date_from'] }}</td>
+										<td class="left">{{ events_story['status'] }}</td>
+										<td class="text-right"><a href="{{ events_story['edit'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>	
+									</tr>
+									{% endfor %}
+									{% else %}
+									<tr class="even">
+										<td class="center" colspan="7">{{ text_no_results }}</td>
+									</tr>
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
+					</form>
+					<div class="row">
+						<div class="col-sm-6 text-start">{{ pagination }}</div>
+						<div class="col-sm-6 text-end">{{ results }}</div>
+					</div>
+
+
+				</div>
+			</div>
+		
+	</div>
+</div>
+{{ footer }}

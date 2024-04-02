@@ -1,0 +1,46 @@
+.eventTitle{
+	text-align:center;
+}
+
+.contentEvent{
+	    display: flex;
+}
+
+.imageEvent{
+	margin-right: 100px;
+}
+
+.productEvent{
+	width:300px;
+}
+
+.nameProductEvent{
+	text-align:center;
+}
+
+.contentDescriptionEvent{
+	width:100%;
+}
+.eventItem{
+	border: 1px solid #57CBFF; 
+    border: 1px solid #EDEDED; 
+    border-radius: 6px; 
+    background: #fff; 
+    padding: 14px 18px 16px;
+    overflow: hidden; 
+    margin-bottom: 28px; 
+     -moz-box-shadow: 3px 3px 10px rgba(35, 32, 32, 0.31);
+     -webkit-box-shadow: 3px 3px 10px rgba(35, 32, 32, 0.31); 
+    box-shadow: 3px 3px 10px rgba(35, 32, 32, 0.31);
+}
+
+.eventList .eventItem .caption i:before{
+	content:'';
+	background:url(../image/event-date.png) no-repeat;
+	height:16px;
+	width:16px;
+	display:inline-block;
+	vertical-align:middle;
+	margin-right:8px;	
+	margin-top:-3px;
+}

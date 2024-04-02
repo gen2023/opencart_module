@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart office</name>
+    <code>Office</code>
+    <version>1.0.2</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+	<file path="admin/controller/common/column_left.php">
+		<operation>
+		  <search><![CDATA[if ($this->user->hasPermission('access', 'localisation/stock_status')) {]]></search>
+		  <add position="before"><![CDATA[
+				if ($this->user->hasPermission('access', 'extension/module/office/office')) {
+					$localisation[] = array(
+						'name'	   => $this->language->get('text_office'),
+						'href'     => $this->url->link('extension/module/office/office', 'user_token=' . $this->session->data['user_token'], true),
+						'children' => array()		
+					);
+				}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/language/ru-ru/common/column_left.php">
+		<operation>
+			  <search><![CDATA[$_['text_currency']]]></search>
+			  <add position="before"><![CDATA[$_['text_office'] = 'Офисы';]]></add>
+		</operation>
+	</file>
+	<file path="admin/language/en-gb/common/column_left.php">
+		<operation>
+			<search><![CDATA[$_['text_currency']]]></search>
+			<add position="before"><![CDATA[$_['text_office'] = 'Office';]]></add>
+		</operation>
+	</file>
+	<file path="admin/language/ua-uk/common/column_left.php">
+		<operation>
+			<search><![CDATA[$_['text_currency']]]></search>
+			<add position="before"><![CDATA[$_['text_office'] = 'Офиси';]]></add>
+		</operation>
+	</file>
+</modification>

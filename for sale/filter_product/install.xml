@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>GEN2023 Filter Product</name>
+    <code>Filter Product</code>
+    <version>3.0.16</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    <file path="admin/controller/catalog/product.php">
+    <operation>
+      <search><![CDATA[ $data['product_specials'] = array(); ]]></search>
+      <add position="after"><![CDATA[
+	  if (isset($this->request->post['addressDoma'])) {
+			$homes = $this->request->post['addressDoma'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$homes = $this->model_catalog_product->getProductAdressD($this->request->get['product_id']);
+		} else {
+			$homes = array();
+		}
+		
+		$this->load->model('catalog/seria');
+		$data['serias'] = array();		
+		$resultsSeraias = $this->model_catalog_seria->getSerias();
+
+		foreach ($resultsSeraias as $result) {
+			$data['serias'][] = array(
+				'seria_id' => $result['seria_id'],
+				'name'            => $result['name']
+			);
+		}
+		
+		$this->load->model('catalog/type_doma');
+		$data['types_doma'] = array();		
+		$resultsTypesDoma = $this->model_catalog_type_doma->getTypesDoma();
+
+		foreach ($resultsTypesDoma as $result) {
+			$data['types_doma'][] = array(
+				'type_doma_id' => $result['type_doma_id'],
+				'name'            => $result['name']
+			);
+		}
+
+		$this->load->model('catalog/year_doma');
+		$data['years_doma'] = array();		
+		$resultsYearsDoma = $this->model_catalog_year_doma->getYearsDoma();
+
+		foreach ($resultsYearsDoma as $result) {
+			$data['years_doma'][] = array(
+				'year_doma_id' => $result['year_doma_id'],
+				'name'            => $result['name']
+			);
+		}
+
+		$this->load->model('catalog/floor_doma');
+		$data['floors_doma'] = array();		
+		$resultsFloorsDoma = $this->model_catalog_floor_doma->getFloorsDoma();
+
+		foreach ($resultsFloorsDoma as $result) {
+			$data['floors_doma'][] = array(
+				'floor_doma_id' => $result['floor_doma_id'],
+				'name'            => $result['name']
+			);
+		}
+
+		$this->load->model('catalog/address_doma');
+		$data['address_domas'] = array();		
+		$resultsAddressDomas = $this->model_catalog_address_doma->getAddressDomas();
+
+		foreach ($resultsAddressDomas as $result) {
+			$data['address_domas'][] = array(
+				'address_doma_id' => $result['address_doma_id'],
+				'name'            => $result['name']
+			);
+		}
+
+		$data['homes'] = array();
+
+		foreach ($homes as $addressDoma) {
+			$data['homes'][] = array(
+				'addressD'          => $addressDoma['address_doma_id'],
+				'seriaD'          => $addressDoma['seria_id'],
+				'floorD'             => $addressDoma['floor_doma_id'],
+				'yearD'        => $addressDoma['year_doma_id'],
+				'typeD'          => $addressDoma['type_doma_id']
+			);
+		}
+      	]]></add>
+    </operation>
+	</file>
+	<file path="admin/view/template/catalog/product_form.twig">
+    <operation>
+      <search><![CDATA[ <li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li> ]]></search>
+      <add position="before"><![CDATA[
+			<li><a href="#tab-addressDoma" data-toggle="tab">{{ tab_addressDoma }}</a></li>
+      	]]></add>
+    </operation>
+	<operation>
+      <search><![CDATA[ <div class="tab-pane" id="tab-seo"> ]]></search>
+      <add position="before"><![CDATA[
+			<div class="tab-pane" id="tab-addressDoma">
+              <div class="table-responsive">
+                <table id="addressDoma" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_addressD }}</td>
+                      <td class="text-left">{{ entry_seriaD }}</td>
+                      <td class="text-right">{{ entry_floorD }}</td>
+                      <td class="text-right">{{ entry_yearD }}</td>
+                      <td class="text-left">{{ entry_typeD }}</td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  {% set addressDoma_row = 0 %}
+                  {% for addressDoma in homes %}
+                  <tr id="addressDoma-row{{ addressDoma_row }}">
+										<td class="text-right">
+											<select name="addressDoma[{{ addressDoma_row }}][addressD]" id="addressDoma[{{ addressDoma_row }}][addressD]" class="form-control">
+												{% for address_doma in address_domas %}
+													{% if (addressDoma.addressD==address_doma.address_doma_id)%}
+														<option value="{{ address_doma.address_doma_id }}" selected="selected">{{ address_doma.name }}</option>
+													{% else %}
+														<option value="{{ address_doma.address_doma_id }}" >{{ address_doma.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</td>
+                    <td class="text-right">
+											<select name="addressDoma[{{ addressDoma_row }}][seriaD]" id="addressDoma[{{ addressDoma_row }}][seriaD]" class="form-control">
+												{% for seria in serias %}
+													{% if (addressDoma.seriaD==seria.seria_id)%}
+														<option value="{{ seria.seria_id }}" selected="selected">{{ seria.name }}</option>
+													{% else %}
+														<option value="{{ seria.seria_id }}" >{{ seria.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</td>
+										<td class="text-right">
+											<select name="addressDoma[{{ addressDoma_row }}][floorD]" id="addressDoma[{{ addressDoma_row }}][floorD]" class="form-control">
+												{% for floor_doma in floors_doma %}
+													{% if (addressDoma.floorD==floor_doma.floor_doma_id)%}
+														<option value="{{ floor_doma.floor_doma_id }}" selected="selected">{{ floor_doma.name }}</option>
+													{% else %}
+														<option value="{{ floor_doma.floor_doma_id }}" >{{ floor_doma.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</td>
+										<td class="text-right">
+											<select name="addressDoma[{{ addressDoma_row }}][yearD]" id="addressDoma[{{ addressDoma_row }}][yearD]" class="form-control">
+												{% for year_doma in years_doma %}
+													{% if (addressDoma.yearD==year_doma.year_doma_id)%}
+														<option value="{{ year_doma.year_doma_id }}" selected="selected">{{ year_doma.name }}</option>
+													{% else %}
+														<option value="{{ year_doma.year_doma_id }}" >{{ year_doma.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</td>
+										<td class="text-right">
+											<select name="addressDoma[{{ addressDoma_row }}][typeD]" id="addressDoma[{{ addressDoma_row }}][typeD]" class="form-control">
+												{% for type_doma in types_doma %}
+													{% if (addressDoma.typeD==type_doma.type_doma_id)%}
+														<option value="{{ type_doma.type_doma_id }}" selected="selected">{{ type_doma.name }}</option>
+													{% else %}
+														<option value="{{ type_doma.type_doma_id }}" >{{ type_doma.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</td>
+                    <td class="text-left"><button type="button" onclick="$('#addressDoma-row{{ addressDoma_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+                  </tr>
+                  {% set addressDoma_row = addressDoma_row + 1 %}
+                  {% endfor %}
+                    </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td colspan="5"></td>
+                      <td class="text-left"><button type="button" onclick="addAddressDoma();" data-toggle="tooltip" title="{{ button_addressDoma_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+      	]]></add>
+    </operation>
+	<operation>
+      <search><![CDATA[ {{ footer }}  ]]></search>
+      <add position="before"><![CDATA[
+			<script type="text/javascript"><!--
+var addressDoma_row = {{ addressDoma_row }};
+
+function addAddressDoma() {
+	html  = '<tr id="addressDoma-row' + addressDoma_row + '">';
+	html += '  <td class="text-right"><select name="addressDoma[{{ addressDoma_row }}][addressD]" id="addressDoma[{{ addressDoma_row }}][addressD]" class="form-control">';
+	{% for address_doma in address_domas %}
+    html += '<option value="{{ address_doma.address_doma_id }}" selected="selected">{{ address_doma.name }}</option>';
+    {% endfor %}
+  html += '  </select></td>';
+	html += '  <td class="text-right"><select name="addressDoma[{{ addressDoma_row }}][seriaD]" id="addressDoma[{{ addressDoma_row }}][seriaD]" class="form-control">';
+		{% for seria in serias %}
+			html += '<option value="{{ seria.seria_id }}" selected="selected">{{ seria.name }}</option>';
+		{% endfor %}
+  html += '  </select></td>';
+	html += '  <td class="text-right"><select name="addressDoma[{{ addressDoma_row }}][floorD]" id="addressDoma[{{ addressDoma_row }}][floorD]" class="form-control">';
+	{% for floor_doma in floors_doma %}
+    html += '<option value="{{ floor_doma.floor_doma_id }}" selected="selected">{{ floor_doma.name }}</option>';
+    {% endfor %}
+  html += '  </select></td>';
+	html += '  <td class="text-right"><select name="addressDoma[{{ addressDoma_row }}][yearD]" id="addressDoma[{{ addressDoma_row }}][yearD]" class="form-control">';
+	{% for year_doma in years_doma %}
+    html += '<option value="{{ year_doma.year_doma_id }}" selected="selected">{{ year_doma.name }}</option>';
+    {% endfor %}
+  html += '  </select></td>';
+	html += '  <td class="text-right"><select name="addressDoma[{{ addressDoma_row }}][typeD]" id="addressDoma[{{ addressDoma_row }}][typeD]" class="form-control">';
+	{% for type_doma in types_doma %}
+    html += '<option value="{{ type_doma.type_doma_id }}" selected="selected">{{ type_doma.name }}</option>';
+    {% endfor %}
+    html += '  </select></td>';
+	html += '  <td class="text-left"><button type="button" onclick="$(\'#addressDoma-row' + addressDoma_row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+	html += '</tr>';
+
+	$('#addressDoma tbody').append(html);
+
+	$('.date').datetimepicker({
+		language: '{{ datepicker }}',
+		pickTime: false
+	});
+
+	addressDoma_row++;
+}
+//--></script> 
+      	]]></add>
+    </operation>
+  </file>
+	<file path="admin/language/*/catalog/product.php">
+    <operation>
+      <search><![CDATA[ $_['heading_title'] ]]></search>
+      <add position="after"><![CDATA[
+			$_['entry_addressD']          = 'Адресс';
+			$_['entry_seriaD']          = 'Серия';
+			$_['entry_floorD']          = 'Этажность';
+			$_['entry_yearD']          = 'Год';
+			$_['entry_typeD']          = 'Тип';
+			$_['tab_addressDoma']          = 'Список адресов';
+      	]]></add>
+    </operation>
+	</file>
+	<file path="admin/model/catalog/product.php">
+    <operation>
+      <search><![CDATA[ if (isset($data['product_special'])) { ]]></search>
+      <add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "gen_product_filter WHERE product_id = '" . (int)$product_id . "'");
+	 	if (isset($data['addressDoma'])) {
+			foreach ($data['addressDoma'] as $addressDoma) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "gen_product_filter SET product_id = '" . (int)$product_id . "', address_doma_id = '" .  $this->db->escape($addressDoma['addressD']) . "', seria_id = '" .  $this->db->escape($addressDoma['seriaD']) . "', floor_doma_id = '" . (int)$addressDoma['floorD'] . "', year_doma_id = '" . (int)$addressDoma['yearD'] . "', type_doma_id = '" . $this->db->escape($addressDoma['typeD']) . "'");
+			}
+		}
+      	]]></add>
+    </operation>
+	<operation>
+      <search><![CDATA[ public function getProductSpecials($product_id) { ]]></search>
+      <add position="before"><![CDATA[
+	  	public function getProductAdressD($product_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "gen_product_filter WHERE product_id = '" . (int)$product_id . "'");
+
+		return $query->rows;
+	}
+      	]]></add>
+    </operation>
+	</file>
+	<file path="admin/controller/common/column_left.php">
+    <operation>
+      <search><![CDATA[ if ($this->user->hasPermission('access', 'catalog/manufacturer')) { ]]></search>
+      <add position="before"><![CDATA[
+	  	if ($this->user->hasPermission('access', 'catalog/seria')) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_seria'),
+					'href'     => $this->url->link('catalog/seria', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
+		if ($this->user->hasPermission('access', 'catalog/type_doma')) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_type_doma'),
+					'href'     => $this->url->link('catalog/type_doma', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
+
+			if ($this->user->hasPermission('access', 'catalog/address_doma')) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_address_doma'),
+					'href'     => $this->url->link('catalog/address_doma', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
+			if ($this->user->hasPermission('access', 'catalog/floor_doma')) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_floor_doma'),
+					'href'     => $this->url->link('catalog/floor_doma', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
+			if ($this->user->hasPermission('access', 'catalog/year_doma')) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_year_doma'),
+					'href'     => $this->url->link('catalog/year_doma', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
+      	]]></add>
+    </operation>
+	</file>
+	<file path="admin/language/*/common/column_left.php">
+    <operation>
+      <search><![CDATA[ $_['text_api'] ]]></search>
+      <add position="after"><![CDATA[
+	  	$_['text_seria']                  = 'Серия дома';
+		$_['text_type_doma']                  = 'Тип дома';
+		$_['text_address_doma']                  = 'Адреса дома';
+		$_['text_floor_doma']                  = 'Этажность дома';
+		$_['text_year_doma']                  = 'Год дома';
+      	]]></add>
+    </operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+    <operation>
+      <search><![CDATA[ $data['header'] = $this->load->controller('common/header'); ]]></search>
+      <add position="after"><![CDATA[
+			$data['tipDoma'] = $this->load->controller('extension/module/tip_doma');
+      	]]></add>
+    </operation>
+	</file>
+	<file path="catalog/view/theme/*/template/product/tipdoma.twig">
+    <operation>
+      <search><![CDATA[ {{ content_bottom }} ]]></search>
+      <add position="repleace"><![CDATA[ {{ content_bottom }}{{ tipDoma }} ]]></add>
+    </operation>
+	</file>
+</modification>

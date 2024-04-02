@@ -1,0 +1,30 @@
+{% if homes %}
+<div class="container">
+  <div class="col-12">
+	<div class="row">
+	  <table border="1" width="100%" class="">
+		<thead>
+		  <tr>
+			<th align="left">Адрес</th>
+			<th align="left">Серия или ЖК</th>
+			<th align="left">Этажей</th>
+			<th align="left">Год</th>
+			<th align="left">Стены</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  {% for addressDoma in homes %}
+			<tr>
+			  <td>{{ addressDoma.addressD.name }}</td>
+			  <td><a href="{{ addressDoma.href }}">{{ addressDoma.seriaD }}</a></td>
+			  <td>{{ addressDoma.floorD.name }}</td>
+			  <td>{{ addressDoma.yearD.name }}</td>
+			  <td>{{ addressDoma.typeD.name }}</td>
+			</tr>	
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</div>
+  </div>
+</div>
+{% endif%}
