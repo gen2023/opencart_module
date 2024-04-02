@@ -1,0 +1,45 @@
+{% if languages|length > 1 %}
+<div id="modal_lang" class="modal_lang">
+  <div class="modal-dialog_lang">
+    <div class="modal-content_lang">
+
+        <h3 class="modal-title_lang">{{ title }}</h3>
+        <form action="{{ action }}" class="h-100" method="post" enctype="multipart/form-data" id="form-language">
+          <div class="navigation">
+            {% for language in languages %}
+              <a href="{% if language.code != code %}{{ custom_language_link }}{% else %}javascript:void(0);{% endif %}" class="btn_lang language-select{% if language.code == code %} active-item{% endif %}" name="{{ language.code }}">
+                {% if isImage == 1 %}
+                  <img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" />
+                {% endif %}
+                  <span>{{ language.name }}</span>
+              </a>
+            {% endfor %}
+          </div>
+            <input type="hidden" name="code" value="" />
+            <input type="hidden" name="redirect" value="{{ redirect }}" />
+
+        </form>
+		
+    </div>
+  </div>
+</div>
+        
+
+    </div>
+{% endif %}
+
+
+<script>
+
+  const modal_lang=document.querySelector('#modal_lang');
+  setTimeout(() => {
+    modal_lang.classList.add('active');
+  }, {{ second }});
+
+  modal_lang.addEventListener('click',function(e){
+    if (e.target!=e.currentTarget){
+      modal_lang.classList.remove('active');
+    }
+  })
+</script>
+

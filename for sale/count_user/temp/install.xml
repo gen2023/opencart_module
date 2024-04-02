@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart Count user</name>
+    <code>Count user</code>
+    <version>1.0.1</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    <file path="catalog/controller/common/footer.php">
+		<operation>
+		  <search><![CDATA[public function index() {]]></search>
+		  <add position="after"><![CDATA[
+				$this->load->controller('extension/module/count_user');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/information/uni_news_story.php">
+		<operation>
+		  <search><![CDATA[$this->response->setOutput($this->load->view('information/uni_news_story', $data));]]></search>
+		  <add position="before"><![CDATA[
+				$data['viewed']=$this->load->controller('extension/module/count_user_news');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/manufacturer.php">
+		<operation>
+		  <search><![CDATA[ $this->response->setOutput($this->load->view('product/manufacturer_info', $data)); ]]></search>
+		  <add position="after"><![CDATA[
+				$data['viewed']=$this->load->controller('extension/module/count_user_manufacturer');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation>
+		  <search><![CDATA[ $this->response->setOutput($this->load->view('product/product', $data)); ]]></search>
+		  <add position="after"><![CDATA[
+				$data['viewed']=$this->load->controller('extension/module/count_user_product');
+			]]></add>
+		</operation>
+	</file>
+</modification>

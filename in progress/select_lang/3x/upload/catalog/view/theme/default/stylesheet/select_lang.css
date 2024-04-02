@@ -1,0 +1,85 @@
+.modal_lang {
+    display: none;
+}
+.modal_lang.active {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    z-index: 1000000;
+}
+.modal-dialog_lang {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    height: 100vh;
+}
+.modal-content_lang {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    outline: 0;
+    background: #eee;
+    border: none;
+    border-radius: 10px;
+    padding: 60px 90px;
+    width: max-content;
+    height: max-content;
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+.modal-title_lang {
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 37px;
+    text-align: center;
+    color: #000000;
+    padding-bottom: 45px;
+}
+.close_modal_lang {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    font-size: 40px;
+    color: #000;
+}
+.modal-content_lang .navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.btn_lang {
+    color: #888;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 10px 30px;
+}
+.btn_lang:hover {
+    background: #ddd;
+    color: #444;
+}
+
+@media screen and (max-width: 500px) {
+    .modal-content_lang {
+        padding: 30px;
+    }
+}

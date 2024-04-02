@@ -2,7 +2,11 @@
 <modification>
     <name>Opencart Baner product</name>
     <code>Baner product</code>
+<<<<<<< HEAD
     <version>0.0.2</version>
+=======
+    <version>0.0.4</version>
+>>>>>>> 8841f7ebec4bd47799d1024a24781a11759b4854
 	<link>mailto:genodessa@gmail.com</link>
     <author>GEN2023</author>
 </modification>
