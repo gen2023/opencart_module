@@ -2,16 +2,16 @@
 <modification>
     <name>Opencart Testimonial Shop</name>
     <code>Testimonial Shop</code>
-    <version>0.1.2</version>
+    <version>0.2.1</version>
     <author>GEN</author>
     <file path="admin/controller/common/column_left.php">
     <operation>
       <search><![CDATA[if ($this->user->hasPermission('access', 'catalog/information')) {]]></search>
       <add position="before"><![CDATA[
-			if ($this->user->hasPermission('access', 'extension/module/gentestimonials_list')) {		
+			if ($this->user->hasPermission('access', 'extension/module/gentestimonials/gentestimonials_list')) {		
 				$catalog[] = array(
 					'name'	   => $this->language->get('text_gentestimonials'),
-					'href'     => $this->url->link('extension/module/gentestimonials_list', 'user_token=' . $this->session->data['user_token'], true),
+					'href'     => $this->url->link('extension/module/gentestimonials/gentestimonials_list', 'user_token=' . $this->session->data['user_token'], true),
 					'children' => array()		
 				);					
 			}
@@ -22,14 +22,6 @@
     <operation>
       <search><![CDATA[$_['text_manufacturer']]]></search>
       <add position="before"><![CDATA[$_['text_gentestimonials'] = 'Отзывы магазина';]]></add>
-    </operation>
-  </file>
-  <file path="catalog/view/theme/default/template/common/header.twig">
-    <operation>
-      <search><![CDATA[<link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">]]></search>
-      <add position="before"><![CDATA[	
-		<link href="catalog/view/theme/default/stylesheet/testimonials-style.css" rel="stylesheet">
-	  ]]></add>
     </operation>
   </file>
 </modification>

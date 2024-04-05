@@ -1,55 +1,140 @@
 {% for testimonation in testimonations %}
 <div class="swiper-slide">
-	<div class="opgtm-testimonial-left">
-		{% if testimonation.author_image and display_avatar %}
-			<div class="opgtm-avtar-image"><img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}"></div>
+	<div class="opgtm-testimonial-header">
+			<div class="opgtm-avtar-image">
+				{% if testimonation.author_image and display_avatar %}
+					<img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
+				{% else %}
+					<div class="opgtm-avatar-name" style="{{ testimonation.avatar_name_color }}">{{ testimonation.avatar_name }}</div>
+				{% endif %}
+				{% if display_client  and  testimonation.author %}
+					<div class="opgtm-testimonial-client">
+						{{ testimonation.author }}
+					</div>
+				{% endif %}
+			</div>
+		
+		{% if display_rating %}
+			<div class="rating">
+				{% for j in 1..5 %}
+					{% if testimonation.rating < j %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span> {% endif %}
+				{% endfor %} 
+			</div>
 		{% endif %}
-	</div>
-	<div class="opgtm-testimonial-content">
-		<i class="fa fa-quote-left"></i>
 		{% if display_date %}
 			<div class="opgtm-testimonials-date_added">
 				<div class="date_added"> {{ testimonation.date_added }}</div>
 			</div>
 		{% endif %}
-		<div class="opgtm-testimonials-title_rating">
-			<h4>{{ testimonation.testimonial_title }}</h4>
-			{% if display_rating %}
-				<div class="rating"> {% for j in 1..5 %}
-					{% if testimonation.rating < j %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span> {% endif %}
-					{% endfor %} 
-				</div>
-			{% endif %}
-		</div>
-		<div class="opgtm-testimonials-text">
-				{% if display_quotes %} <div class="quotes"> {% endif %}
-					<div class="opgtm-content_description">
-					  {{ testimonation.description }} 
-					</div>
-				{% if display_quotes %} </div> {% endif %}
+	</div>
+	<div class="opgtm-testimonial-main">
+		<div class="opgtm-content_description">
+			{{ testimonation.description }} 
 		</div>
 	</div>
-	{% if display_client  and  testimonation.author %}
-		<div class="opgtm-testimonial-client">
-			{{ testimonation.author }}
-		</div>
-	{% endif %}
-	{% if display_job  and  job_title  or  display_company  and  testimonation.company %}
-		<div class="opgtm-testimonial-job">
-			{% if display_job  and  testimonation.job_title %}
-				{{ testimonation.job_title }}
-			{% endif %}
-			{% if display_job  and  testimonation.job_title  and  display_company  and  testimonation.company %} 
-				{{ " / " }}
-			{% endif %}
-			{% if display_company  and  testimonation.company %}
-				{% if testimonation.urlCompany=='' %}
-					{{ testimonation.company}}
-				{% else %}
-					{{ '<a href="'~testimonation.urlCompany~'" > '~testimonation.company~' </a>' }}
-				{% endif %}
-			{% endif %}
+	{% if display_userRating %}
+		<div class="opgtm-testimonial-footer">
+			<div class="review-rating-change-buttons">
+				<span class="change-rating-button">
+					<a class="testimonation-positive" data-value="{{ testimonation.positive }}" data-id="{{ testimonation.id }}">
+						<i class="ex-like fa fa-thumbs-up"></i>					
+						<span class="review-vote-count" id="vote_count_positive-{{ testimonation.id }}">{{ testimonation.positive }}</span>
+					</a>				
+				</span>
+				<span class="change-rating-button">
+					<a class="testimonation-negative" data-value="{{ testimonation.negative }}" data-id="{{ testimonation.id }}">
+						<i class="ex-dislike fa fa-thumbs-up"></i>
+						<span class="review-vote-count" id="vote_count_negative-{{ testimonation.id }}">{{ testimonation.negative }}</span>
+					</a>				
+				</span>
+			</div>
 		</div>
 	{% endif %}
 </div>
 {% endfor %}
+
+<script type="text/javascript"><!--
+	$('.testimonation-negative').on('click', function() {
+	  let id = $(this).data("id");
+	  let ls_negative = "negative"+id;
+		let ls_positive = "positive"+id;
+	  let note_block = $("#testimonial_note");
+		let vote_count_negative = $('#vote_count_negative-'+id);
+		let vote_count_positive = $('#vote_count_positive-'+id);
+		let valueNegative=0;
+		let valuePositive=0;
+
+	  if(localStorage.getItem(ls_negative) == null){
+			if(localStorage.getItem(ls_positive) == null){
+				valueNegative = parseInt(vote_count_negative.text())-1;
+				valuePositive = vote_count_positive.text();
+			}else{
+				valueNegative = parseInt(vote_count_negative.text())-1;
+				valuePositive = parseInt(vote_count_positive.text())-1;
+			}
+
+	    $.ajax({
+	      url: 'index.php?route=extension/module/gentestimonials/updateTestomonialRating',
+	  		type: 'post',
+	  		data: { testimonial_id : id, negative : valueNegative, positive : valuePositive } ,
+	      dataType: 'json',
+	      success: function(json) {
+	        if (json['success']) {
+						vote_count_negative.text(valueNegative);
+						vote_count_positive.text(valuePositive);
+	        	localStorage.setItem(ls_negative , true);
+	      	}
+	      }
+	    });
+	    $(note_block).append('<div class="alert alert-success m-0"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; {{ alert_success_updateRating }}</div>');
+	  }
+	  else{
+	    $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
+	  }
+		setTimeout(function(){
+			$('.testimonial_note .alert').remove();
+		},2000);
+	});
+	$('.testimonation-positive').on('click', function() {
+
+	  let id = $(this).data("id");
+	  let ls_negative = "negative"+id;
+		let ls_positive = "positive"+id;
+	  let note_block = $("#testimonial_note");
+		let vote_count_negative = $('#vote_count_negative-'+id);
+		let vote_count_positive = $('#vote_count_positive-'+id);
+		let valueNegative=0;
+		let valuePositive=0;
+
+	  if(localStorage.getItem(ls_positive) == null){
+			if(localStorage.getItem(ls_negative) == null){
+				valuePositive = parseInt(vote_count_positive.text())+1;
+				valueNegative = vote_count_negative.text();
+			}else{
+				valueNegative = parseInt(vote_count_negative.text())+1;
+				valuePositive = parseInt(vote_count_positive.text())+1;
+			}
+
+	    $.ajax({
+	      url: 'index.php?route=extension/module/gentestimonials/updateTestomonialRating',
+	  		type: 'post',
+	  		data: { testimonial_id : id, negative : valueNegative, positive : valuePositive } ,
+	      dataType: 'json',
+	      success: function(json) {
+	        if (json['success']) {
+						vote_count_negative.text(valueNegative);
+						vote_count_positive.text(valuePositive);
+						localStorage.setItem(ls_positive , true);
+	      	}
+	    }
+	    });
+	    $(note_block).append('<div class="alert alert-success m-0"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; {{ alert_success_updateRating }}</div>');
+	  }
+	  else{
+	      $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
+	  }
+		setTimeout(function(){
+			$('.testimonial_note .alert').remove();
+		},2000);
+	});
+//--></script>

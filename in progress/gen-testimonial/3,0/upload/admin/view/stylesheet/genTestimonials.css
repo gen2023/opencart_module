@@ -1,3 +1,5 @@
-.delProduct{
-	font-size:25px;
+#custom_template{
+	border-top: 3px solid #ededed;
+	border-bottom: 3px solid #ededed;
 }
+.form-group{border-top: 1px solid #ededed;}

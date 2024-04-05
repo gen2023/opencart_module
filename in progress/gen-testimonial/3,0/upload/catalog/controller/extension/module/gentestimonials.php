@@ -1,6 +1,8 @@
 <?php
-class ControllerExtensionModuleGentestimonials extends Controller {
-	public function index($setting) {
+class ControllerExtensionModuleGentestimonials extends Controller
+{
+	public function index($setting)
+	{
 		static $module = 0;
 
 		$this->load->model('tool/image');
@@ -8,32 +10,88 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');
 		$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
 		$this->document->addScript('catalog/view/javascript/jquery/swiper/js/swiper.jquery.js');
-		
-		$this->load->model('extension/module/gentestimonials');
+		$this->document->addStyle('catalog/view/theme/default/stylesheet/testimonials-style.min.css');
 
-		$result_sql=$this->model_extension_module_gentestimonials->getTestimonials();
+		$this->load->model('extension/module/gentestimonials');
+		$this->load->language('extension/module/gentestimonials');
+
+		$filter=array();
+		$filter['count_slider']=$setting['count_slider'];
+
+		$results = $this->model_extension_module_gentestimonials->getTestimonials($filter);
+		$totalAll = $this->model_extension_module_gentestimonials->getTestimonialsAll();
+		$total=count($totalAll);
+
+
+
+		$data['total_testimonial'] = $this->language->get('text_total_testimonial') . ' ' . $total;
 
 		$data['testimonations'] = array();
+		$rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
 
-		foreach ($result_sql as $result) {
+		foreach ($results as $result) {
+			// var_dump($result);
+
 			$data['testimonations'][] = array(
+				'id'=> $result['testimonial_id'],
+				'positive' => $result['positive'],
+				'negative' => $result['negative'],
 				'userLink' => $result['userLink'],
 				'rating' => $result['rating'],
 				'author' => $result['user'], /*переименовать в author*/
-				'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+				// 'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+				'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 200) . '...',
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
-				'testimonial_title' => $result['testimonial_title'],
-				'job_title' => $result['job_title'], 
-				'company' => $result['company'], 
-				'urlCompany' => $result['urlCompany'], 
-				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100)
+				// 'testimonial_title' => $result['testimonial_title'],
+				'avatar_name' => $result['user'][0],
+				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
+				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
 			);
 		}
-//var_dump($data['testimonations']);
+
+		$average_rating = 0;
+		$count_rating_5 = 0;
+		$count_rating_4 = 0;
+		$count_rating_3 = 0;
+		$count_rating_2 = 0;
+		$count_rating_1 = 0;
+
+
+		foreach ($totalAll as $key => $value) {
+			$average_rating = $average_rating + $value['rating'];
+			switch ($value['rating']) {
+				case '5':
+					$count_rating_5=$count_rating_5+1;
+					break;
+				case '4':
+					$count_rating_4=$count_rating_4+1;
+					break;
+				case '3':
+					$count_rating_3=$count_rating_3+1;
+					break;
+				case '2':
+					$count_rating_2=$count_rating_2+1;
+					break;
+				case '1':
+					$count_rating_1=$count_rating_1+1;
+					break;
+
+			}
+		}
+
+		$data['count_rating_5']= round($count_rating_5 / $total * 100);
+		$data['count_rating_4']= round($count_rating_4 / $total * 100);
+		$data['count_rating_3']= round($count_rating_3 / $total * 100);
+		$data['count_rating_2']= round($count_rating_2 / $total * 100);
+		$data['count_rating_1']= round($count_rating_1 / $total * 100);
+		$data['average_rating'] = round($average_rating / $total, 2);
+
+		// var_dump($data['average_rating']);
+
 
 		$data['module'] = $module++;
 		$data['title'] = '';
-		
+
 		$data['direction'] = $setting['direction'];
 		$data['effect'] = $setting['effect'];
 		$data['enabled'] = $setting['enabled'];
@@ -41,71 +99,90 @@ class ControllerExtensionModuleGentestimonials extends Controller {
 		$data['longSwipesMs'] = $setting['longSwipesMs'];
 		$data['loop'] = $setting['loop'];
 		$data['preloadImages'] = $setting['preloadImages'];
-		$data['spaceBetween'] = $setting['spaceBetween'];
 		$data['autoplay'] = $setting['autoplay'];
 		$data['viewPagination'] = $setting['viewPagination'];
 		$data['viewnavigation'] = $setting['viewnavigation'];
-		
 		$data['display_avatar'] = $setting['display_avatar'];
-		$data['display_quotes'] = $setting['display_quotes'];
 		$data['display_client'] = $setting['display_client'];
-		$data['display_job'] = $setting['display_job'];
-		$data['display_company'] = $setting['display_company'];
 		$data['display_rating'] = $setting['display_rating'];
 		$data['display_date'] = $setting['display_date'];
-		
+		$data['display_userRating'] = $setting['display_userRating'];
+		$data['all_testimonial'] = $setting['all_testimonial'];
+		$data['add_testimonial'] = $setting['add_testimonial'];
 		$data['template'] = $setting['template'];
-		$data['css_class'] = 'design' . $setting['template'];
-		$data['class_image'] = $setting['template'];
-		$data['slidesPerView'] = $setting['slidesPerView'];
-		
-		if ($setting['slidesPerView320']==''){
-			$data['slidesPerView320']=$setting['slidesPerView'];
-		} else {
-			$data['slidesPerView320'] 	= $setting['slidesPerView320'];
-		}
-		if ($setting['slidesPerView1024']==''){
-			$data['slidesPerView1024']=$setting['slidesPerView'];
-		} else {
-			$data['slidesPerView1024'] 	= $setting['slidesPerView1024'];
-		}
-		if ($setting['slidesPerView425']==''){
-			$data['slidesPerView425']=$setting['slidesPerView'];
-		} else {
-			$data['slidesPerView425'] 	= $setting['slidesPerView425'];
-		}
-		if ($setting['slidesPerView768']==''){
-			$data['slidesPerView768']=$setting['slidesPerView'];
-		} else {
-			$data['slidesPerView768'] 	= $setting['slidesPerView768'];
-		}
-		
-		if ($setting['spaceBetween320']==''){
-			$data['spaceBetween320']=$setting['spaceBetween'];
-		} else {
-			$data['spaceBetween320'] 	= $setting['spaceBetween320'];
-		}
-		if ($setting['spaceBetween1024']==''){
-			$data['spaceBetween1024']=$setting['spaceBetween'];
-		} else {
-			$data['spaceBetween1024'] 	= $setting['spaceBetween1024'];
-		}
-		if ($setting['spaceBetween768']==''){
-			$data['spaceBetween768']=$setting['spaceBetween'];
-		} else {
-			$data['spaceBetween768'] 	= $setting['spaceBetween768'];
-		}
-		if ($setting['spaceBetween425']==''){
-			$data['spaceBetween425']=$setting['spaceBetween'];
-		} else {
-			$data['spaceBetween425'] 	= $setting['spaceBetween425'];
-		}
-		
-		if ($setting['viewTitle']=='1')
+		$data['class_image'] = $setting['class_image'];
+		$data['status_newTestimonial'] = $setting['status_newTestimonial'];
+
+		$data['bg_rating'] = ' rat-avg-' . (int) $data['average_rating'];
+
+		if ($setting['viewTitle'] == '1')
 			$data['title'] = $setting['name'];
+
+		// $data['design'] = $this->load->view('extension/module/testimonial_template/design' . $data['template'], $data);
+		$data['design'] = $this->load->view('extension/module/testimonial_template/design0', $data);
+
 		
-		$data['design'] = $this->load->view('extension/module/testimonial_template/design' . $data['template'], $data);
 
 		return $this->load->view('extension/module/gentestimonials', $data);
+	}
+
+	public function write() {
+		$this->load->language('extension/module/gentestimonials');
+
+		$json = array();
+
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+			if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 25)) {
+				$json['error'] = $this->language->get('error_name');
+			}
+
+			if ((utf8_strlen($this->request->post['text']) < 25) || (utf8_strlen($this->request->post['text']) > 1000)) {
+				$json['error'] = $this->language->get('error_text');
+			}
+
+			if (empty($this->request->post['rating']) || $this->request->post['rating'] < 0 || $this->request->post['rating'] > 5) {
+				$json['error'] = $this->language->get('error_rating');
+			}
+
+			// Captcha
+			// if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') && in_array('review', (array)$this->config->get('config_captcha_page'))) {
+			// 	$captcha = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha') . '/validate');
+
+			// 	if ($captcha) {
+			// 		$json['error'] = $captcha;
+			// 	}
+			// }
+
+			if (!isset($json['error'])) {
+				$this->load->model('extension/module/gentestimonials');
+
+
+				$this->model_extension_module_gentestimonials->addTestimonial($this->request->post);
+
+				$json['success'] = $this->language->get('text_success');
+			}
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	public function updateTestomonialRating() {
+		$this->load->language('extension/module/gentestimonials');
+		$this->load->model('extension/module/gentestimonials');
+
+		$json = array();
+
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {		
+
+			$this->model_extension_module_gentestimonials->updateTestomonialRating($this->request->post);
+
+				$json['success'] = $this->language->get('alert_success_updateRating');
+
+		}
+
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 }

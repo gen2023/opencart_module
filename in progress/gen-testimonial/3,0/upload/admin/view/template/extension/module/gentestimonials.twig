@@ -1,470 +1,415 @@
 {{ header }}{{ column_left }}
 <div id="content">
-  <div class="page-header">
-    <div class="container-fluid">
-      <div class="pull-right">
-        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
-        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
-      <h1>{{ heading_title }}</h1>
-      <ul class="breadcrumb">
-        {% for breadcrumb in breadcrumbs %}
-        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-  <div class="container-fluid">
-    {% if error_warning %}
-    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
-      </div>
-      <div class="panel-body">
-        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
-		  <ul class="nav nav-tabs">
-			<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
-			<li><a href="#tab-data" data-toggle="tab">{{ tab_setting_swiper }}</a></li>
-			<li><a href="#tab-settingView" data-toggle="tab">{{ tab_setting_viev_slider }}</a></li>
-		  </ul>
-		  <div class="tab-content">
-			<div class="tab-pane active" id="tab-general">
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
-				<div class="col-sm-10">
-				  <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
-				  {% if error_name %}
-					<div class="text-danger">{{ error_name }}</div>
-				  {% endif %}
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-viewTitle">{{ entry_viewTitle }}</label>
-				<div class="col-sm-10">
-				  <select name="viewTitle" id="input-viewTitle" class="form-control">
-					{% if viewTitle %}
-					  <option value="1" selected="selected">{{ text_enabled }}</option>
-					  <option value="0">{{ text_disabled }}</option>
-					{% else %}
-				      <option value="1">{{ text_enabled }}</option>
-					  <option value="0" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>		  
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-template">{{ entry_template }}</label>
-				<div class="col-sm-10">
-				  <select name="template" id="input-template" class="form-control">
-					{% for key,value in templates %}
-					  <option value="{{ key }}" selected="selected">{{ value }}</option>
-					{% endfor %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-add_testimonial">{{ entry_add_testimonial }}</label>
-				<div class="col-sm-10">
-					<select name="add_testimonial" id="input-add_testimonial" class="form-control">
-						{% if add_testimonial %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					</select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-all_testimonial">{{ entry_all_testimonial }}</label>
-				<div class="col-sm-10">
-					<select name="all_testimonial" id="input-all_testimonial" class="form-control">
-						{% if all_testimonial %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					</select>
-				</div>
-			  </div>
-			  <div id="custom_template" style="display:none;">
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_avatar">{{ entry_display_avatar }}</label>
-					<div class="col-sm-10">
-					  <select name="display_avatar" id="input-display_avatar" class="form-control">
-						{% if display_avatar %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_quotes">{{ entry_display_quotes }}</label>
-					<div class="col-sm-10">
-					  <select name="display_quotes" id="input-display_quotes" class="form-control">
-						{% if display_quotes %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_client">{{ entry_display_client }}</label>
-					<div class="col-sm-10">
-					  <select name="display_client" id="input-display_client" class="form-control">
-						{% if display_client %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_job">{{ entry_display_job }}</label>
-					<div class="col-sm-10">
-					  <select name="display_job" id="input-display_job" class="form-control">
-						{% if display_job %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_company">{{ entry_display_company }}</label>
-					<div class="col-sm-10">
-					  <select name="display_company" id="input-display_company" class="form-control">
-						{% if display_company %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_rating">{{ entry_display_rating }}</label>
-					<div class="col-sm-10">
-					  <select name="display_rating" id="input-display_rating" class="form-control">
-						{% if display_rating %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-				  <div class="form-group">
-					<label class="col-sm-2 control-label" for="input-display_date">{{ entry_display_date }}</label>
-					<div class="col-sm-10">
-					  <select name="display_date" id="input-display_date" class="form-control">
-						{% if display_date %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					  </select>
-					</div>
-				  </div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
-				<div class="col-sm-10">
-					<select name="status" id="input-status" class="form-control">
-						{% if status %}
-						<option value="1" selected="selected">{{ text_enabled }}</option>
-						<option value="0">{{ text_disabled }}</option>
-						{% else %}
-						<option value="1">{{ text_enabled }}</option>
-						<option value="0" selected="selected">{{ text_disabled }}</option>
-						{% endif %}
-					</select>
-				</div>
-			  </div>
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}"
+					class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i
+						class="fa fa-reply"></i></a>
 			</div>
-			<div class="tab-pane" id="tab-data">
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-direction">{{ entry_direction }}</label>
-				<div class="col-sm-10">
-				  <select name="direction" id="input-direction" class="form-control">
-					{% if direction=='horizontal' %}
-					<option value="horizontal" selected="selected">{{ text_horizontal }}</option>
-					<option value="vertical">{{ text_vertical }}</option>
-					{% else %}
-					<option value="horizontal">{{ text_horizontal }}</option>
-					<option value="vertical" selected="selected">{{ text_vertical }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>			  
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-effect">{{ entry_effect }}</label>
-				<div class="col-sm-10">
-				  <select name="effect" id="input-effect" class="form-control">
-					{% if effect=='fade' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade" selected="selected">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% elseif effect=='cube' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube" selected="selected">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% elseif effect=='coverflow' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow" selected="selected">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% elseif effect=='flip' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip" selected="selected">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% elseif effect=='creative' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative" selected="selected">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% elseif effect=='cards' %}
-						<option value="slide">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards" selected="selected">{{ text_cards }}</option>
-					{% else %}
-						<option value="slide" selected="selected">{{ text_slide }}</option>
-						<option value="fade">{{ text_fade }}</option>
-						<option value="cube">{{ text_cube }}</option>
-						<option value="coverflow">{{ text_coverflow }}</option>
-						<option value="flip">{{ text_flip }}</option>
-						<option value="creative">{{ text_creative }}</option>
-						<option value="cards">{{ text_cards }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-enabled">{{ entry_enabled }}</label>
-				<div class="col-sm-10">
-				  <select name="enabled" id="input-enabled" class="form-control">
-					{% if enabled %}
-						<option value="true" selected="selected">{{ text_enabled }}</option>
-						<option value="false">{{ text_disabled }}</option>
-					{% else %}
-						<option value="true">{{ text_enabled }}</option>
-						<option value="false" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-followFinger" title="{{ help_followFinger }}">{{ entry_followFinger }}</label>
-				<div class="col-sm-10">
-				  <select name="followFinger" id="input-followFinger" class="form-control">
-					{% if followFinger %}
-						<option value="true" selected="selected">{{ text_enabled }}</option>
-						<option value="false">{{ text_disabled }}</option>
-					{% else %}
-						<option value="true">{{ text_enabled }}</option>
-						<option value="false" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-loop">{{ entry_loop }}</label>
-				<div class="col-sm-10">
-				  <select name="loop" id="input-loop" class="form-control">
-					{% if loop %}
-						<option value="true" selected="selected">{{ text_enabled }}</option>
-						<option value="false">{{ text_disabled }}</option>
-					{% else %}
-						<option value="true">{{ text_enabled }}</option>
-						<option value="false" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-preloadImages" title="{{ help_preloadImages }}">{{ entry_preloadImages }}</label>
-				<div class="col-sm-10">
-				  <select name="preloadImages" id="input-preloadImages" class="form-control">
-					{% if preloadImages %}
-						<option value="true" selected="selected">{{ text_enabled }}</option>
-						<option value="false">{{ text_disabled }}</option>
-					{% else %}
-						<option value="true">{{ text_enabled }}</option>
-						<option value="false" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-longSwipesMs" title="{{ help_longSwipesMs }}">{{ entry_longSwipesMs }}</label>
-				<div class="col-sm-10">
-				  <input type="text" name="longSwipesMs" value="{{ longSwipesMs }}" placeholder="{{ entry_longSwipesMs }}" id="input-longSwipesMs" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-autoplay">{{ entry_autoplay }}</label>
-				<div class="col-sm-10">
-				  <input type="text" name="autoplay" value="{{ autoplay }}" placeholder="{{ entry_autoplay }}" id="input-autoplay" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-viewnavigation">{{ entry_viewnavigation }}</label>
-				<div class="col-sm-10">
-				  <select name="viewnavigation" id="input-viewnavigation" class="form-control">
-					{% if viewnavigation %}
-					<option value="1" selected="selected">{{ text_enabled }}</option>
-					<option value="0">{{ text_disabled }}</option>
-					{% else %}
-					<option value="1">{{ text_enabled }}</option>
-					<option value="0" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-viewPagination">{{ entry_viewPagination }}</label>
-				<div class="col-sm-10">
-				  <select name="viewPagination" id="input-viewPagination" class="form-control">
-					{% if viewPagination %}
-					<option value="1" selected="selected">{{ text_enabled }}</option>
-					<option value="0">{{ text_disabled }}</option>
-					{% else %}
-					<option value="1">{{ text_enabled }}</option>
-					<option value="0" selected="selected">{{ text_disabled }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-class_image">{{ entry_class_image }}</label>
-				<div class="col-sm-10">
-				  <select name="class_image" id="input-class_image" class="form-control">
-					{% if class_image %}
-					<option value="circle" selected="selected">{{ text_circle }}</option>
-					<option value="square">{{ text_square }}</option>
-					{% else %}
-					<option value="circle">{{ text_circle }}</option>
-					<option value="square" selected="selected">{{ text_square }}</option>
-					{% endif %}
-				  </select>
-				</div>
-			  </div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
 			</div>
-			<div class="tab-pane" id="tab-settingView">	
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-slidesPerView">{{ entry_slidesPerView }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="slidesPerView" value="{{ slidesPerView }}" placeholder="{{ entry_slidesPerView }}" id="input-slidesPerView" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-slidesPerView320">{{ entry_slidesPerView320 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="slidesPerView320" value="{{ slidesPerView320 }}" placeholder="{{ entry_slidesPerView320 }}" id="input-slidesPerView" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-slidesPerView425">{{ entry_slidesPerView425 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="slidesPerView425" value="{{ slidesPerView425 }}" placeholder="{{ entry_slidesPerView425 }}" id="input-slidesPerView425" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-slidesPerView768">{{ entry_slidesPerView768 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="slidesPerView768" value="{{ slidesPerView768 }}" placeholder="{{ entry_slidesPerView768 }}" id="input-slidesPerView768" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-slidesPerView1024">{{ entry_slidesPerView1024 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="slidesPerView1024" value="{{ slidesPerView1024 }}" placeholder="{{ entry_slidesPerView1024 }}" id="input-slidesPerView1024" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween" title="{{ help_spaceBetween }}">{{ entry_spaceBetween }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="spaceBetween" value="{{ spaceBetween }}" placeholder="{{ entry_spaceBetween }}" id="input-spaceBetween" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween320">{{ entry_spaceBetween320 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="spaceBetween320" value="{{ spaceBetween320 }}" placeholder="{{ entry_spaceBetween320 }}" id="input-spaceBetween320" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween425">{{ entry_spaceBetween425 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="spaceBetween425" value="{{ spaceBetween425 }}" placeholder="{{ entry_spaceBetween425 }}" id="input-spaceBetween425" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween768">{{ entry_spaceBetween768 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="spaceBetween768" value="{{ spaceBetween768 }}" placeholder="{{ entry_spaceBetween768 }}" id="input-spaceBetween768" class="form-control" />
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label class="col-sm-2 control-label" for="input-spaceBetween1024">{{ entry_spaceBetween1024 }}</label>
-				<div class="col-sm-10">
-				  <input type="number" name="spaceBetween1024" value="{{ spaceBetween1024 }}" placeholder="{{ entry_spaceBetween1024 }}" id="input-spaceBetween1024" class="form-control" />
-				</div>
-			  </div>			  
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module"
+					class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+						<li><a href="#tab-data" data-toggle="tab">{{ tab_setting_swiper }}</a></li>
+
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-general">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name"
+										class="form-control" />
+									{% if error_name %}
+									<div class="text-danger">{{ error_name }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-viewTitle">{{ entry_viewTitle }}</label>
+								<div class="col-sm-10">
+									<select name="viewTitle" id="input-viewTitle" class="form-control">
+										{% if viewTitle %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-template">{{ entry_template }}</label>
+								<div class="col-sm-10">
+									<select name="template" id="input-template" class="form-control">
+										{% for key,value in templates %}
+										<option value="{{ key }}" selected="selected">{{ value }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div id="custom_template" style="display:none;">
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-display_avatar">{{ entry_display_avatar }}</label>
+									<div class="col-sm-10">
+										<select name="display_avatar" id="input-display_avatar" class="form-control">
+											{% if display_avatar %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+											{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-display_client">{{ entry_display_client }}</label>
+									<div class="col-sm-10">
+										<select name="display_client" id="input-display_client" class="form-control">
+											{% if display_client %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+											{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-display_rating">{{ entry_display_rating }}</label>
+									<div class="col-sm-10">
+										<select name="display_rating" id="input-display_rating" class="form-control">
+											{% if display_rating %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+											{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-display_date">{{ entry_display_date }}</label>
+									<div class="col-sm-10">
+										<select name="display_date" id="input-display_date" class="form-control">
+											{% if display_date %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+											{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-display_userRating">{{ entry_display_userRating }}</label>
+									<div class="col-sm-10">
+										<select name="display_userRating" id="input-display_userRating" class="form-control">
+											{% if display_userRating %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+
+
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-add_testimonial">{{ entry_add_testimonial }}</label>
+								<div class="col-sm-10">
+									<select name="add_testimonial" id="input-add_testimonial" class="form-control">
+										{% if add_testimonial %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-all_testimonial">{{ entry_all_testimonial }}</label>
+								<div class="col-sm-10">
+									<select name="all_testimonial" id="input-all_testimonial" class="form-control">
+										{% if all_testimonial %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status_newTestimonial">{{ entry_status_newTestimonial }}</label>
+								<div class="col-sm-10">
+									<select name="status_newTestimonial" id="input-status_newTestimonial" class="form-control">
+										{% if status_newTestimonial %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="status" id="input-status" class="form-control">
+										{% if status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-data">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-direction">{{ entry_direction }}</label>
+								<div class="col-sm-10">
+									<select name="direction" id="input-direction" class="form-control">
+										{% if direction=='vertical' %}
+										<option value="horizontal">{{ text_horizontal }}</option>
+										<option value="vertical" selected="selected">{{ text_vertical }}</option>
+										{% else %}
+										<option value="horizontal" selected="selected">{{ text_horizontal }}</option>
+										<option value="vertical">{{ text_vertical }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-effect">{{ entry_effect }}</label>
+								<div class="col-sm-10">
+									<select name="effect" id="input-effect" class="form-control">
+										{% if effect=='fade' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade" selected="selected">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% elseif effect=='cube' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube" selected="selected">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% elseif effect=='coverflow' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow" selected="selected">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% elseif effect=='flip' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip" selected="selected">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% elseif effect=='creative' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative" selected="selected">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% elseif effect=='cards' %}
+										<option value="slide">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards" selected="selected">{{ text_cards }}</option>
+										{% else %}
+										<option value="slide" selected="selected">{{ text_slide }}</option>
+										<option value="fade">{{ text_fade }}</option>
+										<option value="cube">{{ text_cube }}</option>
+										<option value="coverflow">{{ text_coverflow }}</option>
+										<option value="flip">{{ text_flip }}</option>
+										<option value="creative">{{ text_creative }}</option>
+										<option value="cards">{{ text_cards }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-enabled">{{ entry_enabled }}</label>
+								<div class="col-sm-10">
+									<select name="enabled" id="input-enabled" class="form-control">
+										{% if enabled %}
+										<option value="true" selected="selected">{{ text_enabled }}</option>
+										<option value="false">{{ text_disabled }}</option>
+										{% else %}
+										<option value="true">{{ text_enabled }}</option>
+										<option value="false" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-followFinger" title="{{ help_followFinger }}">{{
+									entry_followFinger }}</label>
+								<div class="col-sm-10">
+									<select name="followFinger" id="input-followFinger" class="form-control">
+										{% if followFinger %}
+										<option value="true" selected="selected">{{ text_enabled }}</option>
+										<option value="false">{{ text_disabled }}</option>
+										{% else %}
+										<option value="true">{{ text_enabled }}</option>
+										<option value="false" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-loop">{{ entry_loop }}</label>
+								<div class="col-sm-10">
+									<select name="loop" id="input-loop" class="form-control">
+										{% if loop %}
+										<option value="true" selected="selected">{{ text_enabled }}</option>
+										<option value="false">{{ text_disabled }}</option>
+										{% else %}
+										<option value="true">{{ text_enabled }}</option>
+										<option value="false" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-preloadImages" title="{{ help_preloadImages }}">{{
+									entry_preloadImages }}</label>
+								<div class="col-sm-10">
+									<select name="preloadImages" id="input-preloadImages" class="form-control">
+										{% if preloadImages %}
+										<option value="true" selected="selected">{{ text_enabled }}</option>
+										<option value="false">{{ text_disabled }}</option>
+										{% else %}
+										<option value="true">{{ text_enabled }}</option>
+										<option value="false" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-longSwipesMs" title="{{ help_longSwipesMs }}">{{
+									entry_longSwipesMs }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="longSwipesMs" value="{{ longSwipesMs }}"
+										placeholder="{{ entry_longSwipesMs }}" id="input-longSwipesMs" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-autoplay">{{ entry_autoplay }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="autoplay" value="{{ autoplay }}" placeholder="{{ entry_autoplay }}"
+										id="input-autoplay" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-viewnavigation">{{ entry_viewnavigation }}</label>
+								<div class="col-sm-10">
+									<select name="viewnavigation" id="input-viewnavigation" class="form-control">
+										{% if viewnavigation %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-viewPagination">{{ entry_viewPagination }}</label>
+								<div class="col-sm-10">
+									<select name="viewPagination" id="input-viewPagination" class="form-control">
+										{% if viewPagination %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-class_image">{{ entry_class_image }}</label>
+								<div class="col-sm-10">
+									<select name="class_image" id="input-class_image" class="form-control">
+										{% if class_image %}
+										<option value="circle" selected="selected">{{ text_circle }}</option>
+										<option value="square">{{ text_square }}</option>
+										{% else %}
+										<option value="circle">{{ text_circle }}</option>
+										<option value="square" selected="selected">{{ text_square }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-count_slider">{{ entry_count_slider }}</label>
+								<div class="col-sm-10">
+									<input type="number" name="count_slider" value="{{ count_slider }}" placeholder="{{ entry_count_slider }}"
+										id="input-count_slider" class="form-control" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
-		  </div>
-		</form>
-	  </div>
-    </div>
-  </div>
+		</div>
+	</div>
 </div>
 <script>
 	$('#input-template').on('change',function(){
