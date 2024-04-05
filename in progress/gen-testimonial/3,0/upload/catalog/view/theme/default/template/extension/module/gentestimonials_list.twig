@@ -1,65 +1,82 @@
-{% for testimonation in testimonations %}
-<div class="swiper-slide">
-	<div class="opgtm-testimonial-header">
-			<div class="opgtm-avtar-image">
-				{% if testimonation.author_image and display_avatar %}
-					<img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
-				{% else %}
-					<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ testimonation.avatar_name_color }}">{{ testimonation.avatar_name }}</div>
-				{% endif %}
-				{% if display_client  and  testimonation.author %}
-					<div class="opgtm-testimonial-client">
-						{{ testimonation.author }}
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+		{% endfor %}
+	</ul>
+	<div class="row">
+		<div class="col-sm-12">
+			{% for testimonation in testimonations %}
+
+			<div class="opgtm-testimonial_item">
+				<div class="opgtm-testimonial_item__header">
+					<div class="opgtm-avtar-image">
+						{% if testimonation.author_image %}
+						<img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
+						{% else %}
+						<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ testimonation.avatar_name_color }}">
+							{{ testimonation.avatar_name }}
+						</div>
+						{% endif %}
+						{% if testimonation.author %}
+						<div class="opgtm-testimonial-client">
+							<strong>{{ testimonation.author }}</strong>
+						</div>
+						{% endif %}
 					</div>
-				{% endif %}
-			</div>
-		
-		{% if display_rating %}
-			<div class="rating">
-				{% for j in 1..5 %}
-					{% if testimonation.rating < j %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span> {% endif %}
-				{% endfor %} 
-			</div>
-		{% endif %}
-		{% if display_date %}
-			<div class="opgtm-testimonials-date_added">
-				<div class="date_added"> {{ testimonation.date_added }}</div>
-			</div>
-		{% endif %}
-	</div>
-	<div class="opgtm-testimonial-main">
-		<div class="opgtm-block_recomended">{{ text_recomended_shop }}</div>
-		<div class="opgtm-content_description">
-			{{ testimonation.description }} 
-		</div>
-	</div>
-	{% if display_userRating %}
-		<div class="opgtm-testimonial-footer">
-			<div class="review-rating-change-buttons">
-				<span class="change-rating-button">
-					<a class="testimonation-positive" data-value="{{ testimonation.positive }}" data-id="{{ testimonation.id }}">
-						<i class="ex-like fa fa-thumbs-up"></i>					
-						<span class="review-vote-count" id="vote_count_positive-{{ testimonation.id }}">{{ testimonation.positive }}</span>
-					</a>				
-				</span>
-				<span class="change-rating-button">
-					<a class="testimonation-negative" data-value="{{ testimonation.negative }}" data-id="{{ testimonation.id }}">
-						<i class="ex-dislike fa fa-thumbs-up"></i>
-						<span class="review-vote-count" id="vote_count_negative-{{ testimonation.id }}">{{ testimonation.negative }}</span>
-					</a>				
-				</span>
+					<div class="opgtm-testimonial_item__header_bottom">
+						<div class="opgtm-block_recomended">
+							<strong>{{ testimonation.text_recomended_shop }}</strong>&nbsp;
+							{{ entry_rating }}&nbsp;-&nbsp;{{ testimonation.rating }}
+						</div>
+					</div>
+				</div>
+				<div class="opgtm-testimonial_item__main">
+					<div class="opgtm-content_description">
+						{{ testimonation.description }}
+					</div>
+				</div>
+				<div class="opgtm-testimonial_item__footer">
+					<div id="testimonial_note-{{ testimonation.id }}" class="testimonial_note"></div>
+					<div class="review-rating-change-buttons">
+						<span class="change-rating-button">
+							<a class="testimonation-positive" data-value="{{ testimonation.positive }}"
+								data-id="{{ testimonation.id }}">
+								<i class="ex-like fa fa-thumbs-up"></i>
+								<span class="review-vote-count" id="vote_count_positive-{{ testimonation.id }}">{{
+									testimonation.positive }}</span>
+							</a>
+						</span>
+						<span class="change-rating-button">
+							<a class="testimonation-negative" data-value="{{ testimonation.negative }}"
+								data-id="{{ testimonation.id }}">
+								<i class="ex-dislike fa fa-thumbs-up"></i>
+								<span class="review-vote-count" id="vote_count_negative-{{ testimonation.id }}">
+									{{ testimonation.negative }}
+								</span>
+							</a>
+						</span>
+					</div>
+				</div>
 			</div>
 		</div>
-	{% endif %}
+		{% endfor %}
+	</div>
 </div>
-{% endfor %}
+
 
 <script type="text/javascript"><!--
 	$('.testimonation-negative').on('click', function() {
 	  let id = $(this).data("id");
+
+    $('#testimonial_note-'+id+' .alert').remove();
+
+
+
 	  let ls_negative = "negative"+id;
 		let ls_positive = "positive"+id;
-	  let note_block = $("#testimonial_note");
+	  let note_block = $("#testimonial_note-"+id);
 		let vote_count_negative = $('#vote_count_negative-'+id);
 		let vote_count_positive = $('#vote_count_positive-'+id);
 		let valueNegative=0;
@@ -92,16 +109,15 @@
 	  else{
 	    $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
 	  }
-		setTimeout(function(){
-			$('.testimonial_note .alert').remove();
-		},2000);
 	});
 	$('.testimonation-positive').on('click', function() {
-
+    
 	  let id = $(this).data("id");
+    $('#testimonial_note-'+id+' .alert').remove();
+
 	  let ls_negative = "negative"+id;
 		let ls_positive = "positive"+id;
-	  let note_block = $("#testimonial_note");
+	  let note_block = $("#testimonial_note-"+id);
 		let vote_count_negative = $('#vote_count_negative-'+id);
 		let vote_count_positive = $('#vote_count_positive-'+id);
 		let valueNegative=0;
@@ -134,8 +150,7 @@
 	  else{
 	      $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
 	  }
-		setTimeout(function(){
-			$('.testimonial_note .alert').remove();
-		},2000);
 	});
 //--></script>
+
+{{ footer }}

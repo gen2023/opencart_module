@@ -137,6 +137,30 @@
 .opgtm-testimonial .btn .fa {
   margin-right: 10px;
 }
+.opgtm-testimonial_item {
+  background: #FBFBFB;
+  color: #777777;
+  border-radius: 4px;
+  border: 0px solid #FBFBFB;
+  padding: 10px 10px 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+  box-shadow: 1px 1px 3px #c3c3c3;
+  overflow: hidden;
+}
+.opgtm-testimonial_item__header {
+  margin-bottom: 10px;
+}
+.opgtm-testimonial_item__main {
+  margin-bottom: 10px;
+}
+.opgtm-testimonial_item__footer {
+  display: flex;
+  justify-content: space-between;
+}
 .opgtm-avtar-image {
   display: flex;
   align-items: center;
@@ -146,7 +170,7 @@
   height: 40px;
 }
 .opgtm-circle {
-  border: 50%;
+  border-radius: 50%;
 }
 .opgtm-avatar-name {
   text-transform: capitalize;

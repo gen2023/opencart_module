@@ -22,8 +22,7 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		$totalAll = $this->model_extension_module_gentestimonials->getTestimonialsAll();
 		$total=count($totalAll);
 
-
-
+		$data['link_all_testimonial']=$this->url->link('extension/module/gentestimonials_list');
 		$data['total_testimonial'] = $this->language->get('text_total_testimonial') . ' ' . $total;
 
 		$data['testimonations'] = array();
@@ -35,6 +34,7 @@ class ControllerExtensionModuleGentestimonials extends Controller
 			$data['testimonations'][] = array(
 				'id'=> $result['testimonial_id'],
 				'positive' => $result['positive'],
+				'recomended_shop' => $result['recomended_shop']==1 ? $this->language->get('text_recomended') : $this->language->get('text_no_recomended'),
 				'negative' => $result['negative'],
 				'userLink' => $result['userLink'],
 				'rating' => $result['rating'],
@@ -42,7 +42,6 @@ class ControllerExtensionModuleGentestimonials extends Controller
 				// 'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
 				'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 200) . '...',
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
-				// 'testimonial_title' => $result['testimonial_title'],
 				'avatar_name' => $result['user'][0],
 				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
 				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'

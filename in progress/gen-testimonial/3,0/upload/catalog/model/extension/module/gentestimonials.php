@@ -4,7 +4,12 @@ class ModelExtensionModuleGentestimonials extends Model
 	public function getTestimonials($filter)
 	{
 
-		$sql = "SELECT * FROM " . DB_PREFIX . "gentestimonial WHERE status = '1'  ORDER BY sort_order DESC LIMIT " . $filter['count_slider'];
+		// $sql = "SELECT * FROM " . DB_PREFIX . "gentestimonial WHERE status = '1'  ORDER BY sort_order DESC LIMIT " . $filter['count_slider'];
+		$sql = "SELECT * FROM " . DB_PREFIX . "gentestimonial WHERE status = '1'  ORDER BY sort_order DESC";
+
+		if (isset($filter['count_slider'])){
+			$sql .= " LIMIT ". $filter['count_slider'];
+		}
 
 		$query = $this->db->query($sql);
 
@@ -28,10 +33,10 @@ class ModelExtensionModuleGentestimonials extends Model
 	public function addTestimonial($data)
 	{
 		$sort = $this->getTotal() + 1;
-
-		// $this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial SET rating = '" . (int)$data['rating'] . "', status = '" . (int)$data['status'] . "',userLink = '" . $this->db->escape($data['userLink']). "',  date = now() ");
+		
 		$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial SET 
 			rating = '" . (int) $data['rating'] . "', 
+			recomended_shop = '" . (int) $data['recomended_shop'] . "', 
 			status = '" . (int) $data['status_newTestimonial'] . "', 
 			userLink = '" . $this->db->escape($data['userLink']) . "',
 			description = '" . $this->db->escape($data['text']) . "',
@@ -39,13 +44,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			image = '', 
 			date = now(), 
 			sort_order = '" . (int) $sort . "'");
-
-		// $testimonial_id = $this->db->getLastId();
-
-		// if (isset($data['image'])) {
-		// 	$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial SET image = '" . $this->db->escape($data['image']) . "' WHERE testimonial_id = '" . (int)$testimonial_id . "'");
-		// }
-
 
 		$this->cache->delete('gentestimonial');
 	}
