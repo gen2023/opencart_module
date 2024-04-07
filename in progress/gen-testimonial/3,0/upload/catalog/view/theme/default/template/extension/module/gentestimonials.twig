@@ -117,7 +117,7 @@
 							<input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />
 						</div>
 					</div>
-					<div class="form-group required">
+					<div class="form-group">
 						<div class="col-sm-12">
 							<label class="control-label" for="input-userLink">{{ entry_userLink }}</label>
 							<input type="text" name="userLink" value="{{ customer_userLink }}" id="input-userLink" class="form-control" />
@@ -131,11 +131,13 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label">{{ entry_recomended_shop }}</label>
-						<select name="recomended_shop" id="input-recomended_shop" class="form-control">
-							<option value="1" selected="selected">{{ text_yes }}</option>
-							<option value="0">{{ text_no }}</option>
-						</select>
+						<div class="col-sm-12">
+							<label class="control-label">{{ entry_recomended_shop }}</label>
+							<select name="recomended_shop" id="input-recomended_shop" class="form-control">
+								<option value="1" selected="selected">{{ text_yes }}</option>
+								<option value="0">{{ text_no }}</option>
+							</select>
+						</div>
 					</div>
 					<div class="form-group required">
 						<div class="col-sm-12">
@@ -220,6 +222,7 @@ $('#button-testimonial').on('click', function() {
 				$('input[name=\'name\']').val('');
 				$('textarea[name=\'text\']').val('');
 				$('input[name=\'rating\']:checked').prop('checked', false);
+				$('#testimonial_form').hide();
 			}
 		}
 	});

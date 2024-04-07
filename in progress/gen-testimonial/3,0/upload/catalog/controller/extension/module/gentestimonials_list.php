@@ -16,6 +16,8 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 
 
 		$results = $this->model_extension_module_gentestimonials->getTestimonials($filter);
+
+		
 		$totalAll = $this->model_extension_module_gentestimonials->getTestimonialsAll();
 		$total=count($totalAll);
 
@@ -37,7 +39,22 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 		$rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
 
 		foreach ($results as $result) {
-			// var_dump($result);
+
+			$resultsAnswers = $this->model_extension_module_gentestimonials->getAnswers($result['testimonial_id']);
+
+			$answers=array();
+			foreach ($resultsAnswers as $result_answer) {
+				$answers[]=array(
+				'id'=> $result_answer['testimonial_id'],
+				'userLink' => $result_answer['userLink'],
+				'author' => $result_answer['user'], /*переименовать в author*/
+				'description' =>html_entity_decode($result_answer['description'], ENT_QUOTES, 'UTF-8'),
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result_answer['date'])),
+				'avatar_name' => $result_answer['user'][0],
+				'author_image' => $this->model_tool_image->resize($result_answer['image'], 100, 100),
+				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
+				);
+			}
 
 			$data['testimonations'][] = array(
 				'id'=> $result['testimonial_id'],
@@ -52,14 +69,59 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
 				'avatar_name' => $result['user'][0],
 				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
-				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
+				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';',
+				'answers' => $answers
 			);
-		}		
+
+
+
+		}
+
+		echo '<pre>';var_dump($data['testimonations']);echo '</pre>';
+
+		$data['display_answer']=1;
 
     $data['footer'] = $this->load->controller('common/footer');
     $data['header'] = $this->load->controller('common/header');
 
     $this->response->setOutput($this->load->view('extension/module/gentestimonials_list', $data));
+	}
+
+	public function write_answer() {
+		$this->load->language('extension/module/gentestimonials');
+
+		$json = array();
+
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+			if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 25)) {
+				$json['error'] = $this->language->get('error_name');
+			}
+
+			if ((utf8_strlen($this->request->post['text']) < 25) || (utf8_strlen($this->request->post['text']) > 1000)) {
+				$json['error'] = $this->language->get('error_text');
+			}
+
+			// Captcha
+			// if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') && in_array('review', (array)$this->config->get('config_captcha_page'))) {
+			// 	$captcha = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha') . '/validate');
+
+			// 	if ($captcha) {
+			// 		$json['error'] = $captcha;
+			// 	}
+			// }
+
+			if (!isset($json['error'])) {
+				$this->load->model('extension/module/gentestimonials');
+
+
+				$this->model_extension_module_gentestimonials->addAnswerTestimonial($this->request->post);
+
+				$json['success'] = $this->language->get('text_success');
+			}
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 
 }

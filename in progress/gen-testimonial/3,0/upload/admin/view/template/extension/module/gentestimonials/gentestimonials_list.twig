@@ -53,6 +53,8 @@
 										<a href="{{ sort_date }}">{{ column_date }}</a>
 									{% endif %}</td>
 									<td class="left">{{ column_userRating }}</td>
+									<td class="left">{{ column_count_answer }}</td>
+									<td class="left">{{ column_last_answer }}</td>
 									<td class="left">{{ column_status }}</td>
 									<td class="right">{{ column_action }}</td>
 								</tr>
@@ -74,6 +76,8 @@
 									<td class="left">{{ testimonial['user'] }}</td>
 									<td class="left">{{ testimonial['date'] }}</td>
 									<td class="left">{{ testimonial['positive'] }}/{{ testimonial['negative'] }}</td>
+									<td class="left">{{ testimonial['count_answer'] }}</td>
+									<td class="left">{{ testimonial['answer_name'] }}</td>
 									<td class="left">{{ testimonial['status'] }}</td>
 				                	<td class="text-right"><a href="{{ testimonial['edit'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>	
 								</tr>

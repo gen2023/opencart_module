@@ -101,6 +101,7 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			}
 
 			$data['testimonials'][] = array(
+
 				'testimonial_id' => $result['testimonial_id'],
 				'user' => $result['user'],
 				'positive' => $result['positive'],
@@ -109,9 +110,14 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 				'date' => date($this->language->get('date_format_short'), strtotime($result['date'])),
 				'status' => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'selected' => isset($this->request->post['selected']) && in_array($result['testimonial_id'], $this->request->post['selected']),
-				'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/edit', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true)
+				'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/edit', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true),
+				'count_answer' => $this->model_extension_module_gentestimonials->getCountAnswer($result['testimonial_id']),
+				'answer_name' => $this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])
 			);
 		}
+
+		
+
 		//посмотреть что заносится в selected и какая его функция
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array) $this->request->post['selected'];

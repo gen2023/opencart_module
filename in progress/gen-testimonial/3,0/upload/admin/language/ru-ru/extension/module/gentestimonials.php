@@ -38,7 +38,7 @@ $_['entry_date']				= 'Дата';
 $_['entry_testimonials_color']	= 'Цвет отзыва';
 $_['entry_sort_order']			= 'Сортировка отзыва';
 $_['entry_image']				= 'Изображение';
-
+$_['entry_display_answer']				= 'Кнопка ответить на отзыв';
 $_['entry_status']				= 'Статус';
 $_['entry_viewTitle']			= 'Показывать заголовок?';
 $_['entry_name']				= 'Введите заголовок';
@@ -78,6 +78,8 @@ $_['column_date']				= 'Дата отзыва';
 $_['column_status']				= 'Статус';
 $_['column_action']				= 'Действие';
 $_['column_userRating']				= 'Пользовательский рейтинг +/-';
+$_['column_count_answer']				= 'Количество ответов';
+$_['column_last_answer']				= 'Последнгий ответ от ...';
 
 //таб
 $_['tab_license']				= 'Лицензия';

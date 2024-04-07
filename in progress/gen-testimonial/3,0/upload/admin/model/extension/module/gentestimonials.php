@@ -17,8 +17,19 @@ class ModelExtensionModuleGentestimonials extends Model
 			`positive` int(11) default '0', 
 			`negative` int(11) default '0',
 			`recomended_shop` int(1) default '1',
-			`vewed` int(11) default '0',
 			PRIMARY KEY (`testimonial_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_answer` (
+			`answer_id` int(11) NOT NULL auto_increment, 
+			`testimonial_id` int(11) NOT NULL default '0', 			
+			`status` int(1) NOT NULL default '0', 
+			`user` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
+			`userLink` VARCHAR(255) COLLATE utf8_general_ci default NULL,
+			`description` TEXT COLLATE utf8_general_ci default NULL, 
+			`image` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
+			`date` date default NULL, 
+			`sort_order` int(3) default NULL, 
+			PRIMARY KEY (`answer_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_setting` (`testimonial_value_id` int(11) NOT NULL auto_increment,`value1` VARCHAR(255) COLLATE utf8_general_ci default NULL, `value2` VARCHAR(255) COLLATE utf8_general_ci default NULL, `template` VARCHAR(255) COLLATE utf8_general_ci default NULL, PRIMARY KEY (`testimonial_value_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
 
@@ -33,6 +44,7 @@ class ModelExtensionModuleGentestimonials extends Model
 	{
 		$this->db->query("DROP TABLE `" . DB_PREFIX . "gentestimonial`");
 		$this->db->query("DROP TABLE `" . DB_PREFIX . "gentestimonial_setting`");
+		$this->db->query("DROP TABLE `" . DB_PREFIX . "gentestimonial_answer`");
 	}
 
 	public function addTestimonial($data)
@@ -50,7 +62,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			date = '" . $this->db->escape($data['date']) . "', 
 			recomended_shop = '" . $this->db->escape($data['recomended_shop']) . "', 
 			sort_order = '" . (int) $data['sort_order'] . "'");
-
 
 		$this->cache->delete('gentestimonial');
 	}
@@ -184,5 +195,17 @@ class ModelExtensionModuleGentestimonials extends Model
 			$this->addTestimonial($data);
 		}
 	}
+	public function getCountAnswer($testimonial_id){
+		$query = $this->db->query("SELECT COUNT(*) FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int) $testimonial_id . "'");
+
+		return $query->row;
+	}
+	public function getAnswerName($testimonial_id){
+		$query = $this->db->query("SELECT `user` FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int) $testimonial_id . "' ORDER BY `date` DESC LIMIT 1");
+
+		return $query->row;
+	}
+	
+
 }
 ?>

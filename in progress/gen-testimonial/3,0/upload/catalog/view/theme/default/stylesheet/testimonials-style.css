@@ -161,6 +161,18 @@
   display: flex;
   justify-content: space-between;
 }
+.opgtm-testimonial_item__footer .btn_answer_testimonial i {
+  margin-right: 10px;
+}
+.opgtm-testimonial_item .block_form_answer {
+  display: none;
+}
+.opgtm-testimonial_item .block_form_answer.active {
+  display: block;
+}
+.opgtm-testimonial_item .answer_testimonial_list {
+  margin-left: 10%;
+}
 .opgtm-avtar-image {
   display: flex;
   align-items: center;
@@ -193,7 +205,7 @@
   max-height: 210px;
   min-height: 260px;
 }
-.testimonation_note {
+.testimonation .testimonial_note {
   position: absolute;
   z-index: 10;
   left: 50%;
