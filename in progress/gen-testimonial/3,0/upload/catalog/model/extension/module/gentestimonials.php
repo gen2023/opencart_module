@@ -89,7 +89,8 @@ class ModelExtensionModuleGentestimonials extends Model
 			date = now(), 
 			sort_order = '" . (int) $sort . "'");
 
-		$this->cache->delete('gentestimonial');
+			$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial SET is_new = '1' WHERE testimonial_id = '" . (int)$data['testimonial_id'] . "'");
+			
 	}
 
 }

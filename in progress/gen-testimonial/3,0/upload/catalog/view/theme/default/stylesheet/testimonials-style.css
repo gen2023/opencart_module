@@ -154,6 +154,11 @@
 .opgtm-testimonial_item__header {
   margin-bottom: 10px;
 }
+.opgtm-testimonial_item__header .testimonial_item__header_left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .opgtm-testimonial_item__main {
   margin-bottom: 10px;
 }
@@ -172,6 +177,17 @@
 }
 .opgtm-testimonial_item .answer_testimonial_list {
   margin-left: 10%;
+}
+.opgtm-testimonial_item .answer_testimonial_list .answer_header {
+  margin-bottom: 5px;
+}
+.opgtm-testimonial_item .answer_testimonial_item {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c3c3c3;
+}
+.opgtm-testimonial_item .answer_testimonial_item:last-child {
+  border-bottom: none;
 }
 .opgtm-avtar-image {
   display: flex;

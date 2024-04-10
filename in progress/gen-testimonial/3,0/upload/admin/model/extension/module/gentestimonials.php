@@ -17,6 +17,7 @@ class ModelExtensionModuleGentestimonials extends Model
 			`positive` int(11) default '0', 
 			`negative` int(11) default '0',
 			`recomended_shop` int(1) default '1',
+			`is_new` int(1) default '0',
 			PRIMARY KEY (`testimonial_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
 
 		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "gentestimonial_answer` (
@@ -182,7 +183,7 @@ class ModelExtensionModuleGentestimonials extends Model
 	public function copyTestimonial($testimonial_id)
 	{
 
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "gentestimonial WHERE testimonial_id = '" . (int) $testimonial_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "gentestimonial WHERE testimonial_id = '" . (int)$testimonial_id . "'");
 
 		if ($query->num_rows) {
 			$data = $query->row;
@@ -196,16 +197,105 @@ class ModelExtensionModuleGentestimonials extends Model
 		}
 	}
 	public function getCountAnswer($testimonial_id){
-		$query = $this->db->query("SELECT COUNT(*) FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int) $testimonial_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int)$testimonial_id . "'");
 
-		return $query->row;
+		return $query->row['total'];
 	}
 	public function getAnswerName($testimonial_id){
-		$query = $this->db->query("SELECT `user` FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int) $testimonial_id . "' ORDER BY `date` DESC LIMIT 1");
+		$query = $this->db->query("SELECT `user` as userName, `date` as dateCreate FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int)$testimonial_id . "' ORDER BY `date` DESC LIMIT 1");
+		
+		$result=array();
+		if (isset($query->row['userName'])){
+			$result['userName']=$query->row['userName'];
+		}else{
+			$result['userName']='';
+		}
+		if (isset($query->row['dateCreate'])){
+			$result['dateCreate']=$query->row['dateCreate'];
+		}else{
+			$result['dateCreate']='';
+		}
+
+		
+
+		
+		return $result;
+	}
+
+	public function getAnswersByIdTestimonial($testimonial_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int)$testimonial_id . "' ORDER BY `date`");
+		
+		return $query->rows;
+	}
+
+	public function editStatusAnswer($data)
+	{
+		$this->db->query("UPDATE `" . DB_PREFIX . "gentestimonial_answer` SET `status`= '". (int)$data['status'] ."' WHERE `answer_id` = '". (int)$data['answer_id'] ."'");
+	}
+
+	public function addAnswer($testimonial_id,$data)
+	{
+
+		$this->db->query("INSERT INTO " . DB_PREFIX . "gentestimonial_answer SET 
+			testimonial_id = '" . (int)$testimonial_id . "', 
+			status = '" . (int)$data['status'] . "', 
+			userLink = '" . $this->db->escape($data['userLink']) . "',
+			description = '" . $this->db->escape($data['description']) . "',
+			user = '" . $this->db->escape($data['user']) . "',  
+			image = '', 
+			date = '" . $this->db->escape($data['date']) . "', 
+			sort_order = '" . (int)$data['sort_order'] . "'");
+
+		$this->cache->delete('gentestimonial');
+	}
+
+	public function editAnswer($testimonial_id, $answer_id, $data)
+	{
+		//var_dump($data);
+		$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial_answer SET 
+		testimonial_id = '" . (int)$testimonial_id . "', 
+		status = '" . (int) $data['status'] . "',
+		userLink = '" . $this->db->escape($data['userLink']) . "', 
+		sort_order = '" . (int) $data['sort_order'] . "',
+		description = '" . $this->db->escape($data['description']) . "',
+		user = '" . $this->db->escape($data['user']) . "', 
+		image = '" . $this->db->escape($data['image']) . "', 
+		date = '" . $this->db->escape($data['date']) . "' 
+		WHERE answer_id = '" . (int) $answer_id . "'");
+
+	}
+
+	public function copyAnswer($answer_id) {
+		
+		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "gentestimonial_answer WHERE answer_id = '" . (int)$answer_id . "'");
+
+		if ($query->num_rows) {
+			$data = $query->row;
+
+			$data['status'] = '0';
+
+			$this->addAnswer($data['testimonial_id'],$data);
+		}
+	}
+
+	public function deleteAnswers($answer_id)
+	{
+		$this->db->query("DELETE FROM " . DB_PREFIX . "gentestimonial_answer WHERE answer_id = '" . (int) $answer_id . "'");
+
+	}
+
+	public function getAnswersStory($answer_id)
+	{
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "gentestimonial_answer WHERE answer_id = '" . (int) $answer_id . "'");
 
 		return $query->row;
 	}
-	
+	public function deletaStatusIsNew($testimonial_id)
+	{
+		$this->db->query("UPDATE " . DB_PREFIX . "gentestimonial SET is_new = '0' WHERE testimonial_id = '" . (int)$testimonial_id . "'");
+
+	}
 
 }
 ?>

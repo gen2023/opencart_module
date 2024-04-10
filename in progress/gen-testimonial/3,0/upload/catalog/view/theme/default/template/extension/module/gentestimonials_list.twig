@@ -13,9 +13,9 @@
 						<div class="testimonial_item__header_left">
 						<div class="opgtm-avtar-image">
 							{% if testimonation.author_image %}
-							<img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
+								<img src="{{ testimonation.author_image }}" alt="avatar" class="">
 							{% else %}
-							<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ testimonation.avatar_name_color }}">
+							<div class="opgtm-avatar-name" style="{{ testimonation.avatar_name_color }}">
 								{{ testimonation.avatar_name }}
 							</div>
 							{% endif %}
@@ -25,11 +25,9 @@
 							</div>
 							{% endif %}
 						</div>
-						{% if display_date %}
 							<div class="opgtm-testimonials-date_added">
 								<div class="date_added"> {{ testimonation.date_added }}</div>
 							</div>
-						{% endif %}
 						</div>
 						<div class="opgtm-testimonial_item__header_bottom">
 							<div class="opgtm-block_recomended">
@@ -110,6 +108,7 @@
 					</div>
 					<div class="answer_testimonial_list">
 						{% for answer in testimonation.answers %}
+							<div class="answer_testimonial_item">
 							<div class="answer_header">
 								<div class="opgtm-avtar-image">
 									{% if answer.author_image %}
@@ -130,8 +129,9 @@
 										<div class="date_added"> {{ answer.date_added }}</div>
 									</div>
 								{% endif %}
-						</div>
+							</div>
 							<div class="answer_main">{{ answer.description }}</div>
+							</div>
 						{% endfor %}
 					</div>
 				</div>

@@ -22,7 +22,7 @@ class ControllerExtensionModuleGentestimonials extends Controller
 
 		$this->load->model('setting/module');
 		$this->load->model('extension/module/gentestimonials');
-		$this->document->addStyle('admin/view/stylesheet/genTestimonials.css');
+		$this->document->addStyle('view/stylesheet/gentestimonials.css');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!isset($this->request->get['module_id'])) {

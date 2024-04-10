@@ -39,18 +39,30 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 		$rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
 
 		foreach ($results as $result) {
-
+			
 			$resultsAnswers = $this->model_extension_module_gentestimonials->getAnswers($result['testimonial_id']);
 
 			$answers=array();
 			foreach ($resultsAnswers as $result_answer) {
+				// $result_answer['user'][0] = mb_substr($result_answer['user'][0], 2, 1, 'UTF-8');
+				// echo $result_answer['user'][0]; // Это должно вывести русскую букву из строки
+
+				// var_dump(html_entity_decode($result_answer['user'], ENT_QUOTES, 'UTF-8'));
+				// echo '<br>';
+				// var_dump(html_entity_decode($result_answer['user'][0], ENT_QUOTES, 'UTF-8'));
+				// echo '<br>';
+				// var_dump(html_entity_decode($result_answer['user'], ENT_QUOTES, 'UTF-8')[0]);
+				// echo '<br>';
+				
+				
+				
 				$answers[]=array(
 				'id'=> $result_answer['testimonial_id'],
 				'userLink' => $result_answer['userLink'],
 				'author' => $result_answer['user'], /*переименовать в author*/
 				'description' =>html_entity_decode($result_answer['description'], ENT_QUOTES, 'UTF-8'),
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result_answer['date'])),
-				'avatar_name' => $result_answer['user'][0],
+				'avatar_name' => mb_substr($result_answer['user'], 0, 1),
 				'author_image' => $this->model_tool_image->resize($result_answer['image'], 100, 100),
 				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
 				);
@@ -67,7 +79,7 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 				'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
 				// 'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 200) . '...',
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
-				'avatar_name' => $result['user'][0],
+				'avatar_name' => mb_substr($result['user'], 0, 1),
 				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
 				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';',
 				'answers' => $answers
@@ -77,9 +89,9 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 
 		}
 
-		echo '<pre>';var_dump($data['testimonations']);echo '</pre>';
+		// echo '<pre>';var_dump($data['testimonations']);echo '</pre>';
 
-		$data['display_answer']=1;
+		// $data['display_answer']=1;
 
     $data['footer'] = $this->load->controller('common/footer');
     $data['header'] = $this->load->controller('common/header');

@@ -6,6 +6,8 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 	public function index()
 	{
 
+		$this->document->addStyle('view/stylesheet/gentestimonials.css');
+
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -43,6 +45,7 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 		$data['button_add'] = $this->language->get('button_add');
 		$data['button_edit'] = $this->language->get('button_edit');
+		$data['button_answers'] = $this->language->get('button_answers');
 		$data['button_delete'] = $this->language->get('button_delete');
 
 		if (isset($this->error['warning'])) {
@@ -91,7 +94,8 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		);
 
 		$results = $this->model_extension_module_gentestimonials->getTestimonialList($filter_data);
-		//var_dump($result);
+		$data['is_new']=0;
+		
 		foreach ($results as $result) {
 
 			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
@@ -100,19 +104,25 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 				$image = $this->model_tool_image->resize('placeholder.png', 40, 40);
 			}
 
-			$data['testimonials'][] = array(
+			if($result['is_new']==1){
+				$data['is_new']=1;
+			}
 
+			$data['testimonials'][] = array(
 				'testimonial_id' => $result['testimonial_id'],
 				'user' => $result['user'],
 				'positive' => $result['positive'],
 				'negative' => $result['negative'],
+				'is_new' => $result['is_new'],
 				'image' => $image,
 				'date' => date($this->language->get('date_format_short'), strtotime($result['date'])),
 				'status' => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'selected' => isset($this->request->post['selected']) && in_array($result['testimonial_id'], $this->request->post['selected']),
 				'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/edit', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true),
+				'answers' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true),
 				'count_answer' => $this->model_extension_module_gentestimonials->getCountAnswer($result['testimonial_id']),
-				'answer_name' => $this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])
+				'answer_name' => $this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])['userName'],
+				'answer_date' => date($this->language->get('date_format_short'), strtotime($this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])['dateCreate']))
 			);
 		}
 
@@ -412,8 +422,6 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			$data['date'] = date('Y-m-d');
 		}
 
-
-
 		if (isset($this->request->post['sort_order'])) {
 			$data['sort_order'] = $this->request->post['sort_order'];
 		} elseif (!empty($testimonial_info)) {
@@ -509,6 +517,371 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 	{
 		if (!$this->user->hasPermission('modify', 'extension/module/gentestimonials/gentestimonials_list')) {
 			$this->error['warning'] = $this->language->get('error_permission');
+		}
+
+		return !$this->error;
+	}
+	public function answers()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title_answers'));
+
+		$this->load->model('extension/module/gentestimonials');
+		$this->load->model('tool/image');
+
+		$data['breadcrumbs'] = array();
+
+		$data['breadcrumbs'][] = array(
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
+			'text' => $this->language->get('text_home'),
+			'separator' => false
+		);
+
+		$data['breadcrumbs'][] = array(
+			'href' => $this->url->link('extension/module/gentestimonials/gentestimonials_list', 'user_token=' . $this->session->data['user_token'], true),
+			'text' => $this->language->get('heading_title'),
+			'separator' => ' :: '
+		);
+
+		if (isset($this->error['warning'])) {
+			$data['error_warning'] = $this->error['warning'];
+		} else {
+			$data['error_warning'] = '';
+		}
+
+		if (isset($this->session->data['success'])) {
+			$data['success'] = $this->session->data['success'];
+
+			unset($this->session->data['success']);
+		} else {
+			$data['success'] = '';
+		}
+
+		if (isset($this->request->get['testimonial_id'])){
+
+			$url= '&testimonial_id='. $this->request->get['testimonial_id'];
+
+			$data['add'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/addAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['delete'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/deleteAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['copy'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/copyAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
+	
+			$data['user_token']=$this->session->data['user_token'];
+			$data['heading_title']=$this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id'];
+
+			$results = $this->model_extension_module_gentestimonials->getAnswersByIdTestimonial($this->request->get['testimonial_id']);
+			$this->model_extension_module_gentestimonials->deletaStatusIsNew($this->request->get['testimonial_id']);
+
+			$data['answers'] = array();
+
+			foreach ($results as $key => $value) {
+
+			if ($value['image'] && file_exists(DIR_IMAGE . $value['image'])) {
+				$image = $this->model_tool_image->resize($value['image'], 40, 40);
+			} else {
+				$image = $this->model_tool_image->resize('placeholder.png', 40, 40);
+			}
+
+				$data['answers'][] = array(
+					'answer_id'=>$value['answer_id'],
+					'testimonial_id'=>$value['testimonial_id'],
+					'status_id'=>$value['status'],
+					'status'=>($value['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+					'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/editAnswer', 'user_token=' . $this->session->data['user_token'] . $url . '&answer_id=' . $value['answer_id'], true),
+					'user'=>$value['user'],
+					'image'=>$image,
+					'date' => date($this->language->get('date_format_short'), strtotime($value['date'])),
+					'sort_order'=>$value['sort_order'],
+				);
+			}
+		}
+
+		$data['header'] = $this->load->controller('common/header');
+		$data['column_left'] = $this->load->controller('common/column_left');
+		$data['footer'] = $this->load->controller('common/footer');
+
+		$this->response->setOutput($this->load->view('extension/module/gentestimonials/gentestimonials_answers', $data));
+	}
+	public function editStatusAnswer() {
+		$this->load->language('extension/module/gentestimonials');		
+
+		$json = array();
+
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+				$this->load->model('extension/module/gentestimonials');
+
+				if ($this->request->post['action']=='activate'){
+					$this->request->post['status']=1;
+					$json['success'] = $this->language->get('text_activate_answer');
+				}else{
+					$this->request->post['status']=0;
+					$json['success'] = $this->language->get('text_deactivate_answer');
+				}
+				
+				$this->model_extension_module_gentestimonials->editStatusAnswer($this->request->post);
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	public function copyAnswer()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/module/gentestimonials');
+
+
+		if (isset($this->request->post['selected'])) {
+			foreach ($this->request->post['selected'] as $answer_id) {
+				$this->model_extension_module_gentestimonials->copyAnswer($answer_id);
+			}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id='. $this->request->get['testimonial_id'], true));
+		}
+
+		$this->answers();
+	}
+
+	public function deleteAnswer()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/module/gentestimonials');
+
+		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+			foreach ($this->request->post['selected'] as $answer_id) {
+				$this->model_extension_module_gentestimonials->deleteAnswers($answer_id);
+			}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id='. $this->request->get['testimonial_id'], true));
+		}
+
+		$this->answers();
+	}
+
+	public function addAnswer()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/module/gentestimonials');
+
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateFormAnswers()) {
+			$this->model_extension_module_gentestimonials->addAnswer($this->request->get['testimonial_id'],$this->request->post);
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$url = '';
+
+			if (isset($this->request->get['testimonial_id'])){
+				$url .='&testimonial_id=' . $this->request->get['testimonial_id'];
+			}
+			if (isset($this->request->get['answer_id'])){
+				$url .='&answer_id=' . $this->request->get['answer_id'];
+			}
+
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true));
+		}
+
+		$this->getFormAnswers();
+	}
+	public function editAnswer()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/module/gentestimonials');
+
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateFormAnswers()) {
+			$this->model_extension_module_gentestimonials->editAnswer($this->request->get['testimonial_id'],$this->request->get['answer_id'], $this->request->post);
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$url = '';
+
+			if (isset($this->request->get['testimonial_id'])){
+				$url .='&testimonial_id=' . $this->request->get['testimonial_id'];
+			}
+
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true));
+		}
+
+		$this->getFormAnswers();
+	}
+	private function getFormAnswers()
+	{
+
+		$this->load->language('extension/module/gentestimonials');
+
+		$this->load->model('extension/module/gentestimonials');
+
+		$this->document->setTitle($this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id']);
+
+		$data['heading_title'] = $this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id'];
+
+		$data['text_form'] = !isset($this->request->get['answer_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
+
+		if (isset($this->error['warning'])) {
+			$data['error_warning'] = $this->error['warning'];
+		} else {
+			$data['error_warning'] = '';
+		}
+
+		if (isset($this->error['license'])) {
+			$data['error_license'] = $this->error['license'];
+		} else {
+			$data['error_license'] = '';
+		}
+
+		if (isset($this->error['user'])) {
+			$data['error_user'] = $this->error['user'];
+		} else {
+			$data['error_user'] = array();
+		}
+
+		if (isset($this->error['description'])) {
+			$data['error_description'] = $this->error['description'];
+		} else {
+			$data['error_description'] = array();
+		}
+
+		$url= '&testimonial_id=' . $this->request->get['testimonial_id'];
+
+		$data['breadcrumbs'] = array();
+
+		$data['breadcrumbs'][] = array(
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
+			'text' => $this->language->get('text_home'),
+			'separator' => false
+		);
+
+		$data['breadcrumbs'][] = array(
+			'href' => $this->url->link('extension/module/gentestimonials/gentestimonials_list', 'user_token=' . $this->session->data['user_token'], true),
+			'text' => $this->language->get('heading_title'),
+			'separator' => false
+		);
+		$data['breadcrumbs'][] = array(
+			'href' => $this->url->link('extension/module/gentestimonials/gentestimonials/answers', 'user_token=' . $this->session->data['user_token'] . $url, true),
+			'text' => $this->language->get('heading_title_list'),
+			'separator' => ' :: '
+		);		
+
+
+		if (!isset($this->request->get['answer_id'])) {
+			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/addAnswer', 'user_token=' . $this->session->data['user_token'].$url, true);
+		} else {
+			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/editAnswer', 'user_token=' . $this->session->data['user_token'].$url . '&answer_id=' . $this->request->get['answer_id'], true);
+		}
+
+		$data['cancel'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true);
+
+		if ((isset($this->request->get['answer_id'])) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
+			$answer_info = $this->model_extension_module_gentestimonials->getAnswersStory($this->request->get['answer_id']);
+		}
+
+		$this->load->model('localisation/language');
+
+		$data['languages'] = $this->model_localisation_language->getLanguages();
+
+		if (isset($this->request->post['description'])) {
+			$data['description'] = $this->request->post['description'];
+		} elseif (isset($answer_info['description'])) {
+			$data['description'] = $answer_info['description'];
+		} else {
+			$data['description'] = '';
+		}
+
+		if (isset($this->request->post['user'])) {
+			$data['user'] = $this->request->post['user'];
+		} elseif (isset($answer_info['user'])) {
+			$data['user'] = $answer_info['user'];
+		} else {
+			$data['user'] = '';
+		}
+
+		if (isset($this->request->post['userLink'])) {
+			$data['userLink'] = $this->request->post['userLink'];
+		} elseif (isset($answer_info['userLink'])) {
+			$data['userLink'] = $answer_info['userLink'];
+		} else {
+			$data['userLink'] = '';
+		}
+
+		if (isset($this->request->post['date'])) {
+			$data['date'] = $this->request->post['date'];
+		} elseif (isset($answer_info['date'])) {
+			$data['date'] = $answer_info['date'];
+		} else {
+			$data['date'] = date('Y-m-d');
+		}
+
+		if (isset($this->request->post['sort_order'])) {
+			$data['sort_order'] = $this->request->post['sort_order'];
+		} elseif (!empty($answer_info)) {
+			$data['sort_order'] = $answer_info['sort_order'];
+		} else {
+			$data['sort_order'] = 0;
+		}
+
+		if (isset($this->request->post['status'])) {
+			$data['status'] = $this->request->post['status'];
+		} elseif (isset($answer_info)) {
+			$data['status'] = $answer_info['status'];
+		} else {
+			$data['status'] = '';
+		}
+
+		if (isset($this->request->post['image'])) {
+			$data['image'] = $this->request->post['image'];
+		} elseif (!empty($answer_info)) {
+			$data['image'] = $answer_info['image'];
+		} else {
+			$data['image'] = '';
+		}
+
+		$this->load->model('tool/image');
+
+		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+		} elseif (!empty($answer_info) && is_file(DIR_IMAGE . $answer_info['image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($answer_info['image'], 100, 100);
+		} else {
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		}
+
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+
+		$data['header'] = $this->load->controller('common/header');
+		$data['column_left'] = $this->load->controller('common/column_left');
+		$data['footer'] = $this->load->controller('common/footer');
+
+		$this->response->setOutput($this->load->view('extension/module/gentestimonials/gentestimonials_answers_form', $data));
+
+	}
+	protected function validateFormAnswers()
+	{
+
+		if ((utf8_strlen($this->request->post['user']) < 3) || (utf8_strlen($this->request->post['user']) > 64)) {
+			$this->error['user'] = $this->language->get('error_author');
+		}
+
+		if (utf8_strlen($this->request->post['description']) < 1) {
+			$this->error['description'] = $this->language->get('error_description');
+		}
+
+		if ($this->error && !isset($this->error['warning'])) {
+			$this->error['warning'] = $this->language->get('error_warning');
 		}
 
 		return !$this->error;
