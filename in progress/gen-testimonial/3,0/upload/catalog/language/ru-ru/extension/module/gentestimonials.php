@@ -1,6 +1,7 @@
 <?php
 // Heading
 $_['heading_title'] = 'Популярный продукт';
+$_['heading_all_testimonial']='Все отзывы';
 
 // Text
 $_['text_tax']      = 'Без налога:';
@@ -18,8 +19,6 @@ $_['text_success']="Ваш отзыв будет опубликован посл
 $_['text_btn_answer']="Ответить...";
 $_['text_write_answer']="Ответ на отзыв";
 
-$_['heading_all_testimonial']='Все отзывы';
-
 $_['entry_name']='Ваше Имя(ник)';
 $_['entry_recomended_shop']='Рекомендуете ли Вы нас другим?';
 $_['entry_testimonial']='Текст отзыва';
@@ -32,8 +31,6 @@ $_['entry_answer']='Текст ответа';
 $_['button_save']='Отправить';
 $_['btn_show_read']='Посмотреть ответы';
 $_['btn_hide_read']='Скрыть ответы';
-
-
 
 $_['error_name']="Имя от 3х до 25 символов";
 $_['error_text']="Текст от 25 символов и до 1000";

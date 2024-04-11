@@ -32,20 +32,40 @@
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
 						<li><a href="#tab-data" data-toggle="tab">{{ tab_setting_swiper }}</a></li>
-
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab-general">
-							<div class="form-group">
-								<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-name">{{ entry_name_module }}</label>
 								<div class="col-sm-10">
-									<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name"
+									<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name_module }}" id="input-name"
 										class="form-control" />
 									{% if error_name %}
 									<div class="text-danger">{{ error_name }}</div>
 									{% endif %}
 								</div>
 							</div>
+							<div class="tab-content">
+								<ul class="nav nav-tabs" id="language">
+									{% for language in languages %}
+										<li><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+									{% endfor %}
+								</ul>
+								{% for language in languages %}
+									<div class="tab-pane" id="language{{ language.language_id }}">
+										<div class="form-group required">
+											<label class="col-sm-2 control-label" for="input-name{{ language.language_id }}">{{ entry_name }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="module_title[{{ language.language_id }}][name]" value="{{ module_title[language.language_id] ? module_title[language.language_id].name }}" placeholder="{{ entry_name }}" id="input-name{{ language.language_id }}" class="form-control"/>
+												{% if error_name[language.language_id] %}
+													<div class="text-danger">{{ error_name[language.language_id] }}</div>
+												{% endif %} 
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+
 							<div class="form-group">
 								<label class="col-sm-2 control-label" for="input-viewTitle">{{ entry_viewTitle }}</label>
 								<div class="col-sm-10">
@@ -434,4 +454,7 @@
 		}
 	});
 </script>
+  <script type="text/javascript"><!--
+  $('#language a:first').tab('show');
+  //--></script>
 {{ footer }}

@@ -115,8 +115,10 @@ class ControllerExtensionModuleGentestimonials extends Controller
 
 		$data['title'] = '';
 
+
+
 		if ($setting['viewTitle'] == '1') {
-			$data['title'] = $setting['name'];
+			$data['title'] = $setting['module_title'][$this->config->get('config_language_id')]['name'];
 		}
 
 		$data['design'] = $this->load->view('extension/module/testimonial_template/design0', $data);

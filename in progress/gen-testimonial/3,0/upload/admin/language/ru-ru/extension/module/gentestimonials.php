@@ -49,19 +49,14 @@ $_['entry_viewTitle']			= 'Показывать заголовок?';
 $_['entry_name']				= 'Введите заголовок';
 $_['entry_rating']				= 'Рейтинг';
 $_['entry_class_image']			= 'Формат изображения';
-
-
-
 $_['entry_add_testimonial']			= 'Кнопка оставить отзыв';
 $_['entry_all_testimonial']			= 'Кнопка все отзывы';
 $_['entry_status_newTestimonial']			= 'Статус новых отзывов';
 $_['entry_display_date']				= 'Показывать дату?';
 $_['entry_display_rating']				= 'Показывать рейтинг?';
 $_['entry_display_avatar']				= 'Показывать аватар?';
-
 $_['entry_display_client']				= 'Показывать пользователя?';
 $_['entry_display_userRating']				= 'Показывать кнопки лайк и дизлайк';
-
 $_['entry_direction']					= 'Выберите прокрутку';
 $_['entry_effect']						= 'Введите эфект';
 $_['entry_enabled']						= 'Включен или отключен swiper';
@@ -73,6 +68,7 @@ $_['entry_autoplay']					= 'Скорость прокрутки';
 $_['entry_viewnavigation']				= 'Показывать навигацию?';
 $_['entry_viewPagination']				= 'Показывать пагинацию?';
 $_['entry_count_slider']				= 'Количество слайдеров';
+$_['entry_name_module']				= 'Название модуля';
 
 
 

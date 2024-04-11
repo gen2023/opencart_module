@@ -45,7 +45,7 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		if (isset($this->error['name'])) {
 			$data['error_name'] = $this->error['name'];
 		} else {
-			$data['error_name'] = '';
+			$data['error_name'] = array();
 		}
 
 		$data['entry_template'] = $this->language->get('entry_template');
@@ -132,8 +132,20 @@ class ControllerExtensionModuleGentestimonials extends Controller
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
+		$this->load->model('localisation/language');
+
+		$data['languages'] = $this->model_localisation_language->getLanguages();
+
 		if (isset($this->request->get['module_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
 			$module_info = $this->model_setting_module->getModule($this->request->get['module_id']);
+		}
+
+		if (isset($this->request->post['module_title'])) {
+			$data['module_title'] = $this->request->post['module_title'];
+		} elseif (!empty($module_info)) {
+			$data['module_title'] = $module_info['module_title'];
+		} else {
+			$data['module_title'] = array();
 		}
 
 		if (isset($this->request->post['name'])) {
@@ -143,6 +155,7 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		} else {
 			$data['name'] = '';
 		}
+
 		if (isset($this->request->post['viewTitle'])) {
 			$data['viewTitle'] = $this->request->post['viewTitle'];
 		} elseif (!empty($module_info)) {
@@ -318,6 +331,12 @@ class ControllerExtensionModuleGentestimonials extends Controller
 	{
 		if (!$this->user->hasPermission('modify', 'extension/module/gentestimonials')) {
 			$this->error['warning'] = $this->language->get('error_permission');
+		}
+
+		foreach ($this->request->post['module_title'] as $language_id => $value) {
+			if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 255)) {
+				$this->error['name'][$language_id] = $this->language->get('error_name');
+			}
 		}
 
 		if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 64)) {
