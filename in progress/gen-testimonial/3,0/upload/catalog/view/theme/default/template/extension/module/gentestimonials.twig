@@ -75,7 +75,7 @@
 				</div>
 			</div>
 			<div class="rating_navigation">
-				{% if all_testimonial %}
+				{% if testimonations and all_testimonial %}
 					<a href="{{ link_all_testimonial }}" class="btn btn-primary"><i class="fa fa-comments-o" aria-hidden="true"></i>{{ text_all_testimonial }}</a>
 				{% endif %}
 				{% if add_testimonial %}
@@ -83,6 +83,7 @@
 				{% endif %}
 			</div>
 		</div>
+		{% if testimonations %}
 		<div class="col-xs-12 col-md-6">
 			<div class="testimonation swiper-viewport">
 				<div id="testimonation{{ module }}" class="swiper-container">
@@ -104,6 +105,28 @@
 				{% endif %}
 			</div>
 		</div>
+		<script type="text/javascript"><!--
+			$('#testimonation{{ module }}').swiper({
+				slidesPerView: 1,
+				autoHeight: false,
+				centeredSlides: true,
+				simulateTouch: true,
+				paginationClickable: true,
+				direction: "{{ direction }}",
+				effect: "{{ effect }}",
+				enabled: {{ enabled }},
+				followFinger: {{ followFinger }},
+				longSwipesMs: {{ longSwipesMs }},
+				loop: {{ loop }},
+				preloadImages: {{ preloadImages }},
+				//autoplay: {{ autoplay }},
+				pagination: ".testimonation{{ module }}",
+				nextButton: ".testimonation .swiper-button-next",
+				prevButton: ".testimonation .swiper-button-prev"
+			});
+		--></script>
+		{% endif %}
+
 	</div>
 	<div id="testimonial_form" class="testimonial_form">
 		<div class="row">
@@ -117,12 +140,6 @@
 							<input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="col-sm-12">
-							<label class="control-label" for="input-userAvatar">{{ entry_userAvatar }}</label>
-							<input type="text" name="userAvatar" value="{{ customer_userAvatar }}" id="input-userAvatar" class="form-control" />
-						</div>
-					</div>					
 					<div class="form-group">
 						<div class="col-sm-12">
 							<label class="control-label" for="input-userLink">{{ entry_userLink }}</label>
@@ -180,26 +197,7 @@
 		$('#testimonial_form').toggle('active');
 	})
 </script>
-<script type="text/javascript"><!--
-	$('#testimonation{{ module }}').swiper({
-		slidesPerView: 1,
-		autoHeight: false,
-		centeredSlides: true,
-		simulateTouch: true,
-		paginationClickable: true,
-		direction: "{{ direction }}",
-		effect: "{{ effect }}",
-		enabled: {{ enabled }},
-		followFinger: {{ followFinger }},
-		longSwipesMs: {{ longSwipesMs }},
-		loop: {{ loop }},
-		preloadImages: {{ preloadImages }},
-		//autoplay: {{ autoplay }},
-		pagination: ".testimonation{{ module }}",
-		nextButton: ".testimonation .swiper-button-next",
-		prevButton: ".testimonation .swiper-button-prev"
-});
---></script>
+
 <script type="text/javascript"><!--
 
 $('#button-testimonial').on('click', function() {

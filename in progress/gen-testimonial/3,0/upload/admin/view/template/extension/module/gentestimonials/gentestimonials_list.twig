@@ -16,16 +16,18 @@
 		</div>
 	</div>
 	<div class="container-fluid">
-		{% if error_warning %}
-		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<div class="message">
+			{% if error_warning %}
+				<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endif %}
+			{% if success %}
+				<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endif %}
 		</div>
-		{% endif %}
-		{% if success %}
-		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-		</div>
-		{% endif %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
@@ -48,7 +50,6 @@
 							<thead>
 								<tr>
 									<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-									<td class="center">{{ column_image }}</td>
 									<td class="center">{% if (sort == 'nd.title') %}
 										<a href="{{ sort_user }}" class="{{ order|lower }}">{{ column_user }}</a>
 										{% else %}
@@ -79,7 +80,6 @@
 										<input type="checkbox" name="selected[]" value="{{ testimonial['testimonial_id'] }}" />
 										{% endif %} 
 									</td>
-									<td class="center"><img src="{{ testimonial['image'] }}" alt="{{ testimonial['user'] }}" style="padding: 1px; border: 1px solid #DDD;" /></td>
 									<td class="left">{{ testimonial['user'] }}</td>
 									<td class="left">{{ testimonial['date'] }}</td>
 									<td class="left">{{ testimonial['positive'] }}/{{ testimonial['negative'] }}</td>
@@ -90,6 +90,11 @@
 									<td class="left">{{ testimonial['answer_name'] }} / {{ testimonial['answer_date'] }}</td>
 									<td class="left">{{ testimonial['status'] }}</td>
 				          <td class="text-right">
+									{% if(testimonial['status_id'])==0 %}
+											<a data-action="activate" data-id="{{ testimonial.testimonial_id }}" data-toggle="tooltip" title="{{ button_activate }}" class="btn btn-success editStatus"><i class="fa fa-check"></i></a>
+										{% else %}
+											<a data-action="deActivate" data-id="{{ testimonial.testimonial_id }}" data-toggle="tooltip" title="{{ button_deactivate }}" class="btn btn-warning editStatus"><i class="fa fa-close"></i></a>
+										{% endif %}		
 										<a href="{{ testimonial['answers'] }}" data-toggle="tooltip" title="{{ button_answers }}" class="btn btn-primary"><i class="fa fa-reply"></i></a>
 										<a href="{{ testimonial['edit'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
 									</td>	
@@ -112,4 +117,27 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript"><!--
+	$('.editStatus').on('click',function(){
+		let id=$(this).data('id');
+		let action=$(this).data('action');
+
+		console.log('click');
+		console.log(id);
+		console.log(action);
+
+	    $.ajax({
+	      url: 'index.php?route=extension/module/gentestimonials/gentestimonials_list/editStatusTestimonial&user_token={{ user_token }}',
+	  		type: 'post',
+	  		data: { testimonial_id : id, action : action} ,
+	      dataType: 'json',
+	      success: function(json) {
+					if (json['success']) {
+						$('.message').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+						setTimeout(function() {window.location.reload();}, 2000);
+					}
+	      }
+	    });
+	});
+--></script>
 {{ footer }}

@@ -17,16 +17,16 @@
 	</div>
 	<div class="container-fluid">
 		<div class="message">
-		{% if error_warning %}
-		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-		</div>
-		{% endif %}
-		{% if success %}
-		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-		</div>
-		{% endif %}
+			{% if error_warning %}
+				<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endif %}
+			{% if success %}
+				<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endif %}
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -43,7 +43,6 @@
 							<thead>
 								<tr>
 									<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-									<td class="center">{{ column_image }}</td>
 									<td class="center">{% if (sort == 'nd.title') %}
 										<a href="{{ sort_user }}" class="{{ order|lower }}">{{ column_user }}</a>
 										{% else %}
@@ -53,10 +52,7 @@
 										<a href="{{ sort_date }}" class="{{ order|lower }}">{{ column_date }}</a>
 										{% else %}
 										<a href="{{ sort_date }}">{{ column_date }}</a>
-									{% endif %}</td>
-									
-									
-									
+									{% endif %}</td>									
 									<td class="left">{{ column_status }}</td>
 									<td class="right">{{ column_action }}</td>
 								</tr>
@@ -74,12 +70,8 @@
 										<input type="checkbox" name="selected[]" value="{{ answer['answer_id'] }}" />
 										{% endif %} 
 									</td>
-									<td class="center"><img src="{{ answer['image'] }}" alt="{{ answer['user'] }}" style="padding: 1px; border: 1px solid #DDD;" /></td>
 									<td class="left">{{ answer['user'] }}</td>
 									<td class="left">{{ answer['date'] }}</td>
-									
-									
-									
 									<td class="left">{{ answer['status'] }}</td>
 				          <td class="text-right">
 										{% if(answer['status_id'])==0 %}

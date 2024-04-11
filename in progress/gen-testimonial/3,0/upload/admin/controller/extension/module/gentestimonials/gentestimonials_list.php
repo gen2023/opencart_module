@@ -36,13 +36,11 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 		$data['text_list'] = $this->language->get('text_list');
 
-		$data['column_image'] = $this->language->get('column_image');
 		$data['column_user'] = $this->language->get('column_user');
 		$data['column_date'] = $this->language->get('column_date');
 		$data['column_status'] = $this->language->get('column_status');
 		$data['column_action'] = $this->language->get('column_action');
 		$data['column_userRating'] = $this->language->get('column_userRating');
-
 		$data['button_add'] = $this->language->get('button_add');
 		$data['button_edit'] = $this->language->get('button_edit');
 		$data['button_answers'] = $this->language->get('button_answers');
@@ -79,10 +77,9 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		$data['add'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/add', 'user_token=' . $this->session->data['user_token'], true);
 		$data['delete'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/delete', 'user_token=' . $this->session->data['user_token'], true);
 		$data['copy'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/copy', 'user_token=' . $this->session->data['user_token'] . $url, true);
-
+		$data['user_token']=$this->session->data['user_token'];
+		
 		$testimonials_total = $this->model_extension_module_gentestimonials->getTotalTestimonial();
-
-		$this->load->model('tool/image');
 
 		$data['testimonials'] = array();
 
@@ -94,18 +91,27 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		);
 
 		$results = $this->model_extension_module_gentestimonials->getTestimonialList($filter_data);
-		$data['is_new']=0;
-		
+		$data['is_new'] = 0;
+
 		foreach ($results as $result) {
 
-			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
-				$image = $this->model_tool_image->resize($result['image'], 40, 40);
-			} else {
-				$image = $this->model_tool_image->resize('placeholder.png', 40, 40);
+			if ($result['is_new'] == 1) {
+				$data['is_new'] = 1;
 			}
 
-			if($result['is_new']==1){
-				$data['is_new']=1;
+			$lastAnswer=$this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id']);
+			$lastUsername='';
+			if (isset($lastAnswer['userName'])){
+				$lastUsername=$lastAnswer['userName'];
+			}else{
+				$lastUsername='';
+			}
+
+			$lastDate='';
+			if (isset($lastAnswer['dateCreate'])){
+				$lastDate=date($this->language->get('date_format_short'), strtotime($lastAnswer['dateCreate']));
+			}else{
+				$lastDate='';
 			}
 
 			$data['testimonials'][] = array(
@@ -114,20 +120,18 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 				'positive' => $result['positive'],
 				'negative' => $result['negative'],
 				'is_new' => $result['is_new'],
-				'image' => $image,
 				'date' => date($this->language->get('date_format_short'), strtotime($result['date'])),
+				'status_id' => $result['status'],
 				'status' => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'selected' => isset($this->request->post['selected']) && in_array($result['testimonial_id'], $this->request->post['selected']),
 				'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/edit', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true),
 				'answers' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id'], true),
 				'count_answer' => $this->model_extension_module_gentestimonials->getCountAnswer($result['testimonial_id']),
-				'answer_name' => $this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])['userName'],
-				'answer_date' => date($this->language->get('date_format_short'), strtotime($this->model_extension_module_gentestimonials->getAnswerName($result['testimonial_id'])['dateCreate']))
+				'answer_name' => $lastUsername,
+				'answer_date' => $lastDate
 			);
 		}
-
 		
-
 		//посмотреть что заносится в selected и какая его функция
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array) $this->request->post['selected'];
@@ -180,8 +184,6 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		$this->response->setOutput($this->load->view('extension/module/gentestimonials/gentestimonials_list', $data));
 
 	}
-
-
 	public function add()
 	{
 		$this->load->language('extension/module/gentestimonials');
@@ -237,7 +239,6 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 		$this->index();
 	}
-
 	public function edit()
 	{
 		$this->load->language('extension/module/gentestimonials');
@@ -446,32 +447,35 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			$data['status'] = '';
 		}
 
-		if (isset($this->request->post['image'])) {
-			$data['image'] = $this->request->post['image'];
-		} elseif (!empty($testimonial_info)) {
-			$data['image'] = $testimonial_info['image'];
-		} else {
-			$data['image'] = '';
-		}
-
-		$this->load->model('tool/image');
-
-		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
-		} elseif (!empty($testimonial_info) && is_file(DIR_IMAGE . $testimonial_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($testimonial_info['image'], 100, 100);
-		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
-
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/module/gentestimonials/gentestimonials_form', $data));
 
+	}
+	public function editStatusTestimonial()
+	{
+		$this->load->language('extension/module/gentestimonials');
+
+		$json = array();
+
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+			$this->load->model('extension/module/gentestimonials');
+
+			if ($this->request->post['action'] == 'activate') {
+				$this->request->post['status'] = 1;
+				$json['success'] = $this->language->get('text_activate_answer');
+			} else {
+				$this->request->post['status'] = 0;
+				$json['success'] = $this->language->get('text_deactivate_answer');
+			}
+
+			$this->model_extension_module_gentestimonials->editStatusTestimonial($this->request->post);
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 
 	protected function validateForm()
@@ -528,7 +532,6 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		$this->document->setTitle($this->language->get('heading_title_answers'));
 
 		$this->load->model('extension/module/gentestimonials');
-		$this->load->model('tool/image');
 
 		$data['breadcrumbs'] = array();
 
@@ -558,16 +561,16 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			$data['success'] = '';
 		}
 
-		if (isset($this->request->get['testimonial_id'])){
+		if (isset($this->request->get['testimonial_id'])) {
 
-			$url= '&testimonial_id='. $this->request->get['testimonial_id'];
+			$url = '&testimonial_id=' . $this->request->get['testimonial_id'];
 
 			$data['add'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/addAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
 			$data['delete'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/deleteAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
 			$data['copy'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/copyAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
-	
-			$data['user_token']=$this->session->data['user_token'];
-			$data['heading_title']=$this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id'];
+
+			$data['user_token'] = $this->session->data['user_token'];
+			$data['heading_title'] = $this->language->get('heading_title_answers') . ' ' . $this->request->get['testimonial_id'];
 
 			$results = $this->model_extension_module_gentestimonials->getAnswersByIdTestimonial($this->request->get['testimonial_id']);
 			$this->model_extension_module_gentestimonials->deletaStatusIsNew($this->request->get['testimonial_id']);
@@ -576,22 +579,15 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 			foreach ($results as $key => $value) {
 
-			if ($value['image'] && file_exists(DIR_IMAGE . $value['image'])) {
-				$image = $this->model_tool_image->resize($value['image'], 40, 40);
-			} else {
-				$image = $this->model_tool_image->resize('placeholder.png', 40, 40);
-			}
-
 				$data['answers'][] = array(
-					'answer_id'=>$value['answer_id'],
-					'testimonial_id'=>$value['testimonial_id'],
-					'status_id'=>$value['status'],
-					'status'=>($value['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+					'answer_id' => $value['answer_id'],
+					'testimonial_id' => $value['testimonial_id'],
+					'status_id' => $value['status'],
+					'status' => ($value['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 					'edit' => $this->url->link('extension/module/gentestimonials/gentestimonials_list/editAnswer', 'user_token=' . $this->session->data['user_token'] . $url . '&answer_id=' . $value['answer_id'], true),
-					'user'=>$value['user'],
-					'image'=>$image,
+					'user' => $value['user'],
 					'date' => date($this->language->get('date_format_short'), strtotime($value['date'])),
-					'sort_order'=>$value['sort_order'],
+					'sort_order' => $value['sort_order'],
 				);
 			}
 		}
@@ -602,23 +598,24 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 		$this->response->setOutput($this->load->view('extension/module/gentestimonials/gentestimonials_answers', $data));
 	}
-	public function editStatusAnswer() {
-		$this->load->language('extension/module/gentestimonials');		
+	public function editStatusAnswer()
+	{
+		$this->load->language('extension/module/gentestimonials');
 
 		$json = array();
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-				$this->load->model('extension/module/gentestimonials');
+			$this->load->model('extension/module/gentestimonials');
 
-				if ($this->request->post['action']=='activate'){
-					$this->request->post['status']=1;
-					$json['success'] = $this->language->get('text_activate_answer');
-				}else{
-					$this->request->post['status']=0;
-					$json['success'] = $this->language->get('text_deactivate_answer');
-				}
-				
-				$this->model_extension_module_gentestimonials->editStatusAnswer($this->request->post);
+			if ($this->request->post['action'] == 'activate') {
+				$this->request->post['status'] = 1;
+				$json['success'] = $this->language->get('text_activate_answer');
+			} else {
+				$this->request->post['status'] = 0;
+				$json['success'] = $this->language->get('text_deactivate_answer');
+			}
+
+			$this->model_extension_module_gentestimonials->editStatusAnswer($this->request->post);
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
@@ -641,7 +638,7 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id='. $this->request->get['testimonial_id'], true));
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $this->request->get['testimonial_id'], true));
 		}
 
 		$this->answers();
@@ -662,7 +659,7 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id='. $this->request->get['testimonial_id'], true));
+			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $this->request->get['testimonial_id'], true));
 		}
 
 		$this->answers();
@@ -677,17 +674,17 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		$this->load->model('extension/module/gentestimonials');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateFormAnswers()) {
-			$this->model_extension_module_gentestimonials->addAnswer($this->request->get['testimonial_id'],$this->request->post);
+			$this->model_extension_module_gentestimonials->addAnswer($this->request->get['testimonial_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$url = '';
 
-			if (isset($this->request->get['testimonial_id'])){
-				$url .='&testimonial_id=' . $this->request->get['testimonial_id'];
+			if (isset($this->request->get['testimonial_id'])) {
+				$url .= '&testimonial_id=' . $this->request->get['testimonial_id'];
 			}
-			if (isset($this->request->get['answer_id'])){
-				$url .='&answer_id=' . $this->request->get['answer_id'];
+			if (isset($this->request->get['answer_id'])) {
+				$url .= '&answer_id=' . $this->request->get['answer_id'];
 			}
 
 			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true));
@@ -704,14 +701,14 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		$this->load->model('extension/module/gentestimonials');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateFormAnswers()) {
-			$this->model_extension_module_gentestimonials->editAnswer($this->request->get['testimonial_id'],$this->request->get['answer_id'], $this->request->post);
+			$this->model_extension_module_gentestimonials->editAnswer($this->request->get['testimonial_id'], $this->request->get['answer_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$url = '';
 
-			if (isset($this->request->get['testimonial_id'])){
-				$url .='&testimonial_id=' . $this->request->get['testimonial_id'];
+			if (isset($this->request->get['testimonial_id'])) {
+				$url .= '&testimonial_id=' . $this->request->get['testimonial_id'];
 			}
 
 			$this->response->redirect($this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true));
@@ -726,9 +723,9 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 
 		$this->load->model('extension/module/gentestimonials');
 
-		$this->document->setTitle($this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id']);
+		$this->document->setTitle($this->language->get('heading_title_answers') . ' ' . $this->request->get['testimonial_id']);
 
-		$data['heading_title'] = $this->language->get('heading_title_answers') .' '. $this->request->get['testimonial_id'];
+		$data['heading_title'] = $this->language->get('heading_title_answers') . ' ' . $this->request->get['testimonial_id'];
 
 		$data['text_form'] = !isset($this->request->get['answer_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
@@ -756,7 +753,7 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			$data['error_description'] = array();
 		}
 
-		$url= '&testimonial_id=' . $this->request->get['testimonial_id'];
+		$url = '&testimonial_id=' . $this->request->get['testimonial_id'];
 
 		$data['breadcrumbs'] = array();
 
@@ -775,13 +772,13 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 			'href' => $this->url->link('extension/module/gentestimonials/gentestimonials/answers', 'user_token=' . $this->session->data['user_token'] . $url, true),
 			'text' => $this->language->get('heading_title_list'),
 			'separator' => ' :: '
-		);		
+		);
 
 
 		if (!isset($this->request->get['answer_id'])) {
-			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/addAnswer', 'user_token=' . $this->session->data['user_token'].$url, true);
+			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/addAnswer', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		} else {
-			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/editAnswer', 'user_token=' . $this->session->data['user_token'].$url . '&answer_id=' . $this->request->get['answer_id'], true);
+			$data['action'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/editAnswer', 'user_token=' . $this->session->data['user_token'] . $url . '&answer_id=' . $this->request->get['answer_id'], true);
 		}
 
 		$data['cancel'] = $this->url->link('extension/module/gentestimonials/gentestimonials_list/answers', 'user_token=' . $this->session->data['user_token'] . $url, true);
@@ -841,26 +838,6 @@ class ControllerExtensionModuleGentestimonialsGentestimonialsList extends Contro
 		} else {
 			$data['status'] = '';
 		}
-
-		if (isset($this->request->post['image'])) {
-			$data['image'] = $this->request->post['image'];
-		} elseif (!empty($answer_info)) {
-			$data['image'] = $answer_info['image'];
-		} else {
-			$data['image'] = '';
-		}
-
-		$this->load->model('tool/image');
-
-		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
-		} elseif (!empty($answer_info) && is_file(DIR_IMAGE . $answer_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($answer_info['image'], 100, 100);
-		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
-
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

@@ -5,8 +5,6 @@ class ControllerExtensionModuleGentestimonials extends Controller
 	{
 		static $module = 0;
 
-		$this->load->model('tool/image');
-
 		$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');
 		$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
 		$this->document->addScript('catalog/view/javascript/jquery/swiper/js/swiper.jquery.js');
@@ -15,14 +13,14 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		$this->load->model('extension/module/gentestimonials');
 		$this->load->language('extension/module/gentestimonials');
 
-		$filter=array();
-		$filter['count_slider']=$setting['count_slider'];
+		$filter = array();
+		$filter['count_slider'] = $setting['count_slider'];
 
 		$results = $this->model_extension_module_gentestimonials->getTestimonials($filter);
 		$totalAll = $this->model_extension_module_gentestimonials->getTestimonialsAll();
-		$total=count($totalAll);
+		$total = count($totalAll);
 
-		$data['link_all_testimonial']=$this->url->link('extension/module/gentestimonials_list');
+		$data['link_all_testimonial'] = $this->url->link('extension/module/gentestimonials_list');
 		$data['total_testimonial'] = $this->language->get('text_total_testimonial') . ' ' . $total;
 
 		$data['testimonations'] = array();
@@ -32,18 +30,16 @@ class ControllerExtensionModuleGentestimonials extends Controller
 			// var_dump($result);
 
 			$data['testimonations'][] = array(
-				'id'=> $result['testimonial_id'],
+				'id' => $result['testimonial_id'],
 				'positive' => $result['positive'],
-				'recomended_shop' => $result['recomended_shop']==1 ? $this->language->get('text_recomended') : $this->language->get('text_no_recomended'),
+				'recomended_shop' => $result['recomended_shop'] == 1 ? $this->language->get('text_recomended') : $this->language->get('text_no_recomended'),
 				'negative' => $result['negative'],
 				'userLink' => $result['userLink'],
 				'rating' => $result['rating'],
-				'author' => $result['user'], /*переименовать в author*/
-				// 'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+				'author' => $result['user'],
 				'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 200) . '...',
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
-				'avatar_name' => $result['user'][0],
-				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
+				'avatar_name' => mb_substr($result['user'], 0, 1),
 				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
 			);
 		}
@@ -60,37 +56,41 @@ class ControllerExtensionModuleGentestimonials extends Controller
 			$average_rating = $average_rating + $value['rating'];
 			switch ($value['rating']) {
 				case '5':
-					$count_rating_5=$count_rating_5+1;
+					$count_rating_5 = $count_rating_5 + 1;
 					break;
 				case '4':
-					$count_rating_4=$count_rating_4+1;
+					$count_rating_4 = $count_rating_4 + 1;
 					break;
 				case '3':
-					$count_rating_3=$count_rating_3+1;
+					$count_rating_3 = $count_rating_3 + 1;
 					break;
 				case '2':
-					$count_rating_2=$count_rating_2+1;
+					$count_rating_2 = $count_rating_2 + 1;
 					break;
 				case '1':
-					$count_rating_1=$count_rating_1+1;
+					$count_rating_1 = $count_rating_1 + 1;
 					break;
 
 			}
 		}
 
-		$data['count_rating_5']= round($count_rating_5 / $total * 100);
-		$data['count_rating_4']= round($count_rating_4 / $total * 100);
-		$data['count_rating_3']= round($count_rating_3 / $total * 100);
-		$data['count_rating_2']= round($count_rating_2 / $total * 100);
-		$data['count_rating_1']= round($count_rating_1 / $total * 100);
-		$data['average_rating'] = round($average_rating / $total, 2);
-
-		// var_dump($data['average_rating']);
-
+		if ($totalAll) {
+			$data['count_rating_5'] = round($count_rating_5 / $total * 100);
+			$data['count_rating_4'] = round($count_rating_4 / $total * 100);
+			$data['count_rating_3'] = round($count_rating_3 / $total * 100);
+			$data['count_rating_2'] = round($count_rating_2 / $total * 100);
+			$data['count_rating_1'] = round($count_rating_1 / $total * 100);
+			$data['average_rating'] = round($average_rating / $total, 2);
+		} else {
+			$data['count_rating_5'] = 0;
+			$data['count_rating_4'] = 0;
+			$data['count_rating_3'] = 0;
+			$data['count_rating_2'] = 0;
+			$data['count_rating_1'] = 0;
+			$data['average_rating'] = 0;
+		}
 
 		$data['module'] = $module++;
-		$data['title'] = '';
-
 		$data['direction'] = $setting['direction'];
 		$data['effect'] = $setting['effect'];
 		$data['enabled'] = $setting['enabled'];
@@ -111,21 +111,21 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		$data['template'] = $setting['template'];
 		$data['class_image'] = $setting['class_image'];
 		$data['status_newTestimonial'] = $setting['status_newTestimonial'];
-
 		$data['bg_rating'] = ' rat-avg-' . (int) $data['average_rating'];
 
-		if ($setting['viewTitle'] == '1')
+		$data['title'] = '';
+
+		if ($setting['viewTitle'] == '1') {
 			$data['title'] = $setting['name'];
+		}
 
-		// $data['design'] = $this->load->view('extension/module/testimonial_template/design' . $data['template'], $data);
 		$data['design'] = $this->load->view('extension/module/testimonial_template/design0', $data);
-
-		
 
 		return $this->load->view('extension/module/gentestimonials', $data);
 	}
 
-	public function write() {
+	public function write()
+	{
 		$this->load->language('extension/module/gentestimonials');
 
 		$json = array();
@@ -166,17 +166,18 @@ class ControllerExtensionModuleGentestimonials extends Controller
 		$this->response->setOutput(json_encode($json));
 	}
 
-	public function updateTestomonialRating() {
+	public function updateTestomonialRating()
+	{
 		$this->load->language('extension/module/gentestimonials');
 		$this->load->model('extension/module/gentestimonials');
 
 		$json = array();
 
-		if ($this->request->server['REQUEST_METHOD'] == 'POST') {		
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 
 			$this->model_extension_module_gentestimonials->updateTestomonialRating($this->request->post);
 
-				$json['success'] = $this->language->get('alert_success_updateRating');
+			$json['success'] = $this->language->get('alert_success_updateRating');
 
 		}
 

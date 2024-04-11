@@ -1,34 +1,31 @@
 <?php
-class ControllerExtensionModulegentestimonialsList extends Controller {
+class ControllerExtensionModulegentestimonialsList extends Controller
+{
 	private $error = array();
 
 	public function index()
 	{
-
-		$this->load->model('tool/image');
 
 		$this->document->addStyle('catalog/view/theme/default/stylesheet/testimonials-style.min.css');
 
 		$this->load->model('extension/module/gentestimonials');
 		$this->load->language('extension/module/gentestimonials');
 
-		$filter=array();
-
+		$filter = array();
 
 		$results = $this->model_extension_module_gentestimonials->getTestimonials($filter);
 
-		
 		$totalAll = $this->model_extension_module_gentestimonials->getTestimonialsAll();
-		$total=count($totalAll);
+		$total = count($totalAll);
 
-    $data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/home')
 		);
 
-    $data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_all_testimonial'),
 			'href' => $this->url->link('extension/module/gentestimonials_list')
 		);
@@ -39,67 +36,47 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 		$rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
 
 		foreach ($results as $result) {
-			
+
 			$resultsAnswers = $this->model_extension_module_gentestimonials->getAnswers($result['testimonial_id']);
 
-			$answers=array();
+			$answers = array();
 			foreach ($resultsAnswers as $result_answer) {
-				// $result_answer['user'][0] = mb_substr($result_answer['user'][0], 2, 1, 'UTF-8');
-				// echo $result_answer['user'][0]; // Это должно вывести русскую букву из строки
 
-				// var_dump(html_entity_decode($result_answer['user'], ENT_QUOTES, 'UTF-8'));
-				// echo '<br>';
-				// var_dump(html_entity_decode($result_answer['user'][0], ENT_QUOTES, 'UTF-8'));
-				// echo '<br>';
-				// var_dump(html_entity_decode($result_answer['user'], ENT_QUOTES, 'UTF-8')[0]);
-				// echo '<br>';
-				
-				
-				
-				$answers[]=array(
-				'id'=> $result_answer['testimonial_id'],
-				'userLink' => $result_answer['userLink'],
-				'author' => $result_answer['user'], /*переименовать в author*/
-				'description' =>html_entity_decode($result_answer['description'], ENT_QUOTES, 'UTF-8'),
-				'date_added' => date($this->language->get('date_format_short'), strtotime($result_answer['date'])),
-				'avatar_name' => mb_substr($result_answer['user'], 0, 1),
-				'author_image' => $this->model_tool_image->resize($result_answer['image'], 100, 100),
-				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
+				$answers[] = array(
+					'id' => $result_answer['testimonial_id'],
+					'userLink' => $result_answer['userLink'],
+					'author' => $result_answer['user'], /*переименовать в author*/
+					'description' => html_entity_decode($result_answer['description'], ENT_QUOTES, 'UTF-8'),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($result_answer['date'])),
+					'avatar_name' => mb_substr($result_answer['user'], 0, 1),
+					'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';'
 				);
 			}
 
 			$data['testimonations'][] = array(
-				'id'=> $result['testimonial_id'],
+				'id' => $result['testimonial_id'],
 				'positive' => $result['positive'],
-        'text_recomended_shop' => $result['recomended_shop']==1 ? $this->language->get('text_recomended') : $this->language->get('text_no_recomended'),
+				'text_recomended_shop' => $result['recomended_shop'] == 1 ? $this->language->get('text_recomended') : $this->language->get('text_no_recomended'),
 				'negative' => $result['negative'],
 				'userLink' => $result['userLink'],
 				'rating' => $result['rating'],
 				'author' => $result['user'], /*переименовать в author*/
-				'description' =>html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
-				// 'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 200) . '...',
+				'description' => html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date'])),
 				'avatar_name' => mb_substr($result['user'], 0, 1),
-				'author_image' => $this->model_tool_image->resize($result['image'], 100, 100),
 				'avatar_name_color' => 'background: #' . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . $rand[mt_rand(0, 15)] . ';',
 				'answers' => $answers
 			);
-
-
-
 		}
 
-		// echo '<pre>';var_dump($data['testimonations']);echo '</pre>';
+		$data['footer'] = $this->load->controller('common/footer');
+		$data['header'] = $this->load->controller('common/header');
 
-		// $data['display_answer']=1;
-
-    $data['footer'] = $this->load->controller('common/footer');
-    $data['header'] = $this->load->controller('common/header');
-
-    $this->response->setOutput($this->load->view('extension/module/gentestimonials_list', $data));
+		$this->response->setOutput($this->load->view('extension/module/gentestimonials_list', $data));
 	}
 
-	public function write_answer() {
+	public function write_answer()
+	{
 		$this->load->language('extension/module/gentestimonials');
 
 		$json = array();
@@ -113,18 +90,8 @@ class ControllerExtensionModulegentestimonialsList extends Controller {
 				$json['error'] = $this->language->get('error_text');
 			}
 
-			// Captcha
-			// if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') && in_array('review', (array)$this->config->get('config_captcha_page'))) {
-			// 	$captcha = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha') . '/validate');
-
-			// 	if ($captcha) {
-			// 		$json['error'] = $captcha;
-			// 	}
-			// }
-
 			if (!isset($json['error'])) {
 				$this->load->model('extension/module/gentestimonials');
-
 
 				$this->model_extension_module_gentestimonials->addAnswerTestimonial($this->request->post);
 

@@ -88,6 +88,7 @@
 .rating_navigation {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .rating-num {
@@ -103,24 +104,30 @@
   width: 100px;
   height: 100px;
 
-  &.rat-avg-5 {
-    background: #ffb60a;
-  }
+  &.rat-avg {
+    &-5 {
+      background: #ffb60a;
+    }
 
-  &.rat-avg-4 {
-    background-color: #ffc548;
-  }
+    &-4 {
+      background-color: #ffc548;
+    }
 
-  &.rat-avg-3 {
-    background-color: #45a3ff;
-  }
+    &-3 {
+      background-color: #45a3ff;
+    }
 
-  &.rat-avg-2 {
-    background-color: #ff8046;
-  }
+    &-2 {
+      background-color: #ff8046;
+    }
 
-  &.rat-avg-1 {
-    background-color: #ff5858;
+    &-1 {
+      background-color: #ff5858;
+    }
+
+    &-0 {
+      background-color: #eee;
+    }
   }
 }
 
@@ -219,7 +226,24 @@
 
       .answer_testimonial {
         &_list {
+          display: none;
           margin-left: 10%;
+          transition: all .5s linear;
+          border: 4px solid #fff;
+          border-radius: 4px;
+          box-shadow: 0 1px 4px rgba(0,0,0,.2);
+          padding: 10px;
+          margin-bottom: 20px;
+
+          &.active {
+            display: block;
+            animation: fade_in_show 0.5s;
+          }
+
+          &.hideAnswer {            
+            animation: fade_in_out 0.5s;
+            animation-fill-mode: forwards;
+          }
 
           .answer_header {
             margin-bottom: 5px;
@@ -234,6 +258,24 @@
 
         &_item:last-child {
           border-bottom: none;
+        }
+      }
+
+      .btn {
+
+        &_hide_answer,
+        &_show_answer {
+          display: none;
+          width: max-content;
+          margin: 0 auto 10px auto;
+
+          &.active {
+            display: block;
+          }
+
+          i {
+            margin-right: 10px;
+          }
         }
       }
     }
@@ -280,5 +322,29 @@
     z-index: 10;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+@keyframes fade_in_show {
+  0% {
+    display: none;
+    transform: scale(0)
+  }
+
+  100% {
+    display: block;
+    transform: scale(1)
+  }
+}
+
+@keyframes fade_in_out {
+  0% {
+    display: block;
+    transform: scale(1)
+  }
+
+  100% {
+    display: none;
+    transform: scale(0);
   }
 }

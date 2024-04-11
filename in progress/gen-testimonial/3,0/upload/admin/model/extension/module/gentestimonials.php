@@ -11,7 +11,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			`user` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
 			`userLink` VARCHAR(255) COLLATE utf8_general_ci default NULL,
 			`description` TEXT COLLATE utf8_general_ci default NULL, 
-			`image` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
 			`date` date default NULL, 
 			`sort_order` int(3) default NULL, 
 			`positive` int(11) default '0', 
@@ -27,7 +26,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			`user` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
 			`userLink` VARCHAR(255) COLLATE utf8_general_ci default NULL,
 			`description` TEXT COLLATE utf8_general_ci default NULL, 
-			`image` VARCHAR(255) COLLATE utf8_general_ci default NULL, 
 			`date` date default NULL, 
 			`sort_order` int(3) default NULL, 
 			PRIMARY KEY (`answer_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
@@ -59,7 +57,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			userLink = '" . $this->db->escape($data['userLink']) . "',
 			description = '" . $this->db->escape($data['description']) . "',
 			user = '" . $this->db->escape($data['user']) . "',  
-			image = '" . $this->db->escape($data['image']) . "', 
 			date = '" . $this->db->escape($data['date']) . "', 
 			recomended_shop = '" . $this->db->escape($data['recomended_shop']) . "', 
 			sort_order = '" . (int) $data['sort_order'] . "'");
@@ -77,7 +74,6 @@ class ModelExtensionModuleGentestimonials extends Model
 		sort_order = '" . (int) $data['sort_order'] . "',
 		description = '" . $this->db->escape($data['description']) . "',
 		user = '" . $this->db->escape($data['user']) . "', 
-		image = '" . $this->db->escape($data['image']) . "', 
 		recomended_shop = '" . $this->db->escape($data['recomended_shop']) . "', 
 		date = '" . $this->db->escape($data['date']) . "' 
 		WHERE testimonial_id = '" . (int) $testimonial_id . "'");
@@ -196,6 +192,12 @@ class ModelExtensionModuleGentestimonials extends Model
 			$this->addTestimonial($data);
 		}
 	}
+
+	public function editStatusTestimonial($data)
+	{
+		$this->db->query("UPDATE `" . DB_PREFIX . "gentestimonial` SET `status`= '". (int)$data['status'] ."' WHERE `testimonial_id` = '". (int)$data['testimonial_id'] ."'");
+	}
+
 	public function getCountAnswer($testimonial_id){
 		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int)$testimonial_id . "'");
 
@@ -204,22 +206,13 @@ class ModelExtensionModuleGentestimonials extends Model
 	public function getAnswerName($testimonial_id){
 		$query = $this->db->query("SELECT `user` as userName, `date` as dateCreate FROM " . DB_PREFIX . "gentestimonial_answer WHERE testimonial_id = '" . (int)$testimonial_id . "' ORDER BY `date` DESC LIMIT 1");
 		
-		$result=array();
-		if (isset($query->row['userName'])){
-			$result['userName']=$query->row['userName'];
-		}else{
-			$result['userName']='';
-		}
-		if (isset($query->row['dateCreate'])){
-			$result['dateCreate']=$query->row['dateCreate'];
-		}else{
-			$result['dateCreate']='';
-		}
-
-		
-
-		
-		return $result;
+		// $result=array();
+		// if (isset($query->row['userName'])){
+		// 	$result['userName']=$query->row['userName'];
+		// }else{
+		// 	$result['userName']='';
+		// }
+		return $query->row;
 	}
 
 	public function getAnswersByIdTestimonial($testimonial_id) {
@@ -242,7 +235,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			userLink = '" . $this->db->escape($data['userLink']) . "',
 			description = '" . $this->db->escape($data['description']) . "',
 			user = '" . $this->db->escape($data['user']) . "',  
-			image = '', 
 			date = '" . $this->db->escape($data['date']) . "', 
 			sort_order = '" . (int)$data['sort_order'] . "'");
 
@@ -259,7 +251,6 @@ class ModelExtensionModuleGentestimonials extends Model
 		sort_order = '" . (int) $data['sort_order'] . "',
 		description = '" . $this->db->escape($data['description']) . "',
 		user = '" . $this->db->escape($data['user']) . "', 
-		image = '" . $this->db->escape($data['image']) . "', 
 		date = '" . $this->db->escape($data['date']) . "' 
 		WHERE answer_id = '" . (int) $answer_id . "'");
 

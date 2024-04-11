@@ -12,13 +12,9 @@
 					<div class="opgtm-testimonial_item__header">
 						<div class="testimonial_item__header_left">
 						<div class="opgtm-avtar-image">
-							{% if testimonation.author_image %}
-								<img src="{{ testimonation.author_image }}" alt="avatar" class="">
-							{% else %}
 							<div class="opgtm-avatar-name" style="{{ testimonation.avatar_name_color }}">
 								{{ testimonation.avatar_name }}
 							</div>
-							{% endif %}
 							{% if testimonation.author %}
 							<div class="opgtm-testimonial-client">
 								<strong>{{ testimonation.author }}</strong>
@@ -106,18 +102,16 @@
 							</div>
 						</div>
 					</div>
+					{% if testimonation.answers %}
+					<div class="btn_show_answer active"><span class="btn btn-primary"><i class="fa fa-comments" aria-hidden="true"></i>{{ btn_show_read }}</span></div>
 					<div class="answer_testimonial_list">
 						{% for answer in testimonation.answers %}
 							<div class="answer_testimonial_item">
 							<div class="answer_header">
 								<div class="opgtm-avtar-image">
-									{% if answer.author_image %}
-									<img src="{{ answer.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
-									{% else %}
 									<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ answer.avatar_name_color }}">
 										{{ answer.avatar_name }}
 									</div>
-									{% endif %}
 									{% if answer.author %}
 									<div class="opgtm-testimonial-client">
 										<strong>{{ answer.author }}</strong>
@@ -134,6 +128,8 @@
 							</div>
 						{% endfor %}
 					</div>
+					<div class="btn_hide_answer"><span class="btn btn-primary"><i class="fa fa-comments" aria-hidden="true"></i>{{ btn_hide_read }}</span></div>
+					{% endif %}
 				</div>
 			</div>
 		{% endfor %}
@@ -146,15 +142,34 @@
 		let id = $(this).data("id");
 		
 		$('#block_form_answer-'+id).toggle('active');
+	});
+
+	$('.btn_show_answer').on('click',function(){
+		
+		let parent=$(this).parent();
+
+		$(this).removeClass('active');
+		parent.children('.answer_testimonial_list').removeClass('hideAnswer');
+		parent.children('.answer_testimonial_list').addClass('active');
+		parent.children('.btn_hide_answer').addClass('active');		
 	})
+
+	$('.btn_hide_answer').on('click',function(){
+		
+		let parent=$(this).parent();
+
+		$(this).removeClass('active');		
+		parent.children('.answer_testimonial_list').removeClass('active');
+		parent.children('.answer_testimonial_list').addClass('hideAnswer');		
+		parent.children('.btn_show_answer').addClass('active');		
+	})
+
 </script>
 <script type="text/javascript"><!--
 	$('.testimonation-negative').on('click', function() {
 	  let id = $(this).data("id");
 
     $('#testimonial_note-'+id+' .alert').remove();
-
-
 
 	  let ls_negative = "negative"+id;
 		let ls_positive = "positive"+id;

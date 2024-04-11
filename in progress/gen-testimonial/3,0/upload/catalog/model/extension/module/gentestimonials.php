@@ -56,7 +56,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			userLink = '" . $this->db->escape($data['userLink']) . "',
 			description = '" . $this->db->escape($data['text']) . "',
 			user = '" . $this->db->escape($data['name']) . "',  
-			image = '', 
 			date = now(), 
 			sort_order = '" . (int) $sort . "'");
 
@@ -85,7 +84,6 @@ class ModelExtensionModuleGentestimonials extends Model
 			userLink = '" . $this->db->escape($data['userLink']) . "',
 			description = '" . $this->db->escape($data['text']) . "',
 			user = '" . $this->db->escape($data['name']) . "',  
-			image = '', 
 			date = now(), 
 			sort_order = '" . (int) $sort . "'");
 

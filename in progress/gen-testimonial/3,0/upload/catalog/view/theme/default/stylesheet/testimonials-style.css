@@ -69,6 +69,7 @@
 .rating_navigation {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .rating-num {
@@ -98,6 +99,9 @@
 }
 .rating-num.rat-avg-1 {
   background-color: #ff5858;
+}
+.rating-num.rat-avg-0 {
+  background-color: #eee;
 }
 
 .store-rating-container {
@@ -176,7 +180,22 @@
   display: block;
 }
 .opgtm-testimonial_item .answer_testimonial_list {
+  display: none;
   margin-left: 10%;
+  transition: all 0.5s linear;
+  border: 4px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.opgtm-testimonial_item .answer_testimonial_list.active {
+  display: block;
+  animation: fade_in_show 0.5s;
+}
+.opgtm-testimonial_item .answer_testimonial_list.hideAnswer {
+  animation: fade_in_out 0.5s;
+  animation-fill-mode: forwards;
 }
 .opgtm-testimonial_item .answer_testimonial_list .answer_header {
   margin-bottom: 5px;
@@ -188,6 +207,18 @@
 }
 .opgtm-testimonial_item .answer_testimonial_item:last-child {
   border-bottom: none;
+}
+.opgtm-testimonial_item .btn_hide_answer, .opgtm-testimonial_item .btn_show_answer {
+  display: none;
+  width: -moz-max-content;
+  width: max-content;
+  margin: 0 auto 10px auto;
+}
+.opgtm-testimonial_item .btn_hide_answer.active, .opgtm-testimonial_item .btn_show_answer.active {
+  display: block;
+}
+.opgtm-testimonial_item .btn_hide_answer i, .opgtm-testimonial_item .btn_show_answer i {
+  margin-right: 10px;
 }
 .opgtm-avtar-image {
   display: flex;
@@ -226,4 +257,25 @@
   z-index: 10;
   left: 50%;
   transform: translateX(-50%);
+}
+
+@keyframes fade_in_show {
+  0% {
+    display: none;
+    transform: scale(0);
+  }
+  100% {
+    display: block;
+    transform: scale(1);
+  }
+}
+@keyframes fade_in_out {
+  0% {
+    display: block;
+    transform: scale(1);
+  }
+  100% {
+    display: none;
+    transform: scale(0);
+  }
 }/*# sourceMappingURL=testimonials-style.css.map */

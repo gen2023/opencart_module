@@ -2,9 +2,7 @@
 <div class="swiper-slide">
 	<div class="opgtm-testimonial-header">
 			<div class="opgtm-avtar-image">
-				{% if testimonation.author_image and display_avatar %}
-					<img src="{{ testimonation.author_image }}" alt="avatar" class="opgtm-{{ class_image }}">
-				{% else %}
+				{% if display_avatar %}
 					<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ testimonation.avatar_name_color }}">{{ testimonation.avatar_name }}</div>
 				{% endif %}
 				{% if display_client  and  testimonation.author %}
