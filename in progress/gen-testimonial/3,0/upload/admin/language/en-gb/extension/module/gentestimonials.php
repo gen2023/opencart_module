@@ -1,93 +1,110 @@
 <?php
 // Heading
-$_['heading_title']				= 'Events';
+$_['heading_title'] = 'Reviews';
+$_['heading_title_list'] = 'Reviews list';
+$_['heading_title_setting'] = 'Module settings';
+$_['heading_title_answers'] = 'Answers to review:';
 
 // Text
-$_['text_success']				= 'Success: You have modified events!';
-$_['text_list']					= 'Events List';
-$_['text_add']					= 'Add Event';
-$_['text_edit']					= 'Edit Event';
-$_['text_plus']					= '+';
-$_['text_minus']				= '-';
-$_['text_license']				= 'To get the key, send a message to e-meil: <b> gen2023@yandex.ru </ b>';
-$_['text_events_setting']		= 'Global event settings';
-$_['text_editNameRightMenu'] = 'Change the names of the items of the right menu';
+$_['text_success_setting'] = 'Success: you have changed the settings!';
+$_['text_template'] = 'Template';
+$_['text_template_build'] = 'Template - build it yourself';
+$_['text_template_custom'] = 'Template standard';
+$_['text_license'] = 'To receive the key, send a message to e-mail: <b>gen2023@yandex.ru</b>';
+$_['text_list'] = 'List of reviews';
+$_['text_add'] = 'Add review';
+$_['text_edit'] = 'Edit review';
+$_['text_extension'] = 'Modules';
+$_['text_horizontal'] = 'Horizontal';
+$_['text_vertical'] = 'Vertical';
+$_['text_slide'] = 'slide';
+$_['text_fade'] = 'fade';
+$_['text_cube'] = 'cube';
+$_['text_coverflow'] = 'coverflow';
+$_['text_flip'] = 'flip';
+$_['text_creative'] = 'creative';
+$_['text_cards'] = 'cards';
+$_['text_square'] = 'square';
+$_['text_circle'] = 'circle';
+$_['text_activate_answer'] = 'Answer activated';
+$_['text_deactivate_answer'] = 'Answer deactivated';
+$_['text_newAnswer'] = 'New review';
+$_['text_info_is_new'] = 'There are reviews that have not been viewed';
 
 // tab
-$_['tab_license']				= 'License';
-$_['tab_data']					= 'Data';
-$_['tab_calendar']				= 'Calendar settings';
-$_['tab_editNameRightMenu']   = 'Edit name';
+$_['tab_license'] = 'License';
+$_['tab_data'] = 'Data';
+$_['tab_setting_swiper'] = 'Slider settings';
+$_['tab_setting_view_slider'] = 'Settings on different screens';
 
 // Column
-$_['column_image']				= 'Image';
-$_['column_title']				= 'Event name';
-$_['column_date_to']			= 'Event start date';
-$_['column_date_from']			= 'Event end date';
-$_['column_status']				= 'Status';
-$_['column_action']				= 'Action';
+$_['column_image'] = 'Image';
+$_['column_user'] = 'Author name';
+$_['column_date'] = 'Review date';
+$_['column_status'] = 'Status';
+$_['column_action'] = 'Action';
+$_['column_userRating'] = 'User rating +/-';
+$_['column_count_answer'] = 'Count of answers';
+$_['column_last_answer'] = 'Last answer from ...';
 
 // Entry
-$_['entry_title']				= 'Event Name';
-$_['entry_image']				= 'Image';
-$_['entry_description']			= 'Description';
-$_['entry_mindescription']		= 'Short Description'; 
-$_['entry_date_from']			= 'Date from';
-$_['entry_date_to']				= 'Date to';
-$_['entry_time_to']         = 'Start Time';
-$_['entry_time_from']       = 'From time';
-$_['entry_status']				= 'Status';
-$_['entry_sort_order']			= 'Sort Order';
-$_['entry_license']				= 'Enter the key';
-$_['entry_events_url']			= 'Enter the URL for the calendar page:';
-$_['entry_eventslist_url']		= 'Enter the URL for the event list page:';
-$_['entry_eventsDetail_url']	= 'Enter the URL for the event description page:';
-$_['entry_store']				= 'Stores:';
-$_['entry_meta_title']			= 'HTML Title Tag';
-$_['entry_meta_h1']				= 'HTML tag H1';
-$_['entry_meta_keyword']		= 'Meta-tag Keywords:';
-$_['entry_meta_description']	= 'Meta-tag Description:';
-$_['entry_keyword']				= 'Enter SEO URL';
-$_['entry_alternativeLink']		= 'Enter alternative link';
-$_['entry_product']				= 'Product';
-$_['entry_event_color']			= 'Event color';
-$_['entry_firstDay']			= 'Select the start of the week';
-$_['entry_dayMaxEvents']		= 'Enter a limit on the number of events for 1 day';
-$_['entry_initialView']	 	= 'Select main display:';
-$_['entry_list_rightMenu'] 	= 'Select display from the right menu:';
-
-//Days of the week
-$_['Monday']					= 'Monday';
-$_['Tuesday']					= 'Tuesday';
-$_['Wednesday']					= 'Wednesday';
-$_['Thursday']					= 'Thursday';
-$_['Friday']					= 'Friday';
-$_['Saturday']					= 'Saturday';
-$_['Sunday']					= 'Sunday';
-
-// list right panel
-$_['dayGridMonth'] = 'Month';
-$_['timeGridWeek'] = 'Week by time';
-$_['timeGridDay'] = 'Day by time';
-$_['listYear'] = 'List for a year';
-$_['listMonth'] = 'Monthly List';
-$_['listDay'] = 'ListDay';
-$_['listWeek'] = 'Weekly List';
+$_['entry_template'] = 'Select a layout';
+$_['entry_user'] = 'Enter author';
+$_['entry_userLink'] = 'Feedback(phone/email/social networks)';
+$_['entry_description'] = 'Review';
+$_['entry_testimonial_title'] = 'Testimonial title';
+$_['entry_license'] = 'Enter the key';
+$_['entry_date'] = 'Date';
+$_['entry_date'] = 'Date';
+$_['entry_testimonials_color'] = 'Testimonials color';
+$_['entry_sort_order'] = 'Review sorting';
+$_['entry_image'] = 'Image';
+$_['entry_display_answer'] = 'Reply to review button';
+$_['entry_status'] = 'Status';
+$_['entry_viewTitle'] = 'Show title?';
+$_['entry_name'] = 'Enter a title';
+$_['entry_rating'] = 'Rating';
+$_['entry_class_image'] = 'Image format';
+$_['entry_add_testimonial'] = 'Leave a review button';
+$_['entry_all_testimonial'] = 'All reviews button';
+$_['entry_status_newTestimonial'] = 'New testimonial status';
+$_['entry_display_date'] = 'Display date?';
+$_['entry_display_rating'] = 'Display rating?';
+$_['entry_display_avatar'] = 'Display avatar?';
+$_['entry_display_client'] = 'Display user?';
+$_['entry_display_userRating'] = 'Show like and dislike buttons';
+$_['entry_direction'] = 'Select scrolling';
+$_['entry_effect'] = 'Enter effect';
+$_['entry_enabled'] = 'Swiper enabled or disabled';
+$_['entry_followFinger'] = 'Property';
+$_['entry_loop'] = 'Looping';
+$_['entry_preloadImages'] = 'Loading images';
+$_['entry_longSwipesMs'] = 'Duration';
+$_['entry_autoplay'] = 'Scrolling speed';
+$_['entry_viewnavigation'] = 'Show navigation?';
+$_['entry_viewPagination'] = 'Show pagination?';
+$_['entry_count_slider'] = 'Count of sliders';
+$_['entry_name_module'] = 'Module name';
 
 // Help
-$_['help_keyword']				= 'Use dashes instead of spaces. Must be unique to the whole system ';
-$_['help_product']				= '(Autocomplete)';
-$_['help_dayMaxEvents']			= 'Number';
-$_['help_event_color']			= 'Don`t use white. Can be led RGB or HEX (example: black or #000 or #000000)';
+$_['help_testimonials_color'] = 'Don`t use white. You can enter RGB or HEX (example: black or #000 or #000000)';
+
+$_['help_followFinger'] = 'If disabled, the slider will only animate when you release it, it will not move while you hold your finger on it';
+$_['help_preloadImages'] = 'When enabled, Swiper forces all images to be loaded';
+$_['help_longSwipesMs'] = 'Minimum duration (in ms) to go to the next/previous slide with a long swipe';
+$_['help_spaceBetween'] = 'The distance between slides in px.<br>
+If you use the css property "margin" on elements that are included in a Swiper that you pass "spaceBetween" to, the navigation may not work properly.';
 
 // Error
-$_['error_date']				= 'Event\'s End Date must be same or after Event\'s Start Date';
-$_['error_warning']				= 'Warning: Please check the form carefully for errors!';
-$_['error_permission']			= 'Warning: You do not have permission to modify events!';
-$_['error_title']				= 'Event Name must be greater than 3 and less than 255 characters!';
-$_['error_mindescription']		= 'The event must be greater than 3 and less than 255 characters!';
-$_['error_description']			= 'The event must be greater than 3 and less than 255 characters!';
-$_['error_license']				= 'Enter the activation key!';
-$_['error_keyword']				= 'This SEO keyword is already in use!';
+$_['error_warning'] = 'Warning: Please check the form carefully for errors!';
+$_['error_permission'] = 'Warning: You do not have permission to edit reviews!';
+$_['error_user'] = 'The name must be more than 3 and less than 20 characters!';
+$_['error_mindescription'] = 'Review must be more than 3 and less than 255 characters!';
+$_['error_description'] = 'Review must be more than 3 characters!';
+$_['error_license'] = 'Enter your activation key!';
 
-$_['button_setting']			= 'Settings';
+// Buttons
+$_['button_setting'] = 'Settings';
+$_['button_answers'] = 'Answers';
+$_['button_activate'] = 'Activate';
+$_['button_deactivate'] = 'Deactivate';

@@ -1,3 +1,24 @@
-.delProduct{
-	font-size:25px;
+#custom_template{
+	border-top: 3px solid #ededed;
+	border-bottom: 3px solid #ededed;
+}
+.form-group{border-top: 1px solid #ededed;}
+.is_new{
+	color: #f12020;
+	animation-name: text_puls;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+@keyframes text_puls {
+	0% {
+			text-shadow: none;
+	}
+
+	50% {
+			text-shadow: 1px 1px 2px red, 0 0 1em #545454, 0 0 0.2em #545454;
+	}
+
+	100% {
+			text-shadow: none;
+	}
 }

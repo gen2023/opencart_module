@@ -3,6 +3,7 @@
 $_['heading_title']				= 'Отзывы';
 $_['heading_title_list']				= 'Отзывы список';
 $_['heading_title_setting']		= 'Настройки модуля';
+$_['heading_title_answers']		= 'Ответы на отзыв:';
 
 // Text
 $_['text_success_setting']		= 'Успех: вы изменили настройки!';
@@ -25,11 +26,15 @@ $_['text_creative']				= 'творческий';
 $_['text_cards']				= 'карты';
 $_['text_square']				= 'квадрат';
 $_['text_circle']				= 'круг';
+$_['text_activate_answer']				= 'Ответ активирован';
+$_['text_deactivate_answer']				= 'Ответ отключен';
+$_['text_newAnswer']				= 'Новый отзыв';
+$_['text_info_is_new']			= 'Есть не просмотренные отзывы';
 
 // Вводимые значения
 $_['entry_template']			= 'Выберите макет';
 $_['entry_user']				= 'Введите автора';
-$_['entry_userLink']			= 'Введите сылку на пользователя';
+$_['entry_userLink']			= 'Обратная связь(телефон/email/соц.сети)';
 $_['entry_description']			= 'Отзыв';
 $_['entry_testimonial_title']	= 'Название отзыв';
 $_['entry_license']				= 'Введите ключ';
@@ -38,25 +43,20 @@ $_['entry_date']				= 'Дата';
 $_['entry_testimonials_color']	= 'Цвет отзыва';
 $_['entry_sort_order']			= 'Сортировка отзыва';
 $_['entry_image']				= 'Изображение';
-$_['entry_keyword']				= 'Введите SEO URL';
+$_['entry_display_answer']				= 'Кнопка ответить на отзыв';
 $_['entry_status']				= 'Статус';
 $_['entry_viewTitle']			= 'Показывать заголовок?';
 $_['entry_name']				= 'Введите заголовок';
 $_['entry_rating']				= 'Рейтинг';
 $_['entry_class_image']			= 'Формат изображения';
-$_['entry_job_title']			= 'Должность';
-$_['entry_company']				= 'Компания';
-$_['entry_urlCompany']			= 'Сайт компании';
-$_['add_testimonial']			= 'Кнопка оставить отзыв';
-$_['all_testimonial']			= 'Кнопка все отзывы';
-
+$_['entry_add_testimonial']			= 'Кнопка оставить отзыв';
+$_['entry_all_testimonial']			= 'Кнопка все отзывы';
+$_['entry_status_newTestimonial']			= 'Статус новых отзывов';
 $_['entry_display_date']				= 'Показывать дату?';
 $_['entry_display_rating']				= 'Показывать рейтинг?';
 $_['entry_display_avatar']				= 'Показывать аватар?';
-$_['entry_display_quotes']				= 'Показывать кавычки?';
 $_['entry_display_client']				= 'Показывать пользователя?';
-$_['entry_display_job']					= 'Показывать место работы?';
-$_['entry_display_company']				= 'Показывать компанию?';
+$_['entry_display_userRating']				= 'Показывать кнопки лайк и дизлайк';
 $_['entry_direction']					= 'Выберите прокрутку';
 $_['entry_effect']						= 'Введите эфект';
 $_['entry_enabled']						= 'Включен или отключен swiper';
@@ -67,17 +67,10 @@ $_['entry_longSwipesMs']				= 'Продолжительность';
 $_['entry_autoplay']					= 'Скорость прокрутки';
 $_['entry_viewnavigation']				= 'Показывать навигацию?';
 $_['entry_viewPagination']				= 'Показывать пагинацию?';
+$_['entry_count_slider']				= 'Количество слайдеров';
+$_['entry_name_module']				= 'Название модуля';
 
-$_['entry_spaceBetween']		= 'Растояние между блоками по умолчанию';
-$_['entry_spaceBetween1024']	= 'Растояние для экрана>1024px';
-$_['entry_spaceBetween425']		= 'Растояние для экрана>425px';
-$_['entry_spaceBetween320']		= 'Растояние для экрана>320px';
-$_['entry_spaceBetween768']		= 'Растояние для экрана>768px';
-$_['entry_slidesPerView']		= 'Кол-во слайдов по умолчанию';
-$_['entry_slidesPerView1024']	= 'Кол-во для экрана>1024px';
-$_['entry_slidesPerView425']	= 'Кол-во для экрана>425px';
-$_['entry_slidesPerView320']	= 'Кол-во для экрана>320px';
-$_['entry_slidesPerView768']	= 'Кол-во для экрана>768px';
+
 
 // Колонки
 $_['column_image']				= 'Изображение';
@@ -85,6 +78,9 @@ $_['column_user']				= 'Имя автора';
 $_['column_date']				= 'Дата отзыва';
 $_['column_status']				= 'Статус';
 $_['column_action']				= 'Действие';
+$_['column_userRating']				= 'Пользовательский рейтинг +/-';
+$_['column_count_answer']				= 'Количество ответов';
+$_['column_last_answer']				= 'Последнгий ответ от ...';
 
 //таб
 $_['tab_license']				= 'Лицензия';
@@ -102,104 +98,15 @@ $_['error_license']				= 'Введите ключ активации!';
 
 // Помощь
 $_['help_testimonials_color']			= 'Неиспользуйте цвет белый. Можно водить RGB или HEX (пример: black или #000 или #000000)';
-$_['help_keyword']				= 'Используйте тире вместо пробелов. Должно быть уникально на всю систему';
+
 $_['help_followFinger']				= 'Если отключено, то слайдер будет анимироваться только тогда, когда вы его отпустите, он не будет двигаться, пока вы держите на нем палец';
 $_['help_preloadImages']				= 'При включении Swiper принудительно загружает все изображения';
 $_['help_longSwipesMs']				= 'Минимальная продолжительность (в мс) для перехода к следующему/предыдущему слайду при длительном смахивании';
 $_['help_spaceBetween']				= 'Расстояние между слайдами в px.<br>
 Если вы используете свойство css «margin» для элементов, которые входят в Swiper, в который вы передаете «spaceBetween», навигация может работать неправильно.';
 
-//
+// Кнопки
 $_['button_setting']			= 'Настройки';
-
-
-
-
-
-/*
-
-// Text
-$_['text_success']				= 'Успех: вы изменили отзыв!';
-
-
-$_['text_plus']					= '+';
-$_['text_minus']				= '-';
-
-$_['text_events_setting']		= 'Глобальные настройки события';
-$_['text_editNameRightMenu'] = 'Изменить названия пунктов правого меню';
-
-//таб
-
-
-$_['tab_calendar']				= 'Настройки календаря';
-$_['tab_editNameRightMenu']   = 'Изменить названия';
-
-// Колонки
-
-
-$_['column_date_from']			= 'Дата конца события';
-
-
-// Вводимые значения
-
-
-
-
-$_['entry_time_to']         	= 'Время начала';
-$_['entry_time_from']        	= 'Время окончания';
-
-
-
-$_['entry_events_url']			= 'Введите URL для страницы календаря:';
-$_['entry_eventslist_url']		= 'Введите URL для страницы списка событий:';
-$_['entry_eventslist_url']		= 'Введите URL для страницы списка событий:';
-$_['entry_eventsDetail_url']	= 'Введите URL для страницы описания события:';
-$_['entry_store']				= 'Магазины:';
-
-$_['entry_alternativeLink']		= 'Введите альтернативную сылку';
-$_['entry_product']				= 'Товар';
-
-$_['entry_firstDay']			= 'Выберите начало недели';
-$_['entry_dayMaxEvents']		= 'Введите ограничение кол-во событий на 1 день';
-$_['entry_initialView']	 	 = 'Выберите главное отображение:';
-$_['entry_list_rightMenu'] 	 = 'Выберите отображение с правого меню:';
-
-//Дни недели
-$_['Monday']					= 'Понедельник';
-$_['Tuesday']					= 'Вторник';
-$_['Wednesday']					= 'Среда';
-$_['Thursday']					= 'Четверг';
-$_['Friday']					= 'Пятница';
-$_['Saturday']					= 'Суббота';
-$_['Sunday']					= 'Воскресенье';
-
-//list right panel
-$_['dayGridMonth'] 	= 'Месяц';
-$_['timeGridWeek']	= 'Неделя по времени';
-$_['timeGridDay']	= 'День по времени';
-$_['listYear'] 		= 'Список на год';
-$_['listMonth'] 	= 'Список на месяц';
-$_['listDay'] 		= 'Список на день';
-$_['listWeek'] 		= 'Список на неделю';
-
-// Помощь
-$_['help_keyword']				= 'Используйте тире вместо пробелов. Должно быть уникально на всю систему';
-$_['help_product']				= '(Автодополнение)';
-
-$_['help_dayMaxEvents']			= 'Числом';
-
-
-// Помощь
-
-$_['help_product']				= '(Автодополнение)';
-
-// Ошибка
-$_['error_date']				= 'Дата окончания события должна быть такой же или после даты начала события';
-$_['error_warning']				= 'Предупреждение: пожалуйста, внимательно проверьте форму на наличие ошибок!';
-$_['error_permission']			= 'Предупреждение: у вас нет прав на изменение событий!';
-$_['error_title']				= 'Cобытие должно быть больше 3 и меньше 255 символов!';
-$_['error_mindescription']		= 'Cобытие должно быть больше 3 и меньше 255 символов!';
-$_['error_description']			= 'Cобытие должно быть больше 3 и меньше 255 символов!';
-$_['error_license']				= 'Введите ключ активации!';
-$_['error_keyword']				= 'Этот SEO keyword уже используется!';
-*/
+$_['button_answers']			= 'Ответы';
+$_['button_activate']			= 'Активировать';
+$_['button_deactivate']			= 'Деактивировать';
