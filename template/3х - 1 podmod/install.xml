@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Opencart Count user</name>
+    <code>Count user</code>
+    <version>1.0.0</version>
+	<link>mailto:genodessa@gmail.com</link>
+    <author>GEN2023</author>
+    <file path="catalog/controller/common/footer.php">
+    <operation>
+      <search><![CDATA[public function index() {]]></search>
+      <add position="after"><![CDATA[
+			//test
+      	]]></add>
+    </operation>
+  </file>
+</modification>
