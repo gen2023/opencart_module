@@ -1,0 +1,287 @@
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{% for testimonation in testimonations %}
+			<div class="col-sm-12">
+				<div class="opgtm-testimonial_item">
+					<div class="opgtm-testimonial_item__header">
+						<div class="testimonial_item__header_left">
+						<div class="opgtm-avtar-image">
+							<div class="opgtm-avatar-name" style="{{ testimonation.avatar_name_color }}">
+								{{ testimonation.avatar_name }}
+							</div>
+							{% if testimonation.author %}
+							<div class="opgtm-testimonial-client">
+								<strong>{{ testimonation.author }}</strong>
+							</div>
+							{% endif %}
+						</div>
+							<div class="opgtm-testimonials-date_added">
+								<div class="date_added"> {{ testimonation.date_added }}</div>
+							</div>
+						</div>
+						<div class="opgtm-testimonial_item__header_bottom">
+							<div class="opgtm-block_recomended">
+								<strong>{{ testimonation.text_recomended_shop }}</strong>&nbsp;
+								{{ entry_rating }}&nbsp;-&nbsp;{{ testimonation.rating }}
+							</div>
+						</div>
+					</div>
+					<div class="opgtm-testimonial_item__main">
+						<div class="opgtm-content_description">
+							{{ testimonation.description }}
+						</div>
+					</div>
+					<div class="opgtm-testimonial_item__footer">
+						<div class="answer_testimonial_block">
+								<a id="btn_answer_testimonial" class="btn btn-primary btn_answer_testimonial" data-id="{{ testimonation.id }}">
+									<i class="fa fa-reply" aria-hidden="true"></i>
+									{{ text_btn_answer }}
+								</a>
+							</div>
+						<div id="testimonial_note-{{ testimonation.id }}" class="testimonial_note"></div>
+						<div class="review-rating-change-buttons">
+							<span class="change-rating-button">
+								<a class="testimonation-positive" data-value="{{ testimonation.positive }}"
+									data-id="{{ testimonation.id }}">
+									<i class="ex-like fa fa-thumbs-up"></i>
+									<span class="review-vote-count" id="vote_count_positive-{{ testimonation.id }}">{{
+										testimonation.positive }}</span>
+								</a>
+							</span>
+							<span class="change-rating-button">
+								<a class="testimonation-negative" data-value="{{ testimonation.negative }}"
+									data-id="{{ testimonation.id }}">
+									<i class="ex-dislike fa fa-thumbs-up"></i>
+									<span class="review-vote-count" id="vote_count_negative-{{ testimonation.id }}">
+										{{ testimonation.negative }}
+									</span>
+								</a>
+							</span>
+						</div>
+					</div>
+					<div id="block_form_answer-{{ testimonation.id }}" class="block_form_answer">
+						<div class="row">
+							<div class="col-sm-12">
+								<form class="form-horizontal" id="form-answer">
+									<input type="hidden" name="status_newTestimonial" value="{{ status_newTestimonial }}">
+									<input type="hidden" name="testimonial_id" value="{{ testimonation.id }}">
+									<h2>{{ text_write_answer }}</h2>
+									<div class="form-group required">
+										<div class="col-sm-12">
+											<label class="control-label" for="input-name">{{ entry_name }}</label>
+											<input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-sm-12">
+											<label class="control-label" for="input-userLink">{{ entry_userLink }}</label>
+											<input type="text" name="userLink" value="{{ customer_userLink }}" id="input-userLink" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group required">
+										<div class="col-sm-12">
+											<label class="control-label" for="input-testimonial">{{ entry_answer }}</label>
+											<textarea name="text" rows="5" id="input-testimonial" class="form-control"></textarea>
+											<div class="help-block">{{ text_note }}</div>
+										</div>
+									</div>
+									{{ captcha }}
+									<div class="buttons clearfix">
+										<div class="pull-right">
+											<button type="button" data-id="{{ testimonation.id }}" data-loading-text="{{ text_loading }}"
+												class="btn btn-primary button_answer">{{ button_save }}</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					{% if testimonation.answers %}
+					<div class="btn_show_answer active"><span class="btn btn-primary"><i class="fa fa-comments" aria-hidden="true"></i>{{ btn_show_read }}</span></div>
+					<div class="answer_testimonial_list">
+						{% for answer in testimonation.answers %}
+							<div class="answer_testimonial_item">
+							<div class="answer_header">
+								<div class="opgtm-avtar-image">
+									<div class="opgtm-avatar-name opgtm-{{ class_image }}" style="{{ answer.avatar_name_color }}">
+										{{ answer.avatar_name }}
+									</div>
+									{% if answer.author %}
+									<div class="opgtm-testimonial-client">
+										<strong>{{ answer.author }}</strong>
+									</div>
+									{% endif %}
+								</div>
+								{% if display_date %}
+									<div class="opgtm-testimonials-date_added">
+										<div class="date_added"> {{ answer.date_added }}</div>
+									</div>
+								{% endif %}
+							</div>
+							<div class="answer_main">{{ answer.description }}</div>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="btn_hide_answer"><span class="btn btn-primary"><i class="fa fa-comments" aria-hidden="true"></i>{{ btn_hide_read }}</span></div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+<script>
+	$('.btn_answer_testimonial').on('click', function (e) {
+		e.preventDefault();
+		let id = $(this).data("id");
+		
+		$('#block_form_answer-'+id).toggle('active');
+	});
+
+	$('.btn_show_answer').on('click',function(){
+		
+		let parent=$(this).parent();
+
+		$(this).removeClass('active');
+		parent.children('.answer_testimonial_list').removeClass('hideAnswer');
+		parent.children('.answer_testimonial_list').addClass('active');
+		parent.children('.btn_hide_answer').addClass('active');		
+	})
+
+	$('.btn_hide_answer').on('click',function(){
+		
+		let parent=$(this).parent();
+
+		$(this).removeClass('active');		
+		parent.children('.answer_testimonial_list').removeClass('active');
+		parent.children('.answer_testimonial_list').addClass('hideAnswer');		
+		parent.children('.btn_show_answer').addClass('active');		
+	})
+
+</script>
+<script type="text/javascript"><!--
+	$('.testimonation-negative').on('click', function() {
+	  let id = $(this).data("id");
+
+    $('#testimonial_note-'+id+' .alert').remove();
+
+	  let ls_negative = "negative"+id;
+		let ls_positive = "positive"+id;
+	  let note_block = $("#testimonial_note-"+id);
+		let vote_count_negative = $('#vote_count_negative-'+id);
+		let vote_count_positive = $('#vote_count_positive-'+id);
+		let valueNegative=0;
+		let valuePositive=0;
+
+	  if(localStorage.getItem(ls_negative) == null){
+			if(localStorage.getItem(ls_positive) == null){
+				valueNegative = parseInt(vote_count_negative.text())-1;
+				valuePositive = vote_count_positive.text();
+			}else{
+				valueNegative = parseInt(vote_count_negative.text())-1;
+				valuePositive = parseInt(vote_count_positive.text())-1;
+			}
+
+	    $.ajax({
+	      url: 'index.php?route=extension/module/gentestimonials/updateTestomonialRating',
+	  		type: 'post',
+	  		data: { testimonial_id : id, negative : valueNegative, positive : valuePositive } ,
+	      dataType: 'json',
+	      success: function(json) {
+	        if (json['success']) {
+						vote_count_negative.text(valueNegative);
+						vote_count_positive.text(valuePositive);
+	        	localStorage.setItem(ls_negative , true);
+	      	}
+	      }
+	    });
+	    $(note_block).append('<div class="alert alert-success m-0"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; {{ alert_success_updateRating }}</div>');
+	  }
+	  else{
+	    $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
+	  }
+	});
+	$('.testimonation-positive').on('click', function() {
+    
+	  let id = $(this).data("id");
+    $('#testimonial_note-'+id+' .alert').remove();
+
+	  let ls_negative = "negative"+id;
+		let ls_positive = "positive"+id;
+	  let note_block = $("#testimonial_note-"+id);
+		let vote_count_negative = $('#vote_count_negative-'+id);
+		let vote_count_positive = $('#vote_count_positive-'+id);
+		let valueNegative=0;
+		let valuePositive=0;
+
+	  if(localStorage.getItem(ls_positive) == null){
+			if(localStorage.getItem(ls_negative) == null){
+				valuePositive = parseInt(vote_count_positive.text())+1;
+				valueNegative = vote_count_negative.text();
+			}else{
+				valueNegative = parseInt(vote_count_negative.text())+1;
+				valuePositive = parseInt(vote_count_positive.text())+1;
+			}
+
+	    $.ajax({
+	      url: 'index.php?route=extension/module/gentestimonials/updateTestomonialRating',
+	  		type: 'post',
+	  		data: { testimonial_id : id, negative : valueNegative, positive : valuePositive } ,
+	      dataType: 'json',
+	      success: function(json) {
+	        if (json['success']) {
+						vote_count_negative.text(valueNegative);
+						vote_count_positive.text(valuePositive);
+						localStorage.setItem(ls_positive , true);
+	      	}
+	    }
+	    });
+	    $(note_block).append('<div class="alert alert-success m-0"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; {{ alert_success_updateRating }}</div>');
+	  }
+	  else{
+	      $(note_block).append('<div class="alert alert-warning m-0">{{ alert_warning_updateRating }}</div>');
+	  }
+	});
+
+	$('.button_answer').on('click', function() {
+		console.log('click')
+		let id = $(this).data("id");
+		$.ajax({
+			url: 'index.php?route=extension/module/gentestimonials_list/write_answer',
+			type: 'post',
+			dataType: 'json',
+			data: $("#block_form_answer-"+id+" form").serialize(),
+			beforeSend: function() {
+				$('#button_answer').button('loading');
+			},
+			complete: function() {
+				$('#button_answer').button('reset');
+			},
+			success: function(json) {
+				
+				$('.alert-dismissible').remove();
+
+				if (json['error']) {
+					$('#block_form_answer-'+id+'').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+				}
+
+				if (json['success']) {
+					$('#block_form_answer-'+id+'').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+					$('input[name=\'name\']').val('');
+					$('textarea[name=\'text\']').val('');
+					$('input[name=\'rating\']:checked').prop('checked', false);
+					$('#block_form_answer-'+id+'').hide();
+				}
+			}
+		});
+	});
+//--></script>
+
+{{ footer }}
