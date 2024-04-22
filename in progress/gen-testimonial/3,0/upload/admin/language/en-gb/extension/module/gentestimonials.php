@@ -30,6 +30,7 @@ $_['text_activate_answer'] = 'Answer activated';
 $_['text_deactivate_answer'] = 'Answer deactivated';
 $_['text_newAnswer'] = 'New review';
 $_['text_info_is_new'] = 'There are reviews that have not been viewed';
+$_['text_success'] = 'Settings changed';
 
 // tab
 $_['tab_license'] = 'License';
