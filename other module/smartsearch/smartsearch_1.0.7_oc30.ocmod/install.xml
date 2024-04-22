@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>smartsearch</name>
+    <code>smartsearch</code>
+    <version>1.0.7</version>
+    <author>Anton</author>
+    <link>pol-kilo88@mail.ru</link>
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[ 
+
+            $data['smartsearch'] = false;
+            $data['smartsearch_field'] = '';
+            if ($this->config->get('module_smartsearch_status')) {                
+                $data['smartsearch'] = true;  
+
+                if ($this->config->get('module_smartsearch_field')) {
+                    $data['smartsearch_field'] = htmlspecialchars_decode($this->config->get('module_smartsearch_field'));
+                } else {
+                    $data['smartsearch_field'] = 'header input[name="search"]';
+                }                     
+
+            }
+
+            ]]></add>
+        </operation> 
+    </file>
+    <file path="catalog/view/theme/*/template/common/footer.twig">
+        <operation>
+            <search><![CDATA[</body>]]></search>
+            <add position="before"><![CDATA[    
+            {% if smartsearch %}       
+            <link href="catalog/view/theme/default/stylesheet/smartsearch.css" type="text/css" rel="stylesheet"/>
+
+            <script type="text/javascript"> 
+
+                 $(document).on('keyup', '{{ smartsearch_field }}', function(e) {
+                    if (e.keyCode == 40 || e.keyCode == 38) {
+                        return;
+                    }
+
+                    var search = $(this).val();
+                    var input = $(this);
+
+                    $.ajax({
+                        url: 'index.php?route=extension/module/smartsearch',
+                        type: 'post',
+                        data: 'search=' + search,
+                        dataType: 'json',
+                        beforeSend: function() {                                    
+                        },
+                        complete: function() {                                    
+                        },
+                        success: function(json) {
+                        //alert(json)
+
+                        if (input.parent().find('.smartsearch').length == 0) {
+                            input.after('<div class="smartsearch"></div>');
+                        }
+
+                        
+                        if (json['html']) {
+                            $('.smartsearch').html(json['html']);
+                            $('.smartsearch').show();
+                        } else {
+                            $('.smartsearch').html('');
+                            $('.smartsearch').hide();
+                        }
+                        
+                        
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                        //alert(thrownError + " " + xhr.statusText + " " + xhr.responseText);
+                        }
+                    });
+
+                });
+
+
+                $(document).on('keyup', '{{ smartsearch_field }}', function(e) {
+                    var smartsearch = $(this).parent().find('.smartsearch');
+                    if (e.keyCode == 40) {
+                        if (smartsearch.find('.item').length > 0) {
+                            if (smartsearch.find('.item.current').length == 0) {                                        
+                                smartsearch.find('.item').first().addClass('current')
+                            } else {
+                                var el = smartsearch.find('.item.current');
+                                el.removeClass('current');
+                                if (el.next().length == 0) {
+                                    smartsearch.find('.item').first().addClass('current')
+                                } else {
+                                    el.next().addClass('current');
+                                }                                        
+                            }
+                            $(this).val(smartsearch.find('.item.current').attr('search_name'));
+
+                        }                                
+                    }
+                    if (e.keyCode == 38) {
+                        if (smartsearch.find('.item').length > 0) {
+                            if (smartsearch.find('.item.current').length == 0) {                                    
+                                smartsearch.find('.item').last().addClass('current')
+                            } else {
+                                var el = smartsearch.find('.item.current');
+                                el.removeClass('current');
+                                if (el.prev().length == 0) {
+                                    smartsearch.find('.item').last().addClass('current')
+                                } else {
+                                    el.prev().addClass('current');
+                                }                                        
+                            }
+                            $(this).val(smartsearch.find('.item.current').attr('search_name'));
+                        }
+                    }
+                });
+
+
+               
+
+                $(document).on('focus', '{{ smartsearch_field }}', function(e) {  
+                    var smartsearch = $(this).parent().find('.smartsearch');
+                    if (smartsearch.find('.items>.item').length > 0) {
+                        smartsearch.show();
+                    }
+                }); 
+
+                $(document).mouseup(function (e) {
+                    var container = $('{{ smartsearch_field }}');                    
+                    if (!container.is(e.target) && container.has(e.target).length === 0) { 
+                        container.parent().find('.smartsearch').hide();
+                    }
+                });
+
+            </script>
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/product/search.php">   
+        <operation>
+            <search><![CDATA[$this->load->model('catalog/product');]]></search>
+            <add position="after"><![CDATA[
+                if ($this->config->get('module_smartsearch_search_engine')) {
+                    $this->load->model('extension/module/smartsearch');
+                } else {
+                    $this->load->model('catalog/product');
+                }
+                ]]></add>
+        </operation> 
+        <operation>
+            <search><![CDATA[$sort = 'p.sort_order';]]></search>
+            <add position="replace"><![CDATA[
+                if ($this->config->get('module_smartsearch_search_engine')) {
+                    $sort = '';
+                } else {
+                    $sort = 'p.sort_order';
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$product_total = $this->model_catalog_product->getTotalProducts($filter_data);]]></search>
+            <add position="replace"><![CDATA[
+                if ($this->config->get('module_smartsearch_search_engine')) {
+                    $product_total = $this->model_extension_module_smartsearch->getProductsPageTotal($filter_data);
+                } else {
+                    $product_total = $this->model_catalog_product->getTotalProducts($filter_data);
+                }
+            ]]></add>            
+        </operation>
+        <operation>
+            <search><![CDATA[$results = $this->model_catalog_product->getProducts($filter_data);]]></search>
+            <add position="replace"><![CDATA[
+                if ($this->config->get('module_smartsearch_search_engine')) {
+                    $results = $this->model_extension_module_smartsearch->getProductsPage($filter_data);
+                } else {
+                    $results = $this->model_catalog_product->getProducts($filter_data);
+                }                
+            ]]></add>
+        </operation>        
+    </file>  
+    
+
+
+</modification>
