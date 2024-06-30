@@ -30,6 +30,7 @@ $_['text_activate_answer'] = 'Відповідь активовано';
 $_['text_deactivate_answer'] = 'Відповідь вимкнено';
 $_['text_newAnswer'] = 'Новий відгук';
 $_['text_info_is_new'] = 'Є не переглянуті відгуки';
+$_['text_success'] = 'Налаштування змінено';
 
 // таб
 $_['tab_license'] = 'Ліцензія';

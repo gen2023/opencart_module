@@ -30,6 +30,7 @@ $_['text_activate_answer']				= 'Ответ активирован';
 $_['text_deactivate_answer']				= 'Ответ отключен';
 $_['text_newAnswer']				= 'Новый отзыв';
 $_['text_info_is_new']			= 'Есть не просмотренные отзывы';
+$_['text_success']			= 'Настройки изменены';
 
 // Вводимые значения
 $_['entry_template']			= 'Выберите макет';
