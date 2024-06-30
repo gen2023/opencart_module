@@ -1,0 +1,336 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-newsletter" data-toggle="tooltip" title="{{ button_save }}"
+          class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i
+            class="fa fa-reply"></i></a>
+        <a href="{{ list }}" data-toggle="tooltip" title="{{ button_list }}" class="btn btn-default"><i
+            class="fa fa-bars"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-newsletter" class="form-horizontal">
+        	<ul class="nav nav-tabs">
+			      <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+			      <li><a href="#tab-setting_mail" data-toggle="tab">{{ tab_setting_mail }}</a></li>
+		      </ul>
+        	<div class="tab-content">
+			      <div class="tab-pane active" id="tab-general">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-required_field"><span
+                    data-toggle="tooltip" title="{{ help_required_field }}">{{ entry_required_field }}</span></label>
+                <div class="col-sm-10">
+                  <select name="req_field" id="input-required_field"
+                    class="form-control">
+                    {% if (required_field==1) %}
+                    <option value="1" selected="selected">{{ text_phone }}</option>
+                    <option value="0">{{ text_email }}</option>
+                    <option value="2">{{ text_disabled }}</option>
+                    {% elseif (required_field==0) %}
+                    <option value="1">{{ text_phone }}</option>
+                    <option value="0" selected="selected">{{ text_email }}</option>
+                    <option value="2">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_phone }}</option>
+                    <option value="0">{{ text_email }}</option>
+                    <option value="2" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-requireEmail">{{ entry_requireEmail
+                    }}</label>
+                  <select name="reqEmail" id="input-requireEmail"
+                    class="form-control">
+                    {% if reqEmail %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-requirePhone">{{ entry_requirePhone
+                    }}</label>
+                  <select name="reqPhone" id="input-requirePhone"
+                    class="form-control">
+                    {% if reqPhone %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-requireTown">{{ entry_requireTown }}</label>
+                  <select name="reqTown" id="input-requireTown"
+                    class="form-control">
+                    {% if reqTown %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-requireName">{{ entry_requireName }}</label>
+                  <select name="reqName" id="input-requireName"
+                    class="form-control">
+                    {% if reqName %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div id="fieldEmail" class="col-sm-3">
+                  <label class=" control-label" for="input-visibleEmail">{{ entry_visibleEmail
+                    }}</label>
+                  <select name="showEmail" id="input-visibleEmail"
+                    class="form-control">
+                    {% if showEmail %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div id="fieldPhone" class="col-sm-3">
+                  <label class=" control-label" for="input-visiblePhone">{{ entry_visiblePhone
+                    }}</label>
+                  <select name="showPhone" id="input-visiblePhone"
+                    class="form-control">
+                    {% if showPhone %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-visibleTown">{{ entry_visibleTown }}</label>
+                  <select name="showTown" id="input-visibleTown"
+                    class="form-control">
+                    {% if showTown %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-visibleName">{{ entry_visibleName }}</label>
+                  <select name="showName" id="input-visibleName"
+                    class="form-control">
+                    {% if showName %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-unsubscribel">{{ entry_unsubscribel }}</label>
+                  <select name="showUnsubscribe" id="input-unsubscribel"
+                    class="form-control">
+                    {% if showUnsubscribe %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="control-label" for="input-userRegister">{{ entry_userRegister }}</label>
+                  <select name="showUserRegister" id="input-userRegister"
+                    class="form-control">
+                    {% if showUserRegister %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-political"><span
+                  data-toggle="tooltip" title="{{ help_political_text }}">{{ entry_political }}</span></label>
+                <div class="col-sm-10">
+                  <select name="showPolitical" id="input-political" class="form-control">
+                    {% if showPolitical %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div id="fieldPoliticalText" class="col-sm-12">
+                <div class="tab-pane">
+                  <ul class="nav nav-tabs" id="language">
+                    {% for language in languages %}
+                    <li><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  <div class="tab-content">
+                    {% for language in languages %}
+                    <div class="tab-pane" id="language{{ language.language_id }}">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-description{{ language.language_id }}">{{ entry_description }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="political_text[{{ language.language_id }}][text]" placeholder="{{ entry_description }}" id="input-description{{ language.language_id }}" data-toggle="summernote" class="form-control">{{ political_text[language.language_id] ? political_text[language.language_id].text }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-module_genNewsletter_status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_genNewsletter_status" id="input-module_genNewsletter_status" class="form-control">
+                    {% if module_genNewsletter_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-setting_mail">
+              <div clkass="form-group">
+                <div>{{ help_mail }}</div>
+                <div>{{ help_mail_subscrive }}</div>
+                <div>{{ help_mail_unsubscribe }}</div>
+              </div>
+              <div class="tab-pane">
+                <ul class="nav nav-tabs" id="language_mail">
+                  {% for language in languages %}
+                  <li><a href="#language_mail{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                <div class="tab-content">
+                  {% for language in languages %}
+                    <div class="tab-pane" id="language_mail{{ language.language_id }}">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-mail{{ language.language_id }}">{{ entry_mail_subscribe }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="text_mail1[{{ language.language_id }}][description]" placeholder="{{ entry_mail_subscribe }}" id="input-mail1{{ language.language_id }}" data-toggle="summernote" class="form-control">{{ text_mail1[language.language_id] ? text_mail1[language.language_id].description }}</textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-mail{{ language.language_id }}">{{ entry_mail_success }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="text_mail2[{{ language.language_id }}][description]" placeholder="{{ entry_mail_success }}" id="input-mail{{ language.language_id }}" data-toggle="summernote" class="form-control">{{ text_mail2[language.language_id] ? text_mail2[language.language_id].description }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+   
+  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+  <script type="text/javascript"><!--
+$('#language a:first').tab('show');
+$('#language_mail a:first').tab('show');
+//--></script>
+</div>
+<script>
+  requiredField();
+  $('#input-required_field').on('change', function () {
+    requiredField();
+  });
+
+  function requiredField() {
+    if ($('#input-required_field').val() == 1) {
+      $('#fieldPhone').css("display", "none");
+      $('#fieldEmail').css("display", "block");
+      $('#fieldPhone option[value=1]').prop('selected', true);
+    } else if ($('#input-required_field').val() == 0) {
+      $('#fieldEmail').css("display", "none");
+      $('#fieldPhone').css("display", "block");
+      $('#fieldEmail option[value=1]').prop('selected', true);
+    } else {
+      $('#fieldEmail').css("display", "block");
+      $('#fieldPhone').css("display", "block");
+    }
+  }
+
+  const select_political=document.querySelector('#input-political');  
+  const fieldPoliticalText=document.querySelector('#fieldPoliticalText');
+  textPolitical();
+
+  select_political.addEventListener('change',function(){
+    textPolitical();
+  });
+
+  function textPolitical() {
+    if (select_political.value==0){
+      fieldPoliticalText.style.display = 'none';
+    }else{
+      fieldPoliticalText.style.display = 'block';
+    }
+    
+  }
+
+</script>
+{{ footer }}

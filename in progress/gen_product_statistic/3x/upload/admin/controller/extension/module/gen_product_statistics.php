@@ -11,9 +11,16 @@ class ControllerExtensionModuleGenProductStatistics extends Controller
 		$this->load->model('extension/module/gen_product_statistics');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			$this->request->post['module_gen_product_statistics_field']=$this->request->post['statistic_field'];
+			
 			$this->model_setting_setting->editSetting('module_gen_product_statistics', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
+			if (isset($this->request->post['apply'])) {
+				$this->response->redirect($this->url->link('extension/module/gen_product_statistics', 'user_token=' . $this->session->data['user_token'], true));
+			} else {
+				$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true));
+			}
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
 		}
@@ -50,17 +57,23 @@ class ControllerExtensionModuleGenProductStatistics extends Controller
 		
 		$product_fields=$this->model_extension_module_gen_product_statistics->getProductFields();		
 		
-		$data['fieelds']=array();
+		$data['fields']=array();
 		foreach ($product_fields as $key => $value) {
-			$data['fieelds'][]=array(
-				$key => $key
+			$data['fields'][]=array(
+				'index' => $key
 			);
-		}		
+		}
 
 		if (isset($this->request->post['module_gen_product_statistics_status'])) {
 			$data['module_gen_product_statistics_status'] = $this->request->post['module_gen_product_statistics_status'];
 		} else {
 			$data['module_gen_product_statistics_status'] = $this->config->get('module_gen_product_statistics_status');
+		}
+
+		if (isset($this->request->post['module_gen_product_statistics_field'])) {
+			$data['statistic_fields'] = $this->request->post['module_gen_product_statistics_field'];
+		} else {
+			$data['statistic_fields'] = $this->config->get('module_gen_product_statistics_field');
 		}
 
 		$data['header'] = $this->load->controller('common/header');

@@ -1,0 +1,86 @@
+
+<div id="subscribe" class="subscribe-box" style="margin-bottom: 20px;">
+	<h3 class="subscribe-title">{{ heading_title }}</h3>
+	<div class="subscribe-form">
+		<form class="form-inline" action="" method="post" enctype="multipart/form-data">
+		  <div class="form-group required">
+				{% if showName %}
+					<label class="sr-only" for="input-name">{{ name }}</label>
+					<input type="text" class="form-control" name="name" id="txtname" placeholder="{{ name }}">
+				{% endif %}
+				{% if showPhone %}
+					<label class="sr-only" for="input-phone">{{ phone }}</label>
+					<input type="text" class="form-control" name="phone" id="txtphone" placeholder="{{ phone }}">
+				{% endif %}
+				{% if showEmail %}
+					<label class="sr-only" for="exampleInputAmount">Email:</label>
+					<input type="email" class="form-control" name="email" id="txtemail" placeholder="Email">
+				{% endif %}
+				{% if showTown %}
+					<label class="sr-only" for="input-town">{{ town }}</label>
+					<input type="text" class="form-control" name="town" id="txttown" placeholder="{{ town }}">
+				{% endif %}
+		  </div>
+		  <button type="submit" class="btn btn-primary" onclick="subscribe1(event);">{{ but_newsletter }}</button>
+			{% if showUnsubscribe %}
+				<button type="submit" class="btn btn-warning" onclick="unsubscribe(event);">{{ but_unsubscribe }}</button>
+			{% endif %}			
+		</form>
+		{% if showPolitical %}
+			<p> {{ text }} </p>
+		{% endif %}
+	</div>
+</div>
+<script>
+	function subscribe1(event){
+		event.preventDefault();
+
+		let value=$('#subscribe form').serializeArray();
+		console.log(value);
+
+		$.ajax({
+			url: 'index.php?route=extension/module/genNewsletter/sendMailSubscribe',
+			type: 'post',
+			data: value,
+			dataType: 'json',									
+			success: function(json) { 
+				if (json.error){
+					alert(json.error);
+				} else{
+					alert(json.message);
+					$('#txtemail').val('');
+					$('#txtname').val('');
+					$('#txtphone').val('');
+					$('#txttown').val('');
+				}
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				console.log(xhr.responseText);
+				console.log(textStatus);
+		}			
+		});
+	}
+		function unsubscribe(event){
+		event.preventDefault();
+
+		let value=$('#subscribe form').serializeArray();
+		$.ajax({
+			url: 'index.php?route=extension/module/genNewsletter/unsubscribe',
+			type: 'post',
+			data: value,
+			dataType: 'json',									
+			success: function(json) { 
+				if (json.error){
+					alert(json.error);
+				} else{
+					alert(json.message);
+					$('#txtemail').val('');
+				}
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				console.log(xhr.responseText);
+				console.log(textStatus);
+		}			
+		});
+	}
+</script>

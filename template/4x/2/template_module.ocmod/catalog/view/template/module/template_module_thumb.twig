@@ -1,0 +1,20 @@
+<div class="col h-100">
+  <div class="card h-100">
+    <img src="{{ thumb }}" class="card-img-top p-1" alt="{{ name }}" title="{{ name }}">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{{ href }}">{{ name }}</a></h5>
+      {% if isShowDescription %}
+        <p class="card-text">{{ description }}</p>
+      {% endif %}
+    </div>
+    {% if isShowSubCategory %}
+      <div class="list-group list-group-flush">
+        {% for child in children %}
+          <a href="{{ child.href }}" class="list-group-item list-group-item-action">
+            {{ child.name }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

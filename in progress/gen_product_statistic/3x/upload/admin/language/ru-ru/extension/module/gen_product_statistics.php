@@ -7,3 +7,6 @@ $_['text_module']      = 'Модули';
 $_['text_edit']        = 'Настройки модуля';
 $_['text_success']     = 'Настройки модуля обновлены';
 $_['entry_status']     = 'Статус';
+$_['entry_list_column']     = 'Выберите колонку';
+$_['entry_list_column_name']     = 'Введите название колонки';
+$_['button_field_add']     = 'Добавить колонку';
